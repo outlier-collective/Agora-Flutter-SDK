@@ -29,7 +29,7 @@ final Map<int, MethodChannel> _channels = {};
 ///
 /// The RtcSurfaceView class, which is used for rendering the local and remote video.
 /// This class corresponds to different classes on different platforms:
-/// 
+///
 /// Android: SurfaceView (https://developer.android.com/reference/android/view/SurfaceView).
 /// iOS: UIView (https://developer.apple.com/documentation/uikit/uiview).
 /// Web: DivElement (https://api.dart.dev/stable/2.15.0/dart-html/DivElement-class.html).
@@ -48,8 +48,8 @@ class RtcSurfaceView extends StatefulWidget {
   /// The 10 numeric characters: 0 to 9.
   /// Space
   /// "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "[", "]", "^", "_", "{", "}", "|", "~", ","
-  ///  
-  ///   
+  ///
+  ///
   ///
   final String? channelId;
 
@@ -80,7 +80,7 @@ class RtcSurfaceView extends StatefulWidget {
   /// The gesture object that should be consumed by the Web view. It is possible for other gesture recognizers to be competing
   /// with the web view on pointer events, e.g if the web view is inside a [ListView] the [ListView] will want to handle vertical
   /// drags. The web view will claim gestures that are recognized by any of the recognizers on this list.
-  /// When this set is empty or null, the web view will only handle pointer events for gestures that were not claimed by any 
+  /// When this set is empty or null, the web view will only handle pointer events for gestures that were not claimed by any
   /// other gesture recognizer.
   ///
   final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
@@ -263,23 +263,23 @@ class _RtcSurfaceViewState extends State<RtcSurfaceView> {
     // };
 
     var params = <String, dynamic>{
-      'uid': widget.uid,
+      'userId': widget.uid,
       'channelId': widget.channelId,
     };
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       params['subProcess'] = widget.subProcess;
-
-      _renderMode = VideoRenderModeConverter(widget.renderMode).value();
-      params['renderMode'] = _renderMode;
-
-      _mirrorMode = VideoMirrorModeConverter(widget.mirrorMode).value();
-      params['mirrorMode'] = _mirrorMode;
     }
+    _renderMode = VideoRenderModeConverter(widget.renderMode).value();
+    params['renderMode'] = _renderMode;
+
+    _mirrorMode = VideoMirrorModeConverter(widget.mirrorMode).value();
+    params['mirrorMode'] = _mirrorMode;
+
     _channels[_id]?.invokeMethod('setData', params);
 
     _channels[_id]?.invokeMethod('callApi', {
       'apiType': _getSetRenderModeApiType(widget.uid).index,
-      'params': jsonEncode({params}),
+      'params': jsonEncode(params),
     });
   }
 
@@ -398,7 +398,7 @@ class _HtmlElementViewController extends PlatformViewController
 /// The RtcTextureView class, which is used for rendering
 /// the local and remote video.
 /// This class corresponds to different classes in on different platforms:
-/// 
+///
 /// Android: TextureView (https://developer.android.com/reference/android/view/TextureView)
 /// or FlutterTexture (https://api.flutter.dev/objcdoc/Protocols/FlutterTexture.html).
 /// iOS/macOS/Windows: FlutterTexture (https://api.flutter.dev/objcdoc/Protocols/FlutterTexture.html).
@@ -411,7 +411,7 @@ class RtcTextureView extends StatefulWidget {
   final int uid;
 
   ///
-  /// 
+  ///
   ///
   final String? channelId;
 
@@ -434,7 +434,7 @@ class RtcTextureView extends StatefulWidget {
   /// The gesture object that should be consumed by the Web view. It is possible for other gesture recognizers to be competing
   /// with the web view on pointer events, e.g if the web view is inside a [ListView] the [ListView] will want to handle vertical
   /// drags. The web view will claim gestures that are recognized by any of the recognizers on this list.
-  /// When this set is empty or null, the web view will only handle pointer events for gestures that were not claimed by any 
+  /// When this set is empty or null, the web view will only handle pointer events for gestures that were not claimed by any
   /// other gesture recognizer.
   ///
   final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
@@ -563,7 +563,8 @@ class _RtcTextureViewState extends State<RtcTextureView> {
   void dispose() {
     super.dispose();
     _channels.remove(_id);
-    if (widget.useFlutterTexture && defaultTargetPlatform != TargetPlatform.android) {
+    if (widget.useFlutterTexture &&
+        defaultTargetPlatform != TargetPlatform.android) {
       RtcEngine.methodChannel.invokeMethod('destroyTextureRender', {
         'id': _id,
         'subProcess': widget.subProcess,
@@ -578,19 +579,13 @@ class _RtcTextureViewState extends State<RtcTextureView> {
         'canvas': {
           'uid': widget.uid,
           'channelId': widget.channelId,
+          'renderMode': _renderMode,
+          'mirrorMode': _mirrorMode,
         },
       };
-      // var params = <String, dynamic>{
-      //   'uid': widget.uid,
-      //     'channelId': widget.channelId,
-      // };
-      if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
-        params['subProcess'] = widget.subProcess;
-      }
-      // _channels[_id]?.invokeMethod('setData', params);
       _channels[_id]?.invokeMethod('callApi', {
-        'apiType': _getSetRenderModeApiType(widget.uid),
-        'params': jsonEncode({params}),
+        'apiType': _getSetupVideoApiType(widget.uid).index,
+        'params': jsonEncode(params),
       });
 
       return;
@@ -609,29 +604,28 @@ class _RtcTextureViewState extends State<RtcTextureView> {
       params['subProcess'] = widget.subProcess;
     }
     _channels[_id]?.invokeMethod('setData', params);
-    // _channels[_id]?.invokeMethod('callApi',           {
-    //       'apiType': _getSetRenderModeApiType(widget.uid),
-    //       'params': jsonEncode({params
-    //       }),
-    //     });
   }
 
 // kEngineSetLocalRenderMode/kEngineSetRemoteRenderMode
   void setRenderMode() {
     _renderMode = VideoRenderModeConverter(widget.renderMode).value();
-    _channels[_id]?.invokeMethod('setRenderMode', {
-      'renderMode': _renderMode,
-    });
+    _mirrorMode = VideoMirrorModeConverter(widget.mirrorMode).value();
 
-    // _channels[_id]?.invokeMethod('callApi',
-    //     // 'renderMode': _renderMode,
-    //     {
-    //       'apiType': _getSetRenderModeApiType(widget.uid),
-    //       'params': jsonEncode({
-    //         'renderMode': _renderMode,
-    //         'mirrorMode': _mirrorMode,
-    //       }),
-    //     });
+    debugPrint('_renderMode: $_renderMode, _mirrorMode: $_mirrorMode');
+    // _channels[_id]?.invokeMethod('setRenderMode', {
+    //   'renderMode': _renderMode,
+    // });
+
+    _channels[_id]?.invokeMethod('callApi',
+        // 'renderMode': _renderMode,
+        {
+          'apiType': _getSetRenderModeApiType(widget.uid).index,
+          'params': jsonEncode({
+            'userId': widget.uid,
+            'renderMode': _renderMode,
+            'mirrorMode': _mirrorMode,
+          }),
+        });
 
     // {
     //       'apiType': _apiType.index,
@@ -644,20 +638,23 @@ class _RtcTextureViewState extends State<RtcTextureView> {
 
   // kEngineSetLocalRenderMode/kEngineSetRemoteRenderMode
   void setMirrorMode() {
+    _renderMode = VideoRenderModeConverter(widget.renderMode).value();
     _mirrorMode = VideoMirrorModeConverter(widget.mirrorMode).value();
-    _channels[_id]?.invokeMethod('setMirrorMode', {
-      'mirrorMode': _mirrorMode,
-    });
 
-    // _channels[_id]?.invokeMethod('callApi',
-    //     // 'renderMode': _renderMode,
-    //     {
-    //       'apiType': _getSetRenderModeApiType(widget.uid),
-    //       'params': jsonEncode({
-    //         'renderMode': _renderMode,
-    //         'mirrorMode': _mirrorMode,
-    //       }),
-    //     });
+    // _channels[_id]?.invokeMethod('setMirrorMode', {
+    //   'mirrorMode': _mirrorMode,
+    // });
+
+    _channels[_id]?.invokeMethod('callApi',
+        // 'renderMode': _renderMode,
+        {
+          'apiType': _getSetRenderModeApiType(widget.uid).index,
+          'params': jsonEncode({
+            'userId': widget.uid,
+            'renderMode': _renderMode,
+            'mirrorMode': _mirrorMode,
+          }),
+        });
   }
 
   Future<void> onPlatformViewCreated(int id) async {

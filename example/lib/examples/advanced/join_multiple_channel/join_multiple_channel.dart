@@ -244,7 +244,7 @@ class _State extends State<JoinMultipleChannel> {
   }
 
   _renderVideo() {
-    List<int>? remoteUid = null;
+    List<int> remoteUid = [];
     if (renderChannelId == _channelId0) {
       remoteUid = remoteUid0;
     } else if (renderChannelId == _channelId1) {
@@ -254,27 +254,29 @@ class _State extends State<JoinMultipleChannel> {
       child: Stack(
         children: [
           kIsWeb ? RtcLocalView.SurfaceView() : RtcLocalView.TextureView(),
-          if (remoteUid != null)
+          if (remoteUid.isNotEmpty)
             Align(
               alignment: Alignment.topLeft,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: List.of(remoteUid.map(
-                    (e) => Container(
-                      width: 120,
-                      height: 120,
-                      child: kIsWeb
-                          ? RtcRemoteView.SurfaceView(
-                              uid: e,
-                              channelId: renderChannelId!,
-                            )
-                          : RtcRemoteView.TextureView(
-                              uid: e,
-                              channelId: renderChannelId!,
-                            ),
-                    ),
-                  )),
+                  children: remoteUid
+                      .map(
+                        (e) => Container(
+                          width: 120,
+                          height: 120,
+                          child: kIsWeb
+                              ? RtcRemoteView.SurfaceView(
+                                  uid: e,
+                                  channelId: renderChannelId!,
+                                )
+                              : RtcRemoteView.TextureView(
+                                  uid: e,
+                                  channelId: renderChannelId!,
+                                ),
+                        ),
+                      )
+                      .toList(),
                 ),
               ),
             )

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
@@ -107,7 +108,7 @@ class _State extends State<StreamMessage> {
         });
       },
       streamMessage: (int uid, int streamId, Uint8List data) {
-        _showMyDialog(uid, streamId, String.fromCharCodes(data));
+        _showMyDialog(uid, streamId, utf8.decode(data));
         logSink.log('streamMessage $uid $streamId $data');
       },
       streamMessageError:
@@ -126,7 +127,7 @@ class _State extends State<StreamMessage> {
         .createDataStreamWithConfig(DataStreamConfig(false, false));
     if (streamId != null) {
       _engine.sendStreamMessage(
-          streamId, Uint8List.fromList(_controller.text.codeUnits));
+          streamId, Uint8List.fromList(utf8.encode(_controller.text)));
     }
     _controller.clear();
   }
