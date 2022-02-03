@@ -11,8 +11,7 @@ import 'rtc_channel.dart';
 /// RtcEngine is the main class of the Agora SDK.
 class RtcEngine with RtcEngineInterface {
   static const MethodChannel _methodChannel = MethodChannel('agora_rtc_engine');
-  static const EventChannel _eventChannel =
-      EventChannel('agora_rtc_engine/events');
+  static const EventChannel _eventChannel = EventChannel('agora_rtc_engine/events');
   static final Stream _stream = _eventChannel.receiveBroadcastStream();
   static StreamSubscription? _subscription;
 
@@ -28,8 +27,7 @@ class RtcEngine with RtcEngineInterface {
 
   RtcEngine._();
 
-  Future<T?> _invokeMethod<T>(String method,
-      [Map<String, dynamic>? arguments]) {
+  Future<T?> _invokeMethod<T>(String method, [Map<String, dynamic>? arguments]) {
     return _methodChannel.invokeMethod(method, arguments);
   }
 
@@ -112,8 +110,7 @@ class RtcEngine with RtcEngineInterface {
   /// - The error code, if this method call fails:
   ///   - [ErrorCode.InvalidAppId]
   @deprecated
-  static Future<RtcEngine> createWithAreaCode(
-      String appId, List<AreaCode> areaCode) {
+  static Future<RtcEngine> createWithAreaCode(String appId, List<AreaCode> areaCode) {
     return createWithContext(RtcEngineContext(appId, areaCode: areaCode));
   }
 
@@ -204,8 +201,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> joinChannel(
-      String? token, String channelName, String? optionalInfo, int optionalUid,
+  Future<void> joinChannel(String? token, String channelName, String? optionalInfo, int optionalUid,
       [ChannelMediaOptions? options]) {
     return _invokeMethod('joinChannel', {
       'token': token,
@@ -217,8 +213,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> switchChannel(String? token, String channelName,
-      [ChannelMediaOptions? options]) {
+  Future<void> switchChannel(String? token, String channelName, [ChannelMediaOptions? options]) {
     return _invokeMethod('switchChannel', {
       'token': token,
       'channelName': channelName,
@@ -325,8 +320,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> joinChannelWithUserAccount(
-      String? token, String channelName, String userAccount,
+  Future<void> joinChannelWithUserAccount(String? token, String channelName, String userAccount,
       [ChannelMediaOptions? options]) {
     return _invokeMethod('joinChannelWithUserAccount', {
       'token': token,
@@ -377,8 +371,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> enableAudioVolumeIndication(
-      int interval, int smooth, bool report_vad) {
+  Future<void> enableAudioVolumeIndication(int interval, int smooth, bool report_vad) {
     return _invokeMethod('enableAudioVolumeIndication', {
       'interval': interval,
       'smooth': smooth,
@@ -571,9 +564,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> startAudioMixing(
-      String filePath, bool loopback, bool replace, int cycle,
-      [int? startPos]) {
+  Future<void> startAudioMixing(String filePath, bool loopback, bool replace, int cycle, [int? startPos]) {
     return _invokeMethod('startAudioMixing', {
       'filePath': filePath,
       'loopback': loopback,
@@ -605,8 +596,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> addVideoWatermark(
-      String watermarkUrl, WatermarkOptions options) {
+  Future<void> addVideoWatermark(String watermarkUrl, WatermarkOptions options) {
     return _invokeMethod('addVideoWatermark', {
       'watermarkUrl': watermarkUrl,
       'options': options.toJson(),
@@ -710,8 +700,8 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> playEffect(int soundId, String filePath, int loopCount,
-      double pitch, double pan, double gain, bool publish,
+  Future<void> playEffect(
+      int soundId, String filePath, int loopCount, double pitch, double pan, double gain, bool publish,
       [int? startPos]) {
     return _invokeMethod('playEffect', {
       'soundId': soundId,
@@ -809,16 +799,14 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setCameraCapturerConfiguration(
-      CameraCapturerConfiguration config) {
+  Future<void> setCameraCapturerConfiguration(CameraCapturerConfiguration config) {
     return _invokeMethod('setCameraCapturerConfiguration', {
       'config': config.toJson(),
     });
   }
 
   @override
-  Future<void> setCameraExposurePosition(
-      double positionXinView, double positionYinView) {
+  Future<void> setCameraExposurePosition(double positionXinView, double positionYinView) {
     return _invokeMethod('setCameraExposurePosition', {
       'positionXinView': positionXinView,
       'positionYinView': positionYinView,
@@ -826,8 +814,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setCameraFocusPositionInPreview(
-      double positionX, double positionY) {
+  Future<void> setCameraFocusPositionInPreview(double positionX, double positionY) {
     return _invokeMethod('setCameraFocusPositionInPreview', {
       'positionX': positionX,
       'positionY': positionY,
@@ -915,11 +902,9 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setLocalVoiceEqualization(
-      AudioEqualizationBandFrequency bandFrequency, int bandGain) {
+  Future<void> setLocalVoiceEqualization(AudioEqualizationBandFrequency bandFrequency, int bandGain) {
     return _invokeMethod('setLocalVoiceEqualization', {
-      'bandFrequency':
-          AudioEqualizationBandFrequencyConverter(bandFrequency).value(),
+      'bandFrequency': AudioEqualizationBandFrequencyConverter(bandFrequency).value(),
       'bandGain': bandGain,
     });
   }
@@ -1003,8 +988,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   @deprecated
-  Future<void> startAudioRecording(String filePath,
-      AudioSampleRateType sampleRate, AudioRecordingQuality quality) {
+  Future<void> startAudioRecording(String filePath, AudioSampleRateType sampleRate, AudioRecordingQuality quality) {
     return _invokeMethod('startAudioRecording', {
       'filePath': filePath,
       'sampleRate': AudioSampleRateTypeConverter(sampleRate).value(),
@@ -1013,24 +997,21 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> startAudioRecordingWithConfig(
-      AudioRecordingConfiguration config) {
+  Future<void> startAudioRecordingWithConfig(AudioRecordingConfiguration config) {
     return _invokeMethod('startAudioRecording', {
       'config': config.toJson(),
     });
   }
 
   @override
-  Future<void> startChannelMediaRelay(
-      ChannelMediaRelayConfiguration channelMediaRelayConfiguration) {
+  Future<void> startChannelMediaRelay(ChannelMediaRelayConfiguration channelMediaRelayConfiguration) {
     return _invokeMethod('startChannelMediaRelay', {
       'channelMediaRelayConfiguration': channelMediaRelayConfiguration.toJson(),
     });
   }
 
   @override
-  Future<void> startRhythmPlayer(
-      String sound1, String sound2, RhythmPlayerConfig config) {
+  Future<void> startRhythmPlayer(String sound1, String sound2, RhythmPlayerConfig config) {
     return _invokeMethod('startRhythmPlayer', {
       'sound1': sound1,
       'sound2': sound2,
@@ -1051,10 +1032,8 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> startEchoTest(
-      {int? intervalInSeconds, EchoTestConfiguration? config}) {
-    assert(intervalInSeconds == null || config == null,
-        'Only need one of the params');
+  Future<void> startEchoTest({int? intervalInSeconds, EchoTestConfiguration? config}) {
+    assert(intervalInSeconds == null || config == null, 'Only need one of the params');
     return _invokeMethod('startEchoTest', {
       'intervalInSeconds': intervalInSeconds,
       'config': config?.toJson(),
@@ -1118,8 +1097,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> updateChannelMediaRelay(
-      ChannelMediaRelayConfiguration channelMediaRelayConfiguration) {
+  Future<void> updateChannelMediaRelay(ChannelMediaRelayConfiguration channelMediaRelayConfiguration) {
     return _invokeMethod('updateChannelMediaRelay', {
       'channelMediaRelayConfiguration': channelMediaRelayConfiguration.toJson(),
     });
@@ -1174,8 +1152,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> sendCustomReportMessage(
-      String id, String category, String event, String label, int value) {
+  Future<void> sendCustomReportMessage(String id, String category, String event, String label, int value) {
     return _invokeMethod('sendCustomReportMessage', {
       'id': id,
       'category': category,
@@ -1186,11 +1163,9 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setAudioSessionOperationRestriction(
-      AudioSessionOperationRestriction restriction) {
+  Future<void> setAudioSessionOperationRestriction(AudioSessionOperationRestriction restriction) {
     return _invokeMethod('setAudioSessionOperationRestriction', {
-      'restriction':
-          AudioSessionOperationRestrictionConverter(restriction).value(),
+      'restriction': AudioSessionOperationRestrictionConverter(restriction).value(),
     });
   }
 
@@ -1200,8 +1175,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setAudioEffectParameters(
-      AudioEffectPreset preset, int param1, int param2) {
+  Future<void> setAudioEffectParameters(AudioEffectPreset preset, int param1, int param2) {
     return _invokeMethod('setAudioEffectParameters', {
       'preset': AudioEffectPresetConverter(preset).value(),
       'param1': param1,
@@ -1258,8 +1232,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setVoiceBeautifierParameters(
-      VoiceBeautifierPreset preset, int param1, int param2) {
+  Future<void> setVoiceBeautifierParameters(VoiceBeautifierPreset preset, int param1, int param2) {
     return _invokeMethod('setVoiceBeautifierParameters', {
       'preset': VoiceBeautifierPresetConverter(preset).value(),
       'param1': param1,
@@ -1293,8 +1266,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> enableVirtualBackground(
-      bool enabled, VirtualBackgroundSource backgroundSource) {
+  Future<void> enableVirtualBackground(bool enabled, VirtualBackgroundSource backgroundSource) {
     return _invokeMethod('enableVirtualBackground', {
       'enabled': enabled,
       'backgroundSource': backgroundSource.toJson(),
@@ -1400,8 +1372,7 @@ mixin RtcEngineInterface
   /// **Parameter** [optionalUid] (Optional) User ID. `optionalUid` must be unique. If `optionalUid` is not assigned (or set to 0), the SDK assigns and returns uid in the [RtcEngineEventHandler.joinChannelSuccess] callback. Your app must record and maintain the returned uid since the SDK does not do so.
   ///
   /// **Parameter** [options] The channel media options. See [ChannelMediaOptions].
-  Future<void> joinChannel(
-      String? token, String channelName, String? optionalInfo, int optionalUid,
+  Future<void> joinChannel(String? token, String channelName, String? optionalInfo, int optionalUid,
       [ChannelMediaOptions? options]);
 
   /// Switches to a different channel.
@@ -1422,8 +1393,7 @@ mixin RtcEngineInterface
   /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "\[", "\]", "^", "_", " {", "}", "|", "~", ",".
   ///
   /// **Parameter** [options] The channel media options: [ChannelMediaOptions].
-  Future<void> switchChannel(String? token, String channelName,
-      [ChannelMediaOptions? options]);
+  Future<void> switchChannel(String? token, String channelName, [ChannelMediaOptions? options]);
 
   /// Allows a user to leave a channel.
   ///
@@ -1467,8 +1437,7 @@ mixin RtcEngineInterface
   Future<ConnectionStateType> getConnectionState();
 
   /// This function is in the beta stage with a free trial. The ability provided in its beta test version is reporting a maximum of 10 message pieces within 6 seconds, with each message piece not exceeding 256 bytes and each string not exceeding 100 bytes. To try out this function, contact support@agora.io and discuss the format of customized messages with us.
-  Future<void> sendCustomReportMessage(
-      String id, String category, String event, String label, int value);
+  Future<void> sendCustomReportMessage(String id, String category, String event, String label, int value);
 
   /// Gets the current call ID.
   ///
@@ -1645,8 +1614,7 @@ mixin RtcEngineInterface
   /// - Dimensity 700 series 720 and later
   /// - Kirin 800 series 810 and later
   /// - Kirin 900 series 980 and later
-  Future<void> enableVirtualBackground(
-      bool enabled, VirtualBackgroundSource backgroundSource);
+  Future<void> enableVirtualBackground(bool enabled, VirtualBackgroundSource backgroundSource);
 
   /// Takes a snapshot of a video stream.
   ///
@@ -1723,8 +1691,7 @@ mixin RtcUserInfoInterface {
   /// - Punctuation characters and other symbols, including: "!", "#", "$", "%", "&", "(", ")", "+", "-", ":", ";", "<", "=", ".", ">", "?", "@", "\[", "\]", "^", "_", " {", "}", "|", "~", ",".
   ///
   /// **Parameter** [options] The channel media options: [ChannelMediaOptions].
-  Future<void> joinChannelWithUserAccount(
-      String? token, String channelName, String userAccount,
+  Future<void> joinChannelWithUserAccount(String? token, String channelName, String userAccount,
       [ChannelMediaOptions? options]);
 
   /// Gets the user information by passing in the user account.
@@ -1924,8 +1891,7 @@ mixin RtcAudioInterface {
   /// **Parameter** [report_vad]
   /// - `true`: Enable the voice activity detection of the local user. Once it is enabled, the vad parameter of the [RtcEngineEventHandler.audioVolumeIndication] callback reports the voice activity status of the local user.
   /// - `false`: (Default) Disable the voice activity detection of the local user. Once it is disabled, the vad parameter of the [RtcEngineEventHandler.audioVolumeIndication] callback does not report the voice activity status of the local user, except for scenarios where the engine automatically detects the voice activity of the local user.
-  Future<void> enableAudioVolumeIndication(
-      int interval, int smooth, bool report_vad);
+  Future<void> enableAudioVolumeIndication(int interval, int smooth, bool report_vad);
 }
 
 /// @nodoc
@@ -2166,9 +2132,7 @@ mixin RtcAudioMixingInterface {
   /// - -1: Play the music in an indefinite loop.
   ///
   /// **Parameter** [startPos] The playback position (ms) of the music file.
-  Future<void> startAudioMixing(
-      String filePath, bool loopback, bool replace, int cycle,
-      [int? startPos]);
+  Future<void> startAudioMixing(String filePath, bool loopback, bool replace, int cycle, [int? startPos]);
 
   /// Stops playing or mixing the music file.
   ///
@@ -2256,8 +2220,7 @@ mixin RtcAudioMixingInterface {
   /// **Returns**
   /// - The total duration (ms) of the specified music file, if this method call succeeds.
   /// - Error code, if this method call fails.
-  @Deprecated(
-      'This method is deprecated as of v4.1.0. Use getAudioFileInfo instead.')
+  @Deprecated('This method is deprecated as of v4.1.0. Use getAudioFileInfo instead.')
   Future<int?> getAudioMixingDuration([String? filePath]);
 
   /// Gets the information of a specified audio file.
@@ -2447,8 +2410,8 @@ mixin RtcAudioEffectInterface {
   /// - `false`: Do not publish. Only the local user can hear the audio effect.
   ///
   /// **Parameter** [startPos] The playback position (ms) of the audio effect file.
-  Future<void> playEffect(int soundId, String filePath, int loopCount,
-      double pitch, double pan, double gain, bool publish,
+  Future<void> playEffect(
+      int soundId, String filePath, int loopCount, double pitch, double pan, double gain, bool publish,
       [int? startPos]);
 
   /// Sets the playback position of an audio effect file.
@@ -2558,8 +2521,7 @@ mixin RtcAudioEffectInterface {
   ///
   /// **Note**
   /// This method does not restrict the operational permission of the app on the audio session.
-  Future<void> setAudioSessionOperationRestriction(
-      AudioSessionOperationRestriction restriction);
+  Future<void> setAudioSessionOperationRestriction(AudioSessionOperationRestriction restriction);
 }
 
 /// @nodoc
@@ -2602,8 +2564,7 @@ mixin RtcVoiceChangerInterface {
   /// See [AudioEqualizationBandFrequency].
   ///
   /// **Parameter** [bandGain] Sets the gain of each band (dB). The value ranges between -15 and 15. The default value is 0.
-  Future<void> setLocalVoiceEqualization(
-      AudioEqualizationBandFrequency bandFrequency, int bandGain);
+  Future<void> setLocalVoiceEqualization(AudioEqualizationBandFrequency bandFrequency, int bandGain);
 
   /// Sets the local voice reverberation.
   ///
@@ -2744,8 +2705,7 @@ mixin RtcVoiceChangerInterface {
   ///   - 10: F#
   ///   - 11: G
   ///   - 12: G#
-  Future<void> setAudioEffectParameters(
-      AudioEffectPreset preset, int param1, int param2);
+  Future<void> setAudioEffectParameters(AudioEffectPreset preset, int param1, int param2);
 
   /// Sets parameters for SDK preset voice beautifier effects.
   ///
@@ -2783,8 +2743,7 @@ mixin RtcVoiceChangerInterface {
   ///   - [RtcEngine.setLocalVoicePitch]
   ///   - [RtcEngine.setLocalVoiceEqualization]
   ///   - [RtcEngine.setLocalVoiceReverb]
-  Future<void> setVoiceBeautifierParameters(
-      VoiceBeautifierPreset preset, int param1, int param2);
+  Future<void> setVoiceBeautifierParameters(VoiceBeautifierPreset preset, int param1, int param2);
 }
 
 /// @nodoc
@@ -2883,8 +2842,7 @@ mixin RtcMediaRelayInterface {
   /// - After a successful method call, if you want to call this method again, ensure that you call the [RtcEngine.stopChannelMediaRelay] method to quit the current relay.
   ///
   /// **Parameter** [channelMediaRelayConfiguration] The configuration of the media stream relay.
-  Future<void> startChannelMediaRelay(
-      ChannelMediaRelayConfiguration channelMediaRelayConfiguration);
+  Future<void> startChannelMediaRelay(ChannelMediaRelayConfiguration channelMediaRelayConfiguration);
 
   /// Updates the channels for media relay.
   ///
@@ -2897,8 +2855,7 @@ mixin RtcMediaRelayInterface {
   /// - This method supports adding at most four destination channels in the relay. If there are already four destination channels in the relay.
   ///
   /// **Parameter** [channelMediaRelayConfiguration] The media stream relay configuration. See [ChannelMediaRelayConfiguration].
-  Future<void> updateChannelMediaRelay(
-      ChannelMediaRelayConfiguration channelMediaRelayConfiguration);
+  Future<void> updateChannelMediaRelay(ChannelMediaRelayConfiguration channelMediaRelayConfiguration);
 
   /// Stops the media stream relay.
   ///
@@ -3079,8 +3036,7 @@ mixin RtcTestInterface {
   /// **Parameter** [intervalInSeconds] The time interval (s) between when you speak and when the recording plays back.
   ///
   /// **Parameter** [config] The configuration of the audio and video call loop test. See [EchoTestConfiguration].
-  Future<void> startEchoTest(
-      {int? intervalInSeconds, EchoTestConfiguration? config});
+  Future<void> startEchoTest({int? intervalInSeconds, EchoTestConfiguration? config});
 
   /// Stops the audio call test.
   Future<void> stopEchoTest();
@@ -3253,8 +3209,7 @@ mixin RtcAudioRecorderInterface {
   ///
   /// **Parameter** [quality] The audio recording quality. See [AudioRecordingQuality].
   @deprecated
-  Future<void> startAudioRecording(String filePath,
-      AudioSampleRateType sampleRate, AudioRecordingQuality quality);
+  Future<void> startAudioRecording(String filePath, AudioSampleRateType sampleRate, AudioRecordingQuality quality);
 
   /// Starts an audio recording on the client.
   ///
@@ -3270,8 +3225,7 @@ mixin RtcAudioRecorderInterface {
   /// - Call this method after joining a channel.
   ///
   /// **Parameter** [config] Recording configuration. See [AudioRecordingConfiguration].
-  Future<void> startAudioRecordingWithConfig(
-      AudioRecordingConfiguration config);
+  Future<void> startAudioRecordingWithConfig(AudioRecordingConfiguration config);
 
   /// Enables the virtual metronome.
   ///
@@ -3291,8 +3245,7 @@ mixin RtcAudioRecorderInterface {
   /// **Parameter** [sound2] The absolute path or URL address (including the filename extensions) of the file for the upbeats. For example: `/sdcard/emulated/0/audio.mp4` on Android and `/var/mobile/Containers/Data/audio.mp4` on iOS. Supported audio formats include MP3, AAC, M4A, MP4, WAV, and 3GP.
   ///
   /// **Parameter** [config] The metronome configuration. See [RhythmPlayerConfig].
-  Future<void> startRhythmPlayer(
-      String sound1, String sound2, RhythmPlayerConfig config);
+  Future<void> startRhythmPlayer(String sound1, String sound2, RhythmPlayerConfig config);
 
   /// Disables the virtual metronome.
   ///
@@ -3451,8 +3404,7 @@ mixin RtcCameraInterface {
   /// **Parameter** [positionX] The horizontal coordinate of the touch point in the view.
   ///
   /// **Parameter** [positionY] The vertical coordinate of the touch point in the view.
-  Future<void> setCameraFocusPositionInPreview(
-      double positionX, double positionY);
+  Future<void> setCameraFocusPositionInPreview(double positionX, double positionY);
 
   /// Sets the camera exposure position.
   ///
@@ -3462,8 +3414,7 @@ mixin RtcCameraInterface {
   /// **Parameter** [positionXinView] The horizontal coordinate of the touch point in the view.
   ///
   /// **Parameter** [positionYinView] The vertical coordinate of the touch point in the view.
-  Future<void> setCameraExposurePosition(
-      double positionXinView, double positionYinView);
+  Future<void> setCameraExposurePosition(double positionXinView, double positionYinView);
 
   /// Enables/Disables face detection for the local user.
   ///
@@ -3512,8 +3463,7 @@ mixin RtcCameraInterface {
   /// - Call this method before enabling the local camera. That said, you can call this method before calling [RtcEngine.joinChannel], [RtcEngine.enableVideo], or [RtcEngine.enableLocalVideo], depending on which method you use to turn on your local camera.
   ///
   /// **Parameter** [config] The camera capture configuration. See [CameraCapturerConfiguration].
-  Future<void> setCameraCapturerConfiguration(
-      CameraCapturerConfiguration config);
+  Future<void> setCameraCapturerConfiguration(CameraCapturerConfiguration config);
 }
 
 /// @nodoc
