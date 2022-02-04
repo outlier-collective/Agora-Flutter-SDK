@@ -1,9 +1,12 @@
 package io.agora.rtc.base
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import io.agora.rtc.*
 import io.agora.rtc.internal.EncryptionConfig
 import io.agora.rtc.models.UserInfo
+import io.agora.screenshare.ScreenShareClient
 
 class IRtcEngine {
   interface RtcEngineInterface : RtcUserInfoInterface, RtcAudioInterface, RtcVideoInterface,
@@ -140,6 +143,8 @@ class IRtcEngine {
     fun setBeautyEffectOptions(params: Map<String, *>, callback: Callback)
 
     fun enableRemoteSuperResolution(params: Map<String, *>, callback: Callback)
+
+    fun startScreenShare()
   }
 
   interface RtcAudioMixingInterface {
@@ -786,6 +791,13 @@ open class RtcEngineManager(
         params["enabled"] as Boolean
       )
     )
+  }
+
+  @RequiresApi(Build.VERSION_CODES.M)
+  override fun startScreenShare() {
+    engine?.stopPreview()
+    val screenShareClient = ScreenShareClient()
+    screenShareClient.bindVideoService(engine)
   }
 
   override fun startAudioMixing(params: Map<String, *>, callback: Callback) {
