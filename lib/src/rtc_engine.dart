@@ -2099,6 +2099,9 @@ mixin RtcVideoInterface {
   ///
   ///
   Future<void> enableRemoteSuperResolution(int uid, bool enabled);
+
+  /// Starts sharing screen.
+  Future<void> startScreenShare();
 }
 
 /// @nodoc
@@ -3532,7 +3535,4 @@ mixin RtcStreamMessageInterface {
   ///
   /// **Parameter** [message] Sent data.
   Future<void> sendStreamMessage(int streamId, String message);
-
-  /// Starts sharing screen.
-  Future<void> startScreenShare();
 }
