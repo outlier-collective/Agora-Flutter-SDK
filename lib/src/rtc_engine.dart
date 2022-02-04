@@ -1281,6 +1281,11 @@ class RtcEngine with RtcEngineInterface {
       'filePath': filePath,
     });
   }
+
+  @override
+  Future<void> startScreenShare() {
+    return _invokeMethod('startScreenShare');
+  }
 }
 
 /// @nodoc
@@ -3527,4 +3532,7 @@ mixin RtcStreamMessageInterface {
   ///
   /// **Parameter** [message] Sent data.
   Future<void> sendStreamMessage(int streamId, String message);
+
+  /// Starts sharing screen.
+  Future<void> startScreenShare();
 }
