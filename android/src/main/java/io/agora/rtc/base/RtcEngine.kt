@@ -144,7 +144,7 @@ class IRtcEngine {
 
     fun enableRemoteSuperResolution(params: Map<String, *>, callback: Callback)
 
-    fun startScreenShare()
+    fun startScreenShare(callback: Callback)
   }
 
   interface RtcAudioMixingInterface {
@@ -794,8 +794,10 @@ open class RtcEngineManager(
   }
 
   @RequiresApi(Build.VERSION_CODES.M)
-  override fun startScreenShare() {
-    engine?.stopPreview()
+  override fun startScreenShare(callback: Callback) {
+    callback.code(
+      engine?.stopPreview()
+    )
     val screenShareClient = ScreenShareClient()
     screenShareClient.bindVideoService(engine)
   }
