@@ -35,27 +35,28 @@ public class ScreenShareClient extends Fragment {
   private IExternalVideoInputService mService;
   private VideoInputServiceConnection mServiceConnection;
 
+  public Context context;
   public Activity activity;
 
   @Override
-  public void onAttach(Activity activity) {
-    super.onAttach(activity);
-    this.activity = activity;
+  public void onAttach(Context context) {
+    super.onAttach(context);
+    this.context = context;
   }
 
   @RequiresApi(api = Build.VERSION_CODES.M)
   public void bindVideoService(RtcEngine rtcEngine) {
     Constants.rtcEngine = rtcEngine;
     Intent intent = new Intent();
-    intent.setClass(activity, ExternalVideoInputService.class);
+    intent.setClass(context, ExternalVideoInputService.class);
     mServiceConnection = new VideoInputServiceConnection();
-    getContext().bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+    context.bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
   }
 
   @RequiresApi(api = Build.VERSION_CODES.M)
   public void unbindVideoService() {
     if (mServiceConnection != null) {
-      activity.unbindService(mServiceConnection);
+      context.unbindService(mServiceConnection);
       mServiceConnection = null;
     }
   }
@@ -100,7 +101,7 @@ public class ScreenShareClient extends Fragment {
       // Starts capturing screen data. Ensure that your Android version must be Lollipop or higher.
       // Instantiates a MediaProjectionManager object
       MediaProjectionManager mpm = (MediaProjectionManager)
-        getContext().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        context.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
       // Creates an intent
       Intent intent = mpm.createScreenCaptureIntent();
       // Starts screen capturing
