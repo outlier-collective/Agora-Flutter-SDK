@@ -122,6 +122,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
       engine()?.stopPreview()
       val screenShareClient = ScreenShareClient()
       screenShareClient.bindVideoService(engine())
+      return
     }
     manager.javaClass.declaredMethods.find { it.name == call.method }?.let { function ->
       function.let { method ->
