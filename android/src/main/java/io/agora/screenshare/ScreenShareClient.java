@@ -2,6 +2,7 @@ package io.agora.screenshare;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.ComponentName;
 import android.content.Context;
@@ -34,11 +35,19 @@ public class ScreenShareClient extends Fragment {
   private IExternalVideoInputService mService;
   private VideoInputServiceConnection mServiceConnection;
 
+  public Activity activity;
+
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+    this.activity = activity;
+  }
+
   @RequiresApi(api = Build.VERSION_CODES.M)
   public void bindVideoService(RtcEngine rtcEngine) {
     Constants.rtcEngine = rtcEngine;
     Intent intent = new Intent();
-    intent.setClass(getContext(), ExternalVideoInputService.class);
+    intent.setClass(activity, ExternalVideoInputService.class);
     mServiceConnection = new VideoInputServiceConnection();
     getContext().bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
   }
@@ -46,7 +55,7 @@ public class ScreenShareClient extends Fragment {
   @RequiresApi(api = Build.VERSION_CODES.M)
   public void unbindVideoService() {
     if (mServiceConnection != null) {
-      getContext().unbindService(mServiceConnection);
+      activity.unbindService(mServiceConnection);
       mServiceConnection = null;
     }
   }
