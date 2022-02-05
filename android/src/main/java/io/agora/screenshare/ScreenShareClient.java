@@ -47,8 +47,7 @@ public class ScreenShareClient extends Fragment {
   @RequiresApi(api = Build.VERSION_CODES.M)
   public void bindVideoService(RtcEngine rtcEngine) {
     Constants.rtcEngine = rtcEngine;
-    Intent intent = new Intent();
-    intent.setClass(context, ExternalVideoInputService.class);
+    Intent intent = new Intent(context, ExternalVideoInputService.class);
     mServiceConnection = new VideoInputServiceConnection();
     context.bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
   }
