@@ -1,12 +1,15 @@
 package io.agora.agora_rtc_engine
 
 import android.content.Context
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import androidx.annotation.NonNull
+import androidx.annotation.RequiresApi
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcEngineManager
 import io.agora.rtc.base.RtcEngineRegistry
+import io.agora.screenshare.ScreenShareClient
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.*
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -106,10 +109,19 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     return manager.engine
   }
 
+  @RequiresApi(Build.VERSION_CODES.M)
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+    print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+    print(call.method)
+    print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
     if (call.method == "getAssetAbsolutePath") {
       getAssetAbsolutePath(call, result)
       return
+    }
+    if (call.method == "startScreenShare") {
+      engine()?.stopPreview()
+      val screenShareClient = ScreenShareClient()
+      screenShareClient.bindVideoService(engine())
     }
     manager.javaClass.declaredMethods.find { it.name == call.method }?.let { function ->
       function.let { method ->
