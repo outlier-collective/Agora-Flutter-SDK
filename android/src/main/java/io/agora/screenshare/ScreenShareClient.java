@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.media.projection.MediaProjectionManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.DisplayMetrics;
@@ -26,6 +27,8 @@ import io.agora.videohelpers.ExternalVideoInputService;
 import io.agora.videohelpers.IExternalVideoInputService;
 
 public class ScreenShareClient extends Fragment {
+  private static final String TAG = "screen_share_client";
+
   private static final int PROJECTION_REQ_CODE = 1 << 2;
 
   private FrameLayout fl_remote;
@@ -38,19 +41,20 @@ public class ScreenShareClient extends Fragment {
   public Context context;
   public Activity activity;
 
+  @RequiresApi(api = Build.VERSION_CODES.M)
   @Override
   public void onAttach(Context context) {
     super.onAttach(context);
     this.context = context;
+    bindVideoService();
   }
 
   @RequiresApi(api = Build.VERSION_CODES.M)
-  public void bindVideoService(RtcEngine rtcEngine) {
-    Constants.rtcEngine = rtcEngine;
-//    context.startActivity(new Intent(context, ExternalVideoInputService.class));
+  public void bindVideoService() {
+//    requireActivity().startActivity(new Intent(requireActivity(), ExternalVideoInputService.class));
     Intent intent = new Intent(requireActivity(), ExternalVideoInputService.class);
     mServiceConnection = new VideoInputServiceConnection();
-    context.bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+    requireActivity().bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
   }
 
   @RequiresApi(api = Build.VERSION_CODES.M)

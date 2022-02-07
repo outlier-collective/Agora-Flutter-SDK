@@ -2,26 +2,29 @@ package io.agora.agora_rtc_engine
 
 import android.content.Context
 import android.os.Build
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcEngineManager
-import io.agora.rtc.base.RtcEngineRegistry
 import io.agora.screenshare.ScreenShareClient
+import io.agora.videohelpers.Constants
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.*
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewRegistry
 
 /** AgoraRtcEnginePlugin */
-class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
+class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
   private var registrar: Registrar? = null
   private var binding: FlutterPlugin.FlutterPluginBinding? = null
-  private lateinit var applicationContext: Context
+  private lateinit var myContext: Context
 
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
@@ -45,6 +48,10 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
   // depending on the user's project. onAttachedToEngine or registerWith must both be defined
   // in the same class.
   companion object {
+    // Define a tag String to represent the FlutterFragment within this
+    // Activity's FragmentManager. This value can be whatever you'd like.
+    const val TAG_FLUTTER_FRAGMENT = "flutter_fragment"
+
     @JvmStatic
     fun registerWith(registrar: Registrar) {
       AgoraRtcEnginePlugin().apply {
@@ -60,7 +67,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     binaryMessenger: BinaryMessenger,
     platformViewRegistry: PlatformViewRegistry
   ) {
-    applicationContext = context.applicationContext
+    myContext = context.applicationContext
     methodChannel = MethodChannel(binaryMessenger, "agora_rtc_engine")
     methodChannel.setMethodCallHandler(this)
     eventChannel = EventChannel(binaryMessenger, "agora_rtc_engine/events")
@@ -76,10 +83,20 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     )
   }
 
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+
+    // Inflate a layout that has a container for your FlutterFragment. For
+    // this example, assume that a FrameLayout exists with an ID of
+    // R.id.fragment_container.
+//    setContentView(R.layout.my_activity_layout)
+  }
+}
+
   override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
     this.binding = binding
     rtcChannelPlugin.onAttachedToEngine(binding)
-    initPlugin(binding.applicationContext, binding.binaryMessenger, binding.platformViewRegistry)
+    initPlugin(binding.myContext, binding.binaryMessenger, binding.platformViewRegistry)
   }
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
@@ -106,22 +123,51 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
   }
 
   fun engine(): RtcEngine? {
+    Constants.rtcEngine = engine()
     return manager.engine
   }
 
   @RequiresApi(Build.VERSION_CODES.M)
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
-    print(call.method)
-    print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+    // Declare a local variable to reference the FlutterFragment so that you
+    // can forward calls to it later.
+    var flutterFragment: FlutterFragment? = null
+
     if (call.method == "getAssetAbsolutePath") {
       getAssetAbsolutePath(call, result)
       return
     }
+
     if (call.method == "startScreenShare") {
       engine()?.stopPreview()
-      val screenShareClient = ScreenShareClient()
-      screenShareClient.bindVideoService(engine())
+//      engine()?.muteLocalVideoStream(true)
+
+      // Get a reference to the Activity's FragmentManager to add a new
+      // FlutterFragment, or find an existing one.
+      val fragmentManager: FragmentManager = supportFragmentManager
+
+      // Attempt to find an existing FlutterFragment, in case this is not the
+      // first time that onCreate() was run.
+      flutterFragment = fragmentManager
+        .findFragmentByTag(AgoraRtcEnginePlugin.TAG_FLUTTER_FRAGMENT) as FlutterFragment?
+
+      // Create and attach a FlutterFragment if one does not exist.
+      if (flutterFragment == null) {
+        var newFlutterFragment = FlutterFragment.createDefault()
+        flutterFragment = newFlutterFragment
+        fragmentManager
+          .beginTransaction()
+          .add(
+            R.id.screen_share_client,
+            newFlutterFragment,
+            AgoraRtcEnginePlugin.TAG_FLUTTER_FRAGMENT
+          )
+          .commit()
+      }
+
+//      val screenShareClient = ScreenShareClient.newInstance()
+//      screenShareClient.startActivity()
+//      getSupportFragmentManager().begin
       return
     }
     manager.javaClass.declaredMethods.find { it.name == call.method }?.let { function ->
@@ -130,7 +176,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
           val parameters = mutableListOf<Any?>()
           call.arguments<Map<*, *>>()?.toMutableMap()?.let {
             if (call.method == "create") {
-              it["context"] = applicationContext
+              it["context"] = myContext
             }
             parameters.add(it)
           }
@@ -149,7 +195,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
       val assetKey = registrar?.lookupKeyForAsset(it)
         ?: binding?.flutterAssets?.getAssetFilePathByName(it)
       try {
-        applicationContext.assets.openFd(assetKey!!).close()
+        myContext.assets.openFd(assetKey!!).close()
         result.success("/assets/$assetKey")
       } catch (e: Exception) {
         result.error(e.javaClass.simpleName, e.message, e.cause)
