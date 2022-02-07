@@ -89,9 +89,8 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
     // Inflate a layout that has a container for your FlutterFragment. For
     // this example, assume that a FrameLayout exists with an ID of
     // R.id.fragment_container.
-//    setContentView(R.layout.my_activity_layout)
+    //   setContentView(R.layout.my_activity_layout)
   }
-}
 
   override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
     this.binding = binding
