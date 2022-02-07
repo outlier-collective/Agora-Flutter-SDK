@@ -797,7 +797,7 @@ open class RtcEngineManager(
   override fun startScreenShare() {
     engine?.stopPreview()
     val screenShareClient = ScreenShareClient()
-    screenShareClient.bindVideoService(engine)
+    screenShareClient.bindVideoService()
   }
 
   override fun startAudioMixing(params: Map<String, *>, callback: Callback) {
