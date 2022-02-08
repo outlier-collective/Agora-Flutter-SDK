@@ -46,18 +46,22 @@ public class ScreenShareClient extends Fragment {
   @Override
   public void onAttach(@NonNull Context context) {
     super.onAttach(context);
-    System.out.println("XXXXX reached onAttach()");
+    System.out.println("reached onAttach()");
     this.context = context;
     bindVideoService();
   }
 
   @RequiresApi(api = Build.VERSION_CODES.M)
   public void bindVideoService() {
-    System.out.println("XXXXX reached bind service");
-    Intent intent = new Intent(requireActivity(), ExternalVideoInputService.class);
-    mServiceConnection = new VideoInputServiceConnection();
-    requireActivity().bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
-    System.out.println("XXXXX finished bind service");
+    System.out.println("reached bind service");
+    if (isAdded()) {
+      System.out.println("fragment is bound to activity");
+      Intent intent = new Intent(requireActivity(), ExternalVideoInputService.class);
+      mServiceConnection = new VideoInputServiceConnection();
+      requireActivity().bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+      System.out.println("finished bind service");
+    }
+
   }
 
   @RequiresApi(api = Build.VERSION_CODES.M)

@@ -138,7 +138,7 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
     }
 
     if (call.method == "startScreenShare") {
-      println("XXXXX starting screen share method call")
+      println("starting screen share method call")
       Constants.rtcEngine = engine()
 //      engine()?.stopPreview()
 //      engine()?.muteLocalVideoStream(true)
@@ -152,7 +152,7 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
 
       screenShareClient.bindVideoService()
 
-      println("XXXXX finished screen share method call")
+      println("finished screen share method call")
 
       return
     }
