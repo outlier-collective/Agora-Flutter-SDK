@@ -23,7 +23,7 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewRegistry
 import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.*
 
 /** AgoraRtcEnginePlugin */
 class AgoraRtcEnginePlugin : FragmentActivity(), ActivityAware, FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
@@ -131,6 +131,26 @@ class AgoraRtcEnginePlugin : FragmentActivity(), ActivityAware, FlutterPlugin, M
     // appropriate methods on the binding.
     myActivity = binding.getActivity()
     println("plugin attached to activity")
+  }
+
+  override fun onDetachedFromActivityForConfigChanges() {
+    // The Activity your plugin was associated with has been
+    // destroyed due to config changes. It will be right back
+    // but your plugin must clean up any references to that
+    // Activity and associated resources.
+  }
+
+  override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding?) {
+    // Your plugin is now associated with a new Activity instance
+    // after config changes took place. You may now re-establish
+    // a reference to the Activity and associated resources.
+  }
+
+  override fun onDetachedFromActivity() {
+    // Your plugin is no longer associated with an Activity.
+    // You must clean up all resources and references. Your
+    // plugin may, or may not ever be associated with an Activity
+    // again.
   }
 
   override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
