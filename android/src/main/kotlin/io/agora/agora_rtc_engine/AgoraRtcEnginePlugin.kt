@@ -100,6 +100,17 @@ class AgoraRtcEnginePlugin : FragmentActivity(), ActivityAware, FlutterPlugin, M
     // this example, assume that a FrameLayout exists with an ID of
     // R.id.fragment_container.
 //    setContentView(R.layout.activity_main)
+
+    val vParams: ViewGroup.LayoutParams = FrameLayout.LayoutParams(
+      ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+    )
+    val container = FrameLayout(myContext)
+    container.layoutParams = vParams
+    container.id = id
+    myActivity.addContentView(container, vParams)
+
+    fragmentManager = supportFragmentManager
+    println("fragment manager: ${fragmentManager.toString()}")
   }
 
   override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
@@ -132,17 +143,6 @@ class AgoraRtcEnginePlugin : FragmentActivity(), ActivityAware, FlutterPlugin, M
     // appropriate methods on the binding.
     myActivity = binding.getActivity()
     println("plugin attached to activity")
-
-    val vParams: ViewGroup.LayoutParams = FrameLayout.LayoutParams(
-      ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-    )
-    val container = FrameLayout(myContext)
-    container.layoutParams = vParams
-    container.id = id
-    myActivity.addContentView(container, vParams)
-
-    fragmentManager = supportFragmentManager
-    println("fragment manager: ${fragmentManager.toString()}")
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
@@ -197,8 +197,6 @@ class AgoraRtcEnginePlugin : FragmentActivity(), ActivityAware, FlutterPlugin, M
       Constants.rtcEngine = engine()
 //      engine()?.stopPreview()
 //      engine()?.muteLocalVideoStream(true)
-
-
 
       val screenShareClient = ScreenShareClient()
 
