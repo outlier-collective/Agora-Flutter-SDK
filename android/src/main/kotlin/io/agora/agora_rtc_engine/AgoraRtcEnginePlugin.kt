@@ -147,11 +147,12 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
 
       fragmentManager
         ?.beginTransaction()
-        ?.replace(android.R.id.content, screenShareClient)
+        ?.add(android.R.id.content, screenShareClient)
         ?.commit()
 
       screenShareClient.bindVideoService()
 
+      println(fragmentManager?.fragments.toString())
       println("finished screen share method call")
 
       return
