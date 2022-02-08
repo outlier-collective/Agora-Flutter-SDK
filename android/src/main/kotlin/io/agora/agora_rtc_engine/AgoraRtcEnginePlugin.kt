@@ -40,6 +40,9 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
   private val handler = Handler(Looper.getMainLooper())
   private val rtcChannelPlugin = AgoraRtcChannelPlugin(this)
 
+  private var fragmentManager: FragmentManager? = null
+  private var flutterFragment: FlutterFragment? = null
+
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
   // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
   // plugin registration via this function while apps migrate to use the new Android APIs
@@ -91,7 +94,8 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
     // Inflate a layout that has a container for your FlutterFragment. For
     // this example, assume that a FrameLayout exists with an ID of
     // R.id.fragment_container.
-    //   setContentView(R.layout.my_activity_layout)
+//    setContentView(R.layout.activity_main)
+    fragmentManager = supportFragmentManager
   }
 
   override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
@@ -140,13 +144,13 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
 
       // Get a reference to the Activity's FragmentManager to add a new
       // FlutterFragment, or find an existing one.
-      val fragmentManager: FragmentManager = supportFragmentManager
+//      val fragmentManager: FragmentManager = supportFragmentManager
       val screenShareClient = ScreenShareClient()
 
       fragmentManager
-        .beginTransaction()
-        .replace(android.R.id.content, screenShareClient)
-        .commit()
+        ?.beginTransaction()
+        ?.replace(android.R.id.content, screenShareClient)
+        ?.commit()
 
       return
     }
