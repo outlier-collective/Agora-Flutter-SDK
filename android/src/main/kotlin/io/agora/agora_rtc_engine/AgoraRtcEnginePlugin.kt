@@ -94,6 +94,7 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
     // this example, assume that a FrameLayout exists with an ID of
     // R.id.fragment_container.
 //    setContentView(R.layout.activity_main)
+    println("plugin onCreate() method called")
     fragmentManager = supportFragmentManager
   }
 
@@ -152,6 +153,7 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
 
       screenShareClient.bindVideoService()
 
+      println(fragmentManager)
       println(fragmentManager?.fragments.toString())
       println("finished screen share method call")
 
