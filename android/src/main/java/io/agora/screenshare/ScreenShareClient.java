@@ -13,8 +13,10 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,6 +44,12 @@ public class ScreenShareClient extends Fragment {
   public Context context;
   public Activity activity;
 
+  @Override
+  public void onCreate (Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    System.out.println("reached onCreate()");
+  }
+
   @RequiresApi(api = Build.VERSION_CODES.M)
   @Override
   public void onAttach(@NonNull Context context) {
@@ -61,7 +69,6 @@ public class ScreenShareClient extends Fragment {
       requireActivity().bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
       System.out.println("finished bind service");
     }
-
   }
 
   @RequiresApi(api = Build.VERSION_CODES.M)
