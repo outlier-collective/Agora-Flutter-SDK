@@ -14,6 +14,7 @@ import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcEngineManager
 import io.agora.screenshare.ScreenShareClient
 import io.agora.videohelpers.Constants
+import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.*
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -95,7 +96,7 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
   override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
     this.binding = binding
     rtcChannelPlugin.onAttachedToEngine(binding)
-    initPlugin(binding.myContext, binding.binaryMessenger, binding.platformViewRegistry)
+    initPlugin(binding.applicationContext, binding.binaryMessenger, binding.platformViewRegistry)
   }
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
@@ -148,7 +149,7 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
       // Attempt to find an existing FlutterFragment, in case this is not the
       // first time that onCreate() was run.
       flutterFragment = fragmentManager
-        .findFragmentByTag(AgoraRtcEnginePlugin.TAG_FLUTTER_FRAGMENT) as FlutterFragment?
+        .findFragmentByTag(TAG_FLUTTER_FRAGMENT) as FlutterFragment?
 
       // Create and attach a FlutterFragment if one does not exist.
       if (flutterFragment == null) {
@@ -159,7 +160,7 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
           .add(
             R.id.screen_share_client,
             newFlutterFragment,
-            AgoraRtcEnginePlugin.TAG_FLUTTER_FRAGMENT
+            TAG_FLUTTER_FRAGMENT
           )
           .commit()
       }
