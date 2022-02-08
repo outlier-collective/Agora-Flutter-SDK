@@ -46,6 +46,7 @@ public class ScreenShareClient extends Fragment {
   @Override
   public void onAttach(@NonNull Context context) {
     super.onAttach(context);
+    System.out.println("XXXXX reached onAttach()");
     this.context = context;
     bindVideoService();
   }
