@@ -145,29 +145,15 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
       // Get a reference to the Activity's FragmentManager to add a new
       // FlutterFragment, or find an existing one.
       val fragmentManager: FragmentManager = supportFragmentManager
-
-      // Attempt to find an existing FlutterFragment, in case this is not the
-      // first time that onCreate() was run.
       flutterFragment = fragmentManager
         .findFragmentByTag(TAG_FLUTTER_FRAGMENT) as FlutterFragment?
 
-      // Create and attach a FlutterFragment if one does not exist.
-      if (flutterFragment == null) {
-        var newFlutterFragment = FlutterFragment.createDefault()
-        flutterFragment = newFlutterFragment
-        fragmentManager
-          .beginTransaction()
-          .add(
-            R.id.screen_share_client,
-            newFlutterFragment,
-            TAG_FLUTTER_FRAGMENT
-          )
-          .commit()
-      }
+      val shareScreenFragment = ScreenShareClient()
+      fragmentManager
+        .beginTransaction()
+        .replace(flutterFragment, shareScreenFragment)
+        .commit()
 
-//      val screenShareClient = ScreenShareClient.newInstance()
-//      screenShareClient.startActivity()
-//      getSupportFragmentManager().begin
       return
     }
     manager.javaClass.declaredMethods.find { it.name == call.method }?.let { function ->
