@@ -52,10 +52,11 @@ public class ScreenShareClient extends Fragment {
 
   @RequiresApi(api = Build.VERSION_CODES.M)
   public void bindVideoService() {
-//    requireActivity().startActivity(new Intent(requireActivity(), ExternalVideoInputService.class));
+    System.out.println("XXXXX reached bind service");
     Intent intent = new Intent(requireActivity(), ExternalVideoInputService.class);
     mServiceConnection = new VideoInputServiceConnection();
     requireActivity().bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+    System.out.println("XXXXX finished bind service");
   }
 
   @RequiresApi(api = Build.VERSION_CODES.M)

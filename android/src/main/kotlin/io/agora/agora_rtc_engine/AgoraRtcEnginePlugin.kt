@@ -142,9 +142,6 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
 //      engine()?.stopPreview()
 //      engine()?.muteLocalVideoStream(true)
 
-      // Get a reference to the Activity's FragmentManager to add a new
-      // FlutterFragment, or find an existing one.
-//      val fragmentManager: FragmentManager = supportFragmentManager
       val screenShareClient = ScreenShareClient()
 
       fragmentManager
