@@ -131,6 +131,18 @@ class AgoraRtcEnginePlugin : FragmentActivity(), ActivityAware, FlutterPlugin, M
     // appropriate methods on the binding.
     myActivity = binding.getActivity()
     println("plugin attached to activity")
+
+    val id = 0x123456
+    val vParams: ViewGroup.LayoutParams = FrameLayout.LayoutParams(
+      ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+    )
+    val container = FrameLayout(myContext)
+    container.layoutParams = vParams
+    container.id = id
+    myActivity.addContentView(container, vParams)
+
+    fragmentManager = supportFragmentManager
+    println("fragment manager: ${fragmentManager.toString()}")
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
@@ -186,18 +198,9 @@ class AgoraRtcEnginePlugin : FragmentActivity(), ActivityAware, FlutterPlugin, M
 //      engine()?.stopPreview()
 //      engine()?.muteLocalVideoStream(true)
 
-      val id = 0x123456
-      val vParams: ViewGroup.LayoutParams = FrameLayout.LayoutParams(
-        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-      )
-      val container = FrameLayout(myContext)
-      container.layoutParams = vParams
-      container.id = id
-      myActivity.addContentView(container, vParams)
+
 
       val screenShareClient = ScreenShareClient()
-      fragmentManager = supportFragmentManager
-      println("fragment manager: ${fragmentManager.toString()}")
 
       fragmentManager
         ?.beginTransaction()
