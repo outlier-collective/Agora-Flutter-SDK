@@ -136,7 +136,7 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
     if (call.method == "startScreenShare") {
       Constants.rtcEngine = engine()
 //      engine()?.stopPreview()
-//      engine()?.muteLocalVideoStream(true)
+      engine()?.muteLocalVideoStream(true)
 
       // Get a reference to the Activity's FragmentManager to add a new
       // FlutterFragment, or find an existing one.
