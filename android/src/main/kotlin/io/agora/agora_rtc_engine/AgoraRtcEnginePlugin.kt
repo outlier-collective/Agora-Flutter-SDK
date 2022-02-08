@@ -1,10 +1,12 @@
 package io.agora.agora_rtc_engine
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.annotation.NonNull
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import io.agora.rtc.RtcEngine
@@ -128,6 +130,7 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
     return manager.engine
   }
 
+  @RequiresApi(Build.VERSION_CODES.M)
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
     if (call.method == "getAssetAbsolutePath") {
       getAssetAbsolutePath(call, result)
@@ -146,6 +149,8 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
         ?.beginTransaction()
         ?.replace(android.R.id.content, screenShareClient)
         ?.commit()
+
+      screenShareClient.bindVideoService()
 
       println("XXXXX finished screen share method call")
 
