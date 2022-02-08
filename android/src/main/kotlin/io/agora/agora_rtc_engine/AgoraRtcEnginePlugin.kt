@@ -22,10 +22,11 @@ import io.flutter.plugin.common.*
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewRegistry
-
+import io.flutter.plugin.common.MethodChannel.Result
+import io.flutter.embedding.engine.plugins.activity
 
 /** AgoraRtcEnginePlugin */
-class AgoraRtcEnginePlugin : FragmentActivity(), FlutterFragmentActivity, FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
+class AgoraRtcEnginePlugin : FragmentActivity(), ActivityAware, FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
   private var registrar: Registrar? = null
   private var binding: FlutterPlugin.FlutterPluginBinding? = null
   private lateinit var myContext: Context
