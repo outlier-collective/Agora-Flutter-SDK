@@ -85,6 +85,9 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
       "AgoraTextureView",
       AgoraTextureViewFactory(binaryMessenger, this, rtcChannelPlugin)
     )
+
+    fragmentManager = supportFragmentManager
+    println("fragment manager: ${fragmentManager.toString()}")
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,8 +97,6 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
     // this example, assume that a FrameLayout exists with an ID of
     // R.id.fragment_container.
 //    setContentView(R.layout.activity_main)
-    println("plugin onCreate() method called")
-    fragmentManager = supportFragmentManager
   }
 
   override fun onAttachedToEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
