@@ -1,10 +1,13 @@
 package io.agora.agora_rtc_engine
 
+import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
@@ -13,7 +16,6 @@ import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcEngineManager
 import io.agora.screenshare.ScreenShareClient
 import io.agora.videohelpers.Constants
-import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.*
@@ -21,11 +23,13 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewRegistry
 
+
 /** AgoraRtcEnginePlugin */
-class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
+class AgoraRtcEnginePlugin : FragmentActivity(), FlutterFragmentActivity, FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
   private var registrar: Registrar? = null
   private var binding: FlutterPlugin.FlutterPluginBinding? = null
   private lateinit var myContext: Context
+  private lateinit var myActivity: Activity
 
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
@@ -85,9 +89,6 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
       "AgoraTextureView",
       AgoraTextureViewFactory(binaryMessenger, this, rtcChannelPlugin)
     )
-
-    fragmentManager = supportFragmentManager
-    println("fragment manager: ${fragmentManager.toString()}")
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,6 +111,25 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
     methodChannel.setMethodCallHandler(null)
     eventChannel.setStreamHandler(null)
     manager.release()
+  }
+
+  override fun onAttachedToActivity(binding: ActivityPluginBinding?) {
+    // Your plugin is now associated with an Android Activity.
+    //
+    // If this method is invoked, it is always invoked after
+    // onAttachedToFlutterEngine().
+    //
+    // You can obtain an Activity reference with
+    // binding.getActivity()
+    //
+    // You can listen for Lifecycle changes with
+    // binding.getLifecycle()
+    //
+    // You can listen for Activity results, new Intents, user
+    // leave hints, and state saving callbacks by using the
+    // appropriate methods on the binding.
+    myActivity = binding.getActivity()
+    println("plugin attached to activity")
   }
 
   override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
@@ -145,11 +165,22 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
 //      engine()?.stopPreview()
 //      engine()?.muteLocalVideoStream(true)
 
+      val id = 0x123456
+      val vParams: ViewGroup.LayoutParams = FrameLayout.LayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+      )
+      val container = FrameLayout(myContext)
+      container.layoutParams = vParams
+      container.id = id
+      myActivity.addContentView(container, vParams)
+
       val screenShareClient = ScreenShareClient()
+      fragmentManager = supportFragmentManager
+      println("fragment manager: ${fragmentManager.toString()}")
 
       fragmentManager
         ?.beginTransaction()
-        ?.add(android.R.id.content, screenShareClient)
+        ?.replace(android.R.id.content, screenShareClient)
         ?.commit()
 
       screenShareClient.bindVideoService()
