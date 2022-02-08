@@ -46,6 +46,7 @@ class AgoraRtcEnginePlugin : FragmentActivity(), ActivityAware, FlutterPlugin, M
 
   private var fragmentManager: FragmentManager? = null
   private var flutterFragment: FlutterFragment? = null
+  private val id = 0x123456
 
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
   // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
@@ -132,7 +133,6 @@ class AgoraRtcEnginePlugin : FragmentActivity(), ActivityAware, FlutterPlugin, M
     myActivity = binding.getActivity()
     println("plugin attached to activity")
 
-    val id = 0x123456
     val vParams: ViewGroup.LayoutParams = FrameLayout.LayoutParams(
       ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
     )
