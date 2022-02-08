@@ -16,6 +16,7 @@ import android.util.DisplayMetrics;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
@@ -43,7 +44,7 @@ public class ScreenShareClient extends Fragment {
 
   @RequiresApi(api = Build.VERSION_CODES.M)
   @Override
-  public void onAttach(Context context) {
+  public void onAttach(@NonNull Context context) {
     super.onAttach(context);
     this.context = context;
     bindVideoService();

@@ -15,6 +15,7 @@ import io.agora.rtc.base.RtcEngineManager
 import io.agora.screenshare.ScreenShareClient
 import io.agora.videohelpers.Constants
 import io.flutter.embedding.android.FlutterFragment
+import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.*
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -127,10 +128,7 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
     return manager.engine
   }
 
-  override fun <T> onMethodCall(@NonNull call: MethodCall, @NonNull result: Result<T>) {
-    // Declare a local variable to reference the FlutterFragment so that you
-    // can forward calls to it later.
-
+  override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
     if (call.method == "getAssetAbsolutePath") {
       getAssetAbsolutePath(call, result)
       return
@@ -169,11 +167,10 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
         }
       }
     }
-
     result.notImplemented()
   }
 
-  private fun <T> getAssetAbsolutePath(call: MethodCall, result: Result<T>) {
+  private fun getAssetAbsolutePath(call: MethodCall, result: Result) {
     call.arguments<String>()?.let {
       val assetKey = registrar?.lookupKeyForAsset(it)
         ?: binding?.flutterAssets?.getAssetFilePathByName(it)
