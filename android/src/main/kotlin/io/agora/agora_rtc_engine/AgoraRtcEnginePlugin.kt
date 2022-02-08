@@ -114,7 +114,7 @@ class AgoraRtcEnginePlugin : FragmentActivity(), ActivityAware, FlutterPlugin, M
     manager.release()
   }
 
-  override fun onAttachedToActivity(binding: ActivityPluginBinding?) {
+  override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     // Your plugin is now associated with an Android Activity.
     //
     // If this method is invoked, it is always invoked after
@@ -140,7 +140,7 @@ class AgoraRtcEnginePlugin : FragmentActivity(), ActivityAware, FlutterPlugin, M
     // Activity and associated resources.
   }
 
-  override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding?) {
+  override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
     // Your plugin is now associated with a new Activity instance
     // after config changes took place. You may now re-establish
     // a reference to the Activity and associated resources.
