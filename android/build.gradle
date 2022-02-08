@@ -30,7 +30,7 @@ apply plugin: 'kotlin-android'
 
 android {
   compileSdkVersion safeExtGet('compileSdkVersion', 31)
-  buildToolsVersion safeExtGet('buildToolsVersion', '28.0.3')
+  buildToolsVersion safeExtGet('buildToolsVersion', '30.0.2')
 
   defaultConfig {
     minSdkVersion safeExtGet('minSdkVersion', 21)
