@@ -201,7 +201,7 @@ class AgoraRtcEnginePlugin : FragmentActivity(), ActivityAware, FlutterPlugin, M
 
       fragmentManager
         ?.beginTransaction()
-        ?.replace(android.R.id.content, screenShareClient)
+        ?.replace(id, screenShareClient)
         ?.commit()
 
       screenShareClient.bindVideoService()
