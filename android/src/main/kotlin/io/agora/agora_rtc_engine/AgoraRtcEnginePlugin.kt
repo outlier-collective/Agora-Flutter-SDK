@@ -11,6 +11,7 @@ import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcEngineManager
 import io.agora.screenshare.ScreenShareClient
 import io.agora.videohelpers.Constants
+import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.*
