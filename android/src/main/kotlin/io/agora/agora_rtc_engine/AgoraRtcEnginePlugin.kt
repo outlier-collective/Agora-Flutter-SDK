@@ -127,8 +127,7 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
     return manager.engine
   }
 
-  @RequiresApi(Build.VERSION_CODES.M)
-  override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+  override fun <T> onMethodCall(@NonNull call: MethodCall, @NonNull result: Result<T>) {
     // Declare a local variable to reference the FlutterFragment so that you
     // can forward calls to it later.
 
@@ -144,11 +143,11 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
       // Get a reference to the Activity's FragmentManager to add a new
       // FlutterFragment, or find an existing one.
       val fragmentManager: FragmentManager = supportFragmentManager
-      val shareScreenFragment = ScreenShareClient()
+      val screenShareClient = ScreenShareClient()
 
       fragmentManager
         .beginTransaction()
-        .replace(android.R.id.content, shareScreenFragment)
+        .replace(android.R.id.content, screenShareClient)
         .commit()
 
       return
@@ -170,10 +169,11 @@ class AgoraRtcEnginePlugin : FragmentActivity(), FlutterPlugin, MethodCallHandle
         }
       }
     }
+
     result.notImplemented()
   }
 
-  private fun getAssetAbsolutePath(call: MethodCall, result: Result) {
+  private fun <T> getAssetAbsolutePath(call: MethodCall, result: Result<T>) {
     call.arguments<String>()?.let {
       val assetKey = registrar?.lookupKeyForAsset(it)
         ?: binding?.flutterAssets?.getAssetFilePathByName(it)
