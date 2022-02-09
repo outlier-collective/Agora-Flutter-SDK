@@ -11,6 +11,7 @@ import android.util.DisplayMetrics
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
@@ -278,33 +279,10 @@ open class AgoraRtcEnginePlugin :
 //        ENGINE.setParameters("{\"rtc.log_filter\": 65535}");
   }
 
-  inner class VideoInputServiceConnection : ServiceConnection, AppCompatActivity() {
-    private var screenShareLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-      println("onActivityResult reached")
-      if (result.resultCode == RESULT_OK) {
-        val metrics = DisplayMetrics()
-        myActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics)
-        var percent = 0f
-        val hp = metrics.heightPixels.toFloat() - 1920f
-        val wp = metrics.widthPixels.toFloat() - 1080f
-        percent = if (hp < wp) {
-          (metrics.widthPixels.toFloat() - 1080f) / metrics.widthPixels.toFloat()
-        } else {
-          (metrics.heightPixels.toFloat() - 1920f) / metrics.heightPixels.toFloat()
-        }
-        metrics.heightPixels = (metrics.heightPixels.toFloat() - metrics.heightPixels * percent).toInt()
-        metrics.widthPixels = (metrics.widthPixels.toFloat() - metrics.widthPixels * percent).toInt()
-        result.data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels)
-        result.data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
-        result.data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
-        result.data!!.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, DEFAULT_SHARE_FRAME_RATE)
-        setVideoConfig(ExternalVideoInputManager.TYPE_SCREEN_SHARE, metrics.widthPixels, metrics.heightPixels);
-        try {
-          mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, result.data!!)
-        } catch (e: RemoteException) {
-          e.printStackTrace()
-        }
-      }
+  inner class VideoInputServiceConnection : ServiceConnection, FragmentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+      super.onCreate(savedInstanceState)
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -317,6 +295,34 @@ open class AgoraRtcEnginePlugin :
       // Creates an intent
       val intent = mpm.createScreenCaptureIntent()
       // Starts screen capturing
+      val screenShareLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        println("onActivityResult reached")
+        if (result.resultCode == RESULT_OK) {
+          val metrics = DisplayMetrics()
+          myActivity.windowManager.getDefaultDisplay().getMetrics(metrics)
+          var percent = 0f
+          val hp = metrics.heightPixels.toFloat() - 1920f
+          val wp = metrics.widthPixels.toFloat() - 1080f
+          percent = if (hp < wp) {
+            (metrics.widthPixels.toFloat() - 1080f) / metrics.widthPixels.toFloat()
+          } else {
+            (metrics.heightPixels.toFloat() - 1920f) / metrics.heightPixels.toFloat()
+          }
+          metrics.heightPixels = (metrics.heightPixels.toFloat() - metrics.heightPixels * percent).toInt()
+          metrics.widthPixels = (metrics.widthPixels.toFloat() - metrics.widthPixels * percent).toInt()
+          result.data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels)
+          result.data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
+          result.data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
+          result.data!!.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, DEFAULT_SHARE_FRAME_RATE)
+          setVideoConfig(ExternalVideoInputManager.TYPE_SCREEN_SHARE, metrics.widthPixels, metrics.heightPixels);
+          try {
+            mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, result.data!!)
+          } catch (e: RemoteException) {
+            e.printStackTrace()
+          }
+        }
+      }
+
       screenShareLauncher.launch(intent)
 //      startActivityForResult(myActivity, intent, PROJECTION_REQ_CODE, Bundle.EMPTY)
     }
