@@ -163,8 +163,6 @@ open class AgoraRtcEnginePlugin :
 //      ?.beginTransaction()
 //      ?.add(id, screenShareClient)
 //      ?.commit()
-
-    println("commited fragment manager")
   }
 
   override fun onDetachedFromActivityForConfigChanges() {

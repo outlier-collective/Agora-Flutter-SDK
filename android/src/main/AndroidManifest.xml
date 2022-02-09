@@ -15,4 +15,9 @@
     android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
     tools:ignore="ProtectedPermissions" />
 
+  <application>
+    <service android:name=".ExternalVideoInputService"
+      android:exported="false"
+      android:foregroundServiceType="mediaProjection"/>
+  </application>
 </manifest>
