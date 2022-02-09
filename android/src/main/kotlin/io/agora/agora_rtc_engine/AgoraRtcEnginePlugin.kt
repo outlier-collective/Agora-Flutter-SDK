@@ -289,7 +289,7 @@ open class AgoraRtcEnginePlugin :
       val assetKey = registrar?.lookupKeyForAsset(it)
         ?: binding?.flutterAssets?.getAssetFilePathByName(it)
       try {
-        myContext.assets.openFd(assetKey).close()
+        myContext.assets.openFd(assetKey!!).close()
         result.success("/assets/$assetKey")
       } catch (e: Exception) {
         result.error(e.javaClass.simpleName, e.message, e.cause)
