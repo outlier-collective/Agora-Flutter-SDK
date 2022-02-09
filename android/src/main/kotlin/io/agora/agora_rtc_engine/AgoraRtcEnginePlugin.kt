@@ -67,6 +67,8 @@ open class AgoraRtcEnginePlugin :
   private var mService: IExternalVideoInputService? = null
   private var mServiceConnection: VideoInputServiceConnection? = null
 
+  private var captureIntent: Intent? = null
+
   val screenShareLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
     println("onActivityResult reached")
     if (result.resultCode == RESULT_OK) {
@@ -191,6 +193,8 @@ open class AgoraRtcEnginePlugin :
     fragmentManager = supportFragmentManager
     println("fragment manager: ${fragmentManager.toString()}")
 
+    val mpm = myActivity.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+    captureIntent = mpm.createScreenCaptureIntent()
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
@@ -307,9 +311,7 @@ open class AgoraRtcEnginePlugin :
   }
 
   private fun startScreenCapture() {
-    val mpm = myContext.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-    val intent = mpm.createScreenCaptureIntent()
-    startActivityForResult(intent, PROJECTION_REQ_CODE)
+    captureIntent?.let { startActivityForResult(it, PROJECTION_REQ_CODE) }
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
