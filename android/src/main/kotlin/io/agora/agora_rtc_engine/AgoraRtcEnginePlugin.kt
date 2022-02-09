@@ -9,14 +9,11 @@ import android.media.projection.MediaProjectionManager
 import android.os.*
 import android.util.DisplayMetrics
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.FrameLayout
-import androidx.activity.ComponentActivity
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import io.agora.rtc.RtcEngine
@@ -192,9 +189,6 @@ open class AgoraRtcEnginePlugin :
 
     fragmentManager = supportFragmentManager
     println("fragment manager: ${fragmentManager.toString()}")
-
-    val mpm = myActivity.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-    captureIntent = mpm.createScreenCaptureIntent()
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
@@ -343,7 +337,15 @@ open class AgoraRtcEnginePlugin :
     }
   }
 
-  inner class VideoInputServiceConnection : ServiceConnection, AppCompatActivity() {
+  inner class VideoInputServiceConnection : ServiceConnection, Activity() {
+    override fun onCreate(bundle: Bundle?) {
+      super.onCreate(bundle)
+      println("video input service activity created")
+      val mpm = myContext.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+      captureIntent = mpm.createScreenCaptureIntent()
+      this.startActivityForResult(captureIntent, PROJECTION_REQ_CODE)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
       super.onActivityResult(requestCode, resultCode, data)
       println("onActivityResult reached second")
@@ -385,7 +387,7 @@ open class AgoraRtcEnginePlugin :
       // Starts screen capturing
 //      screenShareLauncher.launch(intent)
 
-      startScreenCapture()
+//      startScreenCapture()
 //      ActivityCompat.startActivityForResult(myActivity, intent, PROJECTION_REQ_CODE, Bundle.EMPTY)
     }
 
