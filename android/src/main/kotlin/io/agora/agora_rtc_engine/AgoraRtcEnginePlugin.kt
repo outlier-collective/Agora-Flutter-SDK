@@ -9,7 +9,6 @@ import android.media.projection.MediaProjectionManager
 import android.os.*
 import android.util.DisplayMetrics
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.FrameLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.NonNull
@@ -272,10 +271,13 @@ open class AgoraRtcEnginePlugin :
   @RequiresApi(api = Build.VERSION_CODES.M)
   private fun bindVideoService() {
     println("reached bind service")
-    val intent = Intent(myContext, ExternalVideoInputService::class.java)
+    var videoInputIntent = Intent(myContext, ExternalVideoInputService::class.java)
     mServiceConnection = VideoInputServiceConnection()
-    myContext.bindService(intent, mServiceConnection!!, BIND_AUTO_CREATE)
+    myContext.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
     println("finished bind service")
+    val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
+      .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    myContext.startActivity(screenShareIntent)
   }
 
   private fun getAssetAbsolutePath(call: MethodCall, result: Result) {
@@ -304,51 +306,18 @@ open class AgoraRtcEnginePlugin :
     )
   }
 
-  private fun startScreenCapture() {
-    captureIntent?.let { startActivityForResult(it, PROJECTION_REQ_CODE) }
-  }
-
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    super.onActivityResult(requestCode, resultCode, data)
-    println("onActivityResult reached first")
-    if (requestCode == PROJECTION_REQ_CODE && resultCode == RESULT_OK) {
-      val metrics = DisplayMetrics()
-      myActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics)
-      var percent = 0f
-      val hp = metrics.heightPixels.toFloat() - 1920f
-      val wp = metrics.widthPixels.toFloat() - 1080f
-      percent = if (hp < wp) {
-        (metrics.widthPixels.toFloat() - 1080f) / metrics.widthPixels.toFloat()
-      } else {
-        (metrics.heightPixels.toFloat() - 1920f) / metrics.heightPixels.toFloat()
-      }
-      metrics.heightPixels = (metrics.heightPixels.toFloat() - metrics.heightPixels * percent).toInt()
-      metrics.widthPixels = (metrics.widthPixels.toFloat() - metrics.widthPixels * percent).toInt()
-      data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels)
-      data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
-      data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
-      data.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, DEFAULT_SHARE_FRAME_RATE)
-      setVideoConfig(metrics.widthPixels, metrics.heightPixels);
-    }
-    try {
-      mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
-    } catch (e: RemoteException) {
-      e.printStackTrace()
-    }
-  }
-
-  inner class VideoInputServiceConnection : ServiceConnection, Activity() {
+  inner class StartScreenShareActivity : Activity() {
     override fun onCreate(bundle: Bundle?) {
       super.onCreate(bundle)
-      println("video input service activity created")
-      val mpm = myContext.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-      captureIntent = mpm.createScreenCaptureIntent()
+      println("StartScreenShareActivity created")
+      val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+      val captureIntent = mpm.createScreenCaptureIntent()
       this.startActivityForResult(captureIntent, PROJECTION_REQ_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
       super.onActivityResult(requestCode, resultCode, data)
-      println("onActivityResult reached second")
+      println("onActivityResult reached")
       if (requestCode == PROJECTION_REQ_CODE && resultCode == RESULT_OK) {
         val metrics = DisplayMetrics()
         myActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics)
@@ -374,21 +343,13 @@ open class AgoraRtcEnginePlugin :
         e.printStackTrace()
       }
     }
+  }
 
+  inner class VideoInputServiceConnection : ServiceConnection, Activity() {
     @RequiresApi(api = Build.VERSION_CODES.M)
     override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
       println("video input service connected")
       mService = iBinder as IExternalVideoInputService
-      // Starts capturing screen data. Ensure that your Android version must be Lollipop or higher.
-      // Instantiates a MediaProjectionManager object
-//      val mpm = myContext.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-      // Creates an intent
-//      val intent = mpm.createScreenCaptureIntent()
-      // Starts screen capturing
-//      screenShareLauncher.launch(intent)
-
-//      startScreenCapture()
-//      ActivityCompat.startActivityForResult(myActivity, intent, PROJECTION_REQ_CODE, Bundle.EMPTY)
     }
 
     override fun onServiceDisconnected(componentName: ComponentName) {
