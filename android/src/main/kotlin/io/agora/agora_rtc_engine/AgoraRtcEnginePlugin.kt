@@ -66,7 +66,33 @@ open class AgoraRtcEnginePlugin :
   private var mService: IExternalVideoInputService? = null
   private var mServiceConnection: VideoInputServiceConnection? = null
 
-  private var screenShareLauncher: ActivityResultLauncher<Intent>? = null
+  private var screenShareLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    println("onActivityResult reached")
+    if (result.resultCode == RESULT_OK) {
+      val metrics = DisplayMetrics()
+      myActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics)
+      var percent = 0f
+      val hp = metrics.heightPixels.toFloat() - 1920f
+      val wp = metrics.widthPixels.toFloat() - 1080f
+      percent = if (hp < wp) {
+        (metrics.widthPixels.toFloat() - 1080f) / metrics.widthPixels.toFloat()
+      } else {
+        (metrics.heightPixels.toFloat() - 1920f) / metrics.heightPixels.toFloat()
+      }
+      metrics.heightPixels = (metrics.heightPixels.toFloat() - metrics.heightPixels * percent).toInt()
+      metrics.widthPixels = (metrics.widthPixels.toFloat() - metrics.widthPixels * percent).toInt()
+      result.data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels)
+      result.data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
+      result.data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
+      result.data!!.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, DEFAULT_SHARE_FRAME_RATE)
+      //      setVideoConfig(ExternalVideoInputManager.TYPE_SCREEN_SHARE, metrics.widthPixels, metrics.heightPixels);
+      try {
+        mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, result.data!!)
+      } catch (e: RemoteException) {
+        e.printStackTrace()
+      }
+    }
+  }
 
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
   // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
@@ -164,33 +190,6 @@ open class AgoraRtcEnginePlugin :
     fragmentManager = supportFragmentManager
     println("fragment manager: ${fragmentManager.toString()}")
 
-    screenShareLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-      println("onActivityResult reached")
-      if (result.resultCode == RESULT_OK) {
-        val metrics = DisplayMetrics()
-        myActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics)
-        var percent = 0f
-        val hp = metrics.heightPixels.toFloat() - 1920f
-        val wp = metrics.widthPixels.toFloat() - 1080f
-        percent = if (hp < wp) {
-          (metrics.widthPixels.toFloat() - 1080f) / metrics.widthPixels.toFloat()
-        } else {
-          (metrics.heightPixels.toFloat() - 1920f) / metrics.heightPixels.toFloat()
-        }
-        metrics.heightPixels = (metrics.heightPixels.toFloat() - metrics.heightPixels * percent).toInt()
-        metrics.widthPixels = (metrics.widthPixels.toFloat() - metrics.widthPixels * percent).toInt()
-        result.data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels)
-        result.data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
-        result.data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
-        result.data!!.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, DEFAULT_SHARE_FRAME_RATE)
-        //      setVideoConfig(ExternalVideoInputManager.TYPE_SCREEN_SHARE, metrics.widthPixels, metrics.heightPixels);
-        try {
-          mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, result.data!!)
-        } catch (e: RemoteException) {
-          e.printStackTrace()
-        }
-      }
-    }
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
@@ -307,7 +306,7 @@ open class AgoraRtcEnginePlugin :
       // Creates an intent
       val intent = mpm.createScreenCaptureIntent()
       // Starts screen capturing
-      screenShareLauncher!!.launch(intent)
+      screenShareLauncher.launch(intent)
 //      startActivityForResult(myActivity, intent, PROJECTION_REQ_CODE, Bundle.EMPTY)
     }
 
