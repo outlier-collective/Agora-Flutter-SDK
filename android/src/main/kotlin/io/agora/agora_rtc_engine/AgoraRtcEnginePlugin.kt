@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import io.agora.rtc.RtcEngine
@@ -294,7 +295,7 @@ open class AgoraRtcEnginePlugin :
     result.error(IllegalArgumentException::class.simpleName, null, null)
   }
 
-  private fun setVideoConfig(sourceType: Int, width: Int, height: Int) {
+  private fun setVideoConfig(width: Int, height: Int) {
     /**Setup video stream encoding configs */
     engine()?.setVideoEncoderConfiguration(
       VideoEncoderConfiguration(
@@ -303,18 +304,41 @@ open class AgoraRtcEnginePlugin :
         VideoEncoderConfiguration.STANDARD_BITRATE, ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT
       )
     )
-
-//        ENGINE.setParameters("{\"rtc.log_filter\": 65535}");
   }
 
-  inner class VideoInputServiceConnection : ServiceConnection, FragmentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-      super.onCreate(savedInstanceState)
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    println("onActivityResult reached first")
+    if (requestCode == PROJECTION_REQ_CODE && resultCode == RESULT_OK) {
+      val metrics = DisplayMetrics()
+      myActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics)
+      var percent = 0f
+      val hp = metrics.heightPixels.toFloat() - 1920f
+      val wp = metrics.widthPixels.toFloat() - 1080f
+      percent = if (hp < wp) {
+        (metrics.widthPixels.toFloat() - 1080f) / metrics.widthPixels.toFloat()
+      } else {
+        (metrics.heightPixels.toFloat() - 1920f) / metrics.heightPixels.toFloat()
+      }
+      metrics.heightPixels = (metrics.heightPixels.toFloat() - metrics.heightPixels * percent).toInt()
+      metrics.widthPixels = (metrics.widthPixels.toFloat() - metrics.widthPixels * percent).toInt()
+      data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels)
+      data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
+      data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
+      data.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, DEFAULT_SHARE_FRAME_RATE)
+      setVideoConfig(ExternalVideoInputManager.TYPE_SCREEN_SHARE, metrics.widthPixels, metrics.heightPixels);
     }
+    try {
+      mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
+    } catch (e: RemoteException) {
+      e.printStackTrace()
+    }
+  }
 
+  inner class VideoInputServiceConnection : ServiceConnection, AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
       super.onActivityResult(requestCode, resultCode, data)
-      println("onActivityResult reached")
+      println("onActivityResult reached second")
       if (requestCode == PROJECTION_REQ_CODE && resultCode == RESULT_OK) {
         val metrics = DisplayMetrics()
         myActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics)
@@ -352,7 +376,7 @@ open class AgoraRtcEnginePlugin :
       val intent = mpm.createScreenCaptureIntent()
       // Starts screen capturing
 //      screenShareLauncher.launch(intent)
-      startActivityForResult(intent, PROJECTION_REQ_CODE)
+      ActivityCompat.startActivityForResult(myActivity, intent, PROJECTION_REQ_CODE, Bundle.EMPTY)
     }
 
     override fun onServiceDisconnected(componentName: ComponentName) {
