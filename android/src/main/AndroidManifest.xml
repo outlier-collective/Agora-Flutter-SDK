@@ -18,6 +18,11 @@
     tools:ignore="ProtectedPermissions" />
 
   <application>
+    <activity
+      android:name="io.agora.agora_rtc_engine.AgoraRtcEnginePlugin$StartScreenShareActivity"
+      android:process=":screensharingsvc"
+      android:theme="@android:style/Theme.Translucent"
+      tools:ignore="Instantiatable" />
     <service android:name="io.agora.videohelpers.ExternalVideoInputService"
       android:exported="false"
       android:foregroundServiceType="mediaProjection"/>

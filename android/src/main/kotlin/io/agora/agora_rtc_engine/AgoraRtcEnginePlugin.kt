@@ -278,6 +278,7 @@ open class AgoraRtcEnginePlugin :
     val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
       .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     myContext.startActivity(screenShareIntent)
+    println("finished start screen share activity")
   }
 
   private fun getAssetAbsolutePath(call: MethodCall, result: Result) {
