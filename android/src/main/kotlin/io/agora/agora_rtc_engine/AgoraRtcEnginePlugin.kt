@@ -10,6 +10,7 @@ import android.os.*
 import android.util.DisplayMetrics
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -185,10 +186,9 @@ open class AgoraRtcEnginePlugin :
     // again.
   }
 
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    super.onActivityResult(requestCode, resultCode, data)
+  var activityResultHandler = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
     println("onActivityResult reached")
-    if (requestCode == PROJECTION_REQ_CODE && resultCode == RESULT_OK) {
+    if (result.resultCode == RESULT_OK) {
       val metrics = DisplayMetrics()
       myActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics)
       var percent = 0f
@@ -201,13 +201,13 @@ open class AgoraRtcEnginePlugin :
       }
       metrics.heightPixels = (metrics.heightPixels.toFloat() - metrics.heightPixels * percent).toInt()
       metrics.widthPixels = (metrics.widthPixels.toFloat() - metrics.widthPixels * percent).toInt()
-      data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels)
-      data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
-      data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
-      data.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, DEFAULT_SHARE_FRAME_RATE)
+      result.data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels)
+      result.data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
+      result.data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
+      result.data!!.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, DEFAULT_SHARE_FRAME_RATE)
       //      setVideoConfig(ExternalVideoInputManager.TYPE_SCREEN_SHARE, metrics.widthPixels, metrics.heightPixels);
       try {
-        mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
+        mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, result.data!!)
       } catch (e: RemoteException) {
         e.printStackTrace()
       }
