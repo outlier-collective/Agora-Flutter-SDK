@@ -306,6 +306,12 @@ open class AgoraRtcEnginePlugin :
     )
   }
 
+  private fun startScreenCapture() {
+    val mpm = myContext.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+    val intent = mpm.createScreenCaptureIntent()
+    startActivityForResult(intent, PROJECTION_REQ_CODE)
+  }
+
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     println("onActivityResult reached first")
@@ -371,12 +377,14 @@ open class AgoraRtcEnginePlugin :
       mService = iBinder as IExternalVideoInputService
       // Starts capturing screen data. Ensure that your Android version must be Lollipop or higher.
       // Instantiates a MediaProjectionManager object
-      val mpm = myContext.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+//      val mpm = myContext.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
       // Creates an intent
-      val intent = mpm.createScreenCaptureIntent()
+//      val intent = mpm.createScreenCaptureIntent()
       // Starts screen capturing
 //      screenShareLauncher.launch(intent)
-      ActivityCompat.startActivityForResult(myActivity, intent, PROJECTION_REQ_CODE, Bundle.EMPTY)
+
+      startScreenCapture()
+//      ActivityCompat.startActivityForResult(myActivity, intent, PROJECTION_REQ_CODE, Bundle.EMPTY)
     }
 
     override fun onServiceDisconnected(componentName: ComponentName) {
