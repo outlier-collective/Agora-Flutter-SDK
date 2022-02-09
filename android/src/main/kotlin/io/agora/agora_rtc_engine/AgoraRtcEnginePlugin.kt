@@ -304,7 +304,7 @@ open class AgoraRtcEnginePlugin :
       mService = iBinder as IExternalVideoInputService
       // Starts capturing screen data. Ensure that your Android version must be Lollipop or higher.
       // Instantiates a MediaProjectionManager object
-      val mpm = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+      val mpm = myContext.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
       // Creates an intent
       val intent = mpm.createScreenCaptureIntent()
       // Starts screen capturing
