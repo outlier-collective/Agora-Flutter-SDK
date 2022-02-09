@@ -302,6 +302,7 @@ open class AgoraRtcEnginePlugin :
   inner class VideoInputServiceConnection : ServiceConnection {
     @RequiresApi(api = Build.VERSION_CODES.M)
     override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
+      println("video input service connected")
       mService = iBinder as IExternalVideoInputService
       // Starts capturing screen data. Ensure that your Android version must be Lollipop or higher.
       // Instantiates a MediaProjectionManager object
