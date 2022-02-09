@@ -277,10 +277,10 @@ open class AgoraRtcEnginePlugin :
   @RequiresApi(api = Build.VERSION_CODES.M)
   private fun bindVideoService() {
     println("reached bind service")
-    println("fragment is bound to activity")
     val intent = Intent(myContext, ExternalVideoInputService::class.java)
     mServiceConnection = VideoInputServiceConnection()
-    myContext.bindService(intent, mServiceConnection!!, BIND_AUTO_CREATE)
+    val executed = myContext.bindService(intent, mServiceConnection!!, BIND_AUTO_CREATE)
+    println(executed)
     println("finished bind service")
   }
 
