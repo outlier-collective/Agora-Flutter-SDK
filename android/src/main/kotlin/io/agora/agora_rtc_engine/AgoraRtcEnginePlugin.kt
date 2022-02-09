@@ -296,37 +296,38 @@ open class AgoraRtcEnginePlugin :
     result.error(IllegalArgumentException::class.simpleName, null, null)
   }
 
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    println("onActivityResult reached first")
-    super.onActivityResult(requestCode, resultCode, data)
-    println("onActivityResult reached")
-    if (resultCode == RESULT_OK) {
-      val metrics = DisplayMetrics()
-      myActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics)
-      var percent = 0f
-      val hp = metrics.heightPixels.toFloat() - 1920f
-      val wp = metrics.widthPixels.toFloat() - 1080f
-      percent = if (hp < wp) {
-        (metrics.widthPixels.toFloat() - 1080f) / metrics.widthPixels.toFloat()
-      } else {
-        (metrics.heightPixels.toFloat() - 1920f) / metrics.heightPixels.toFloat()
+  inner class VideoInputServiceConnection : ServiceConnection, ComponentActivity() {
+    
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+      println("onActivityResult reached first")
+      super.onActivityResult(requestCode, resultCode, data)
+      println("onActivityResult reached")
+      if (resultCode == RESULT_OK) {
+        val metrics = DisplayMetrics()
+        myActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics)
+        var percent = 0f
+        val hp = metrics.heightPixels.toFloat() - 1920f
+        val wp = metrics.widthPixels.toFloat() - 1080f
+        percent = if (hp < wp) {
+          (metrics.widthPixels.toFloat() - 1080f) / metrics.widthPixels.toFloat()
+        } else {
+          (metrics.heightPixels.toFloat() - 1920f) / metrics.heightPixels.toFloat()
+        }
+        metrics.heightPixels = (metrics.heightPixels.toFloat() - metrics.heightPixels * percent).toInt()
+        metrics.widthPixels = (metrics.widthPixels.toFloat() - metrics.widthPixels * percent).toInt()
+        data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels)
+        data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
+        data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
+        data.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, DEFAULT_SHARE_FRAME_RATE)
+        //      setVideoConfig(ExternalVideoInputManager.TYPE_SCREEN_SHARE, metrics.widthPixels, metrics.heightPixels);
       }
-      metrics.heightPixels = (metrics.heightPixels.toFloat() - metrics.heightPixels * percent).toInt()
-      metrics.widthPixels = (metrics.widthPixels.toFloat() - metrics.widthPixels * percent).toInt()
-      data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels)
-      data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
-      data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
-      data.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, DEFAULT_SHARE_FRAME_RATE)
-      //      setVideoConfig(ExternalVideoInputManager.TYPE_SCREEN_SHARE, metrics.widthPixels, metrics.heightPixels);
+      try {
+        mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
+      } catch (e: RemoteException) {
+        e.printStackTrace()
+      }
     }
-    try {
-      mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
-    } catch (e: RemoteException) {
-      e.printStackTrace()
-    }
-  }
 
-  inner class VideoInputServiceConnection : ServiceConnection {
     @RequiresApi(api = Build.VERSION_CODES.M)
     override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
       println("video input service connected")
