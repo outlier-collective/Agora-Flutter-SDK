@@ -1,32 +1,40 @@
 package io.agora.agora_rtc_engine
 
 import android.app.Activity
+import android.content.ComponentName
 import android.content.Context
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.content.Intent
+import android.content.ServiceConnection
+import android.media.projection.MediaProjectionManager
+import android.os.*
+import android.util.DisplayMetrics
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcEngineManager
 import io.agora.screenshare.ScreenShareClient
 import io.agora.videohelpers.Constants
+import io.agora.videohelpers.ExternalVideoInputManager
+import io.agora.videohelpers.ExternalVideoInputService
+import io.agora.videohelpers.IExternalVideoInputService
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.activity.*
 import io.flutter.plugin.common.*
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewRegistry
 import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.embedding.engine.plugins.activity.*
 
 /** AgoraRtcEnginePlugin */
-class AgoraRtcEnginePlugin : FragmentActivity(), ActivityAware, FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
+open class AgoraRtcEnginePlugin :
+    FragmentActivity(), ActivityAware, FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
   private var registrar: Registrar? = null
   private var binding: FlutterPlugin.FlutterPluginBinding? = null
   private lateinit var myContext: Context
@@ -47,6 +55,11 @@ class AgoraRtcEnginePlugin : FragmentActivity(), ActivityAware, FlutterPlugin, M
   private var fragmentManager: FragmentManager? = null
   private var flutterFragment: FlutterFragment? = null
   private val id = 0x123456
+
+  private val PROJECTION_REQ_CODE = 1 shl 2
+  private val DEFAULT_SHARE_FRAME_RATE = 15
+  private var mService: IExternalVideoInputService? = null
+  private var mServiceConnection: VideoInputServiceConnection? = null
 
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
   // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
@@ -144,12 +157,12 @@ class AgoraRtcEnginePlugin : FragmentActivity(), ActivityAware, FlutterPlugin, M
     fragmentManager = supportFragmentManager
     println("fragment manager: ${fragmentManager.toString()}")
 
-    val screenShareClient = ScreenShareClient()
-
-    fragmentManager
-      ?.beginTransaction()
-      ?.replace(id, screenShareClient)
-      ?.commit()
+//    val screenShareClient = ScreenShareClient()
+//
+//    fragmentManager
+//      ?.beginTransaction()
+//      ?.add(id, screenShareClient)
+//      ?.commit()
 
     println("commited fragment manager")
   }
@@ -172,6 +185,35 @@ class AgoraRtcEnginePlugin : FragmentActivity(), ActivityAware, FlutterPlugin, M
     // You must clean up all resources and references. Your
     // plugin may, or may not ever be associated with an Activity
     // again.
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    println("onActivityResult reached")
+    if (requestCode == PROJECTION_REQ_CODE && resultCode == RESULT_OK) {
+      val metrics = DisplayMetrics()
+      myActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics)
+      var percent = 0f
+      val hp = metrics.heightPixels.toFloat() - 1920f
+      val wp = metrics.widthPixels.toFloat() - 1080f
+      percent = if (hp < wp) {
+        (metrics.widthPixels.toFloat() - 1080f) / metrics.widthPixels.toFloat()
+      } else {
+        (metrics.heightPixels.toFloat() - 1920f) / metrics.heightPixels.toFloat()
+      }
+      metrics.heightPixels = (metrics.heightPixels.toFloat() - metrics.heightPixels * percent).toInt()
+      metrics.widthPixels = (metrics.widthPixels.toFloat() - metrics.widthPixels * percent).toInt()
+      data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels)
+      data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
+      data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
+      data.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, DEFAULT_SHARE_FRAME_RATE)
+      //      setVideoConfig(ExternalVideoInputManager.TYPE_SCREEN_SHARE, metrics.widthPixels, metrics.heightPixels);
+      try {
+        mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
+      } catch (e: RemoteException) {
+        e.printStackTrace()
+      }
+    }
   }
 
   override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
@@ -207,15 +249,11 @@ class AgoraRtcEnginePlugin : FragmentActivity(), ActivityAware, FlutterPlugin, M
 //      engine()?.stopPreview()
 //      engine()?.muteLocalVideoStream(true)
 
-      val screenShareClient = ScreenShareClient()
-      screenShareClient.bindVideoService()
-
-      println(fragmentManager)
-      println(fragmentManager?.fragments.toString())
+      bindVideoService()
       println("finished screen share method call")
-
       return
     }
+
     manager.javaClass.declaredMethods.find { it.name == call.method }?.let { function ->
       function.let { method ->
         try {
@@ -236,12 +274,22 @@ class AgoraRtcEnginePlugin : FragmentActivity(), ActivityAware, FlutterPlugin, M
     result.notImplemented()
   }
 
+  @RequiresApi(api = Build.VERSION_CODES.M)
+  private fun bindVideoService() {
+    println("reached bind service")
+    println("fragment is bound to activity")
+    val intent = Intent(myActivity, ExternalVideoInputService::class.java)
+    mServiceConnection = VideoInputServiceConnection()
+    myActivity.bindService(intent, mServiceConnection!!, BIND_AUTO_CREATE)
+    println("finished bind service")
+  }
+
   private fun getAssetAbsolutePath(call: MethodCall, result: Result) {
     call.arguments<String>()?.let {
       val assetKey = registrar?.lookupKeyForAsset(it)
         ?: binding?.flutterAssets?.getAssetFilePathByName(it)
       try {
-        myContext.assets.openFd(assetKey!!).close()
+        myContext.assets.openFd(assetKey).close()
         result.success("/assets/$assetKey")
       } catch (e: Exception) {
         result.error(e.javaClass.simpleName, e.message, e.cause)
@@ -250,4 +298,23 @@ class AgoraRtcEnginePlugin : FragmentActivity(), ActivityAware, FlutterPlugin, M
     }
     result.error(IllegalArgumentException::class.simpleName, null, null)
   }
+
+  inner class VideoInputServiceConnection : ServiceConnection {
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
+      mService = iBinder as IExternalVideoInputService
+      // Starts capturing screen data. Ensure that your Android version must be Lollipop or higher.
+      // Instantiates a MediaProjectionManager object
+      val mpm = myContext.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+      // Creates an intent
+      val intent = mpm.createScreenCaptureIntent()
+      // Starts screen capturing
+      startActivityForResult(myActivity, intent, PROJECTION_REQ_CODE, Bundle.EMPTY);
+    }
+
+    override fun onServiceDisconnected(componentName: ComponentName) {
+      mService = null
+    }
+  }
+
 }
