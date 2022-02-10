@@ -325,7 +325,7 @@ class StartScreenShareActivity : ServiceConnection, Activity() {
 
   override fun onServiceConnected(name: ComponentName?, iBinder: IBinder?) {
     mService = iBinder as IExternalVideoInputService
-    println("mService has been set as ${AgoraRtcEnginePlugin.mService}")
+    println("mService has been set as ${mService}")
 
     val metrics = DisplayMetrics()
     this.getWindowManager().getDefaultDisplay().getMetrics(metrics)
@@ -364,11 +364,11 @@ class StartScreenShareActivity : ServiceConnection, Activity() {
     println(requestCode)
     println(resultCode)
     if (requestCode == 1 && resultCode == RESULT_OK) {
-      println("onActivityResult result should execute")
-      val videoInputIntent = Intent(this, ExternalVideoInputService::class.java)
+      println("onActivityResult should execute")
+      val videoInputIntent = Intent(applicationContext, ExternalVideoInputService::class.java)
       mServiceConnection = StartScreenShareActivity()
 //      this.startService(videoInputIntent)
-      this.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
+      applicationContext.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
     }
     finish()
     println("share screen activity finished")
