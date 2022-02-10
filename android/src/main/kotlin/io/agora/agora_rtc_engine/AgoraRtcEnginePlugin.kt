@@ -297,6 +297,16 @@ open class AgoraRtcEnginePlugin :
       println("video input service disconnected")
       mService = null
     }
+
+    override fun onBindingDied(name: ComponentName?) {
+      println("binding died")
+      super.onBindingDied(name)
+    }
+
+    override fun onNullBinding(name: ComponentName?) {
+      println("on null binding")
+      super.onNullBinding(name)
+    }
   }
 }
 
