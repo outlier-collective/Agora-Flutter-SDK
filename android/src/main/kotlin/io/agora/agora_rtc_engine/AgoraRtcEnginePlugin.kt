@@ -281,14 +281,13 @@ open class AgoraRtcEnginePlugin :
 
   inner class VideoInputServiceConnection : ServiceConnection {
     override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
-      println("prev mService has been set as $mService")
       mService = iBinder as IExternalVideoInputService
       println("mService has been set as $mService")
 
       if (mService != null) {
         println("mService is not null and starting screenShareIntent")
         val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
-          .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//          .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         myContext.startActivity(screenShareIntent)
       }
     }
