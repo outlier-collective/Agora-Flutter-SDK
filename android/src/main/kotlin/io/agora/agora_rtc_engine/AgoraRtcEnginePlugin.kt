@@ -76,6 +76,7 @@ open class AgoraRtcEnginePlugin :
     const val TAG_FLUTTER_FRAGMENT = "flutter_fragment"
 
     var mService: IExternalVideoInputService? = null
+    var dataIntent: Intent? = null
 
     @JvmStatic
     fun registerWith(registrar: Registrar) {
@@ -242,16 +243,24 @@ open class AgoraRtcEnginePlugin :
   @RequiresApi(api = Build.VERSION_CODES.M)
   private fun bindVideoService() {
     println("reached bind service")
+//    val videoInputIntent = Intent(myContext, ExternalVideoInputService::class.java)
+//    mServiceConnection = VideoInputServiceConnection()
+//    val didBind = myContext.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
+//    println("finished bind service as: $didBind")
+
+    val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
+      .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    myContext.startActivity(screenShareIntent)
+    println("finished start screen share activity")
+  }
+
+  fun startVideoService() {
     val videoInputIntent = Intent(myContext, ExternalVideoInputService::class.java)
     mServiceConnection = VideoInputServiceConnection()
     val didBind = myContext.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
-    println("finished bind service as: $didBind")
-
-//    val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
-//      .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//    myContext.startActivity(screenShareIntent)
-//    println("finished start screen share activity")
+    println("start video service is $didBind")
   }
+
 
   fun setVideoConfig(width: Int, height: Int) {
     /**Setup video stream encoding configs */
@@ -285,10 +294,34 @@ open class AgoraRtcEnginePlugin :
       println("mService has been set as $mService")
 
       if (mService != null) {
-        println("mService is not null and starting screenShareIntent")
-        val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
-          .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        myContext.startActivity(screenShareIntent)
+        println("onActivityResult result should execute")
+        val metrics = DisplayMetrics()
+        myActivity.windowManager.getDefaultDisplay().getMetrics(metrics)
+        var percent = 0f
+        val hp = metrics.heightPixels.toFloat() - 1920f
+        val wp = metrics.widthPixels.toFloat() - 1080f
+        percent = if (hp < wp) {
+          (metrics.widthPixels.toFloat() - 1080f) / metrics.widthPixels.toFloat()
+        } else {
+          (metrics.heightPixels.toFloat() - 1920f) / metrics.heightPixels.toFloat()
+        }
+        metrics.heightPixels = (metrics.heightPixels.toFloat() - metrics.heightPixels * percent).toInt()
+        metrics.widthPixels = (metrics.widthPixels.toFloat() - metrics.widthPixels * percent).toInt()
+        dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels)
+        dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
+        dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
+        dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, 15)
+        AgoraRtcEnginePlugin().setVideoConfig(metrics.widthPixels, metrics.heightPixels)
+        try {
+          println("trying mService setExternalVideoInput")
+          println("mService: ${mService}")
+//          val binder = ExternalVideoInputService().getmService()
+//          println("binder: $binder")
+          mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, dataIntent!!)
+          println("finished mService setExternalVideoInput")
+        } catch (e: RemoteException) {
+          e.printStackTrace()
+        }
       }
     }
 
@@ -324,34 +357,8 @@ class StartScreenShareActivity : Activity() {
     println(requestCode)
     println(resultCode)
     if (requestCode == 1 && resultCode == RESULT_OK) {
-      println("onActivityResult result should execute")
-      val metrics = DisplayMetrics()
-      this.windowManager.getDefaultDisplay().getMetrics(metrics)
-      var percent = 0f
-      val hp = metrics.heightPixels.toFloat() - 1920f
-      val wp = metrics.widthPixels.toFloat() - 1080f
-      percent = if (hp < wp) {
-        (metrics.widthPixels.toFloat() - 1080f) / metrics.widthPixels.toFloat()
-      } else {
-        (metrics.heightPixels.toFloat() - 1920f) / metrics.heightPixels.toFloat()
-      }
-      metrics.heightPixels = (metrics.heightPixels.toFloat() - metrics.heightPixels * percent).toInt()
-      metrics.widthPixels = (metrics.widthPixels.toFloat() - metrics.widthPixels * percent).toInt()
-      data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels)
-      data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
-      data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
-      data.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, 15)
-      AgoraRtcEnginePlugin().setVideoConfig(metrics.widthPixels, metrics.heightPixels)
-      try {
-        println("trying mService setExternalVideoInput")
-        println("mService: ${AgoraRtcEnginePlugin.mService}")
-        val binder = ExternalVideoInputService().getmService()
-        println("binder: $binder")
-        binder?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
-        println("finished mService setExternalVideoInput")
-      } catch (e: RemoteException) {
-        e.printStackTrace()
-      }
+      AgoraRtcEnginePlugin.dataIntent = data
+      AgoraRtcEnginePlugin().startVideoService()
     }
     finish()
     println("share screen activity finished")
