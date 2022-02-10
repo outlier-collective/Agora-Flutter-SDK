@@ -244,6 +244,7 @@ open class AgoraRtcEnginePlugin :
     println("reached bind service")
     val videoInputIntent = Intent(myContext, ExternalVideoInputService::class.java)
     mServiceConnection = VideoInputServiceConnection()
+    myContext.startService(videoInputIntent)
     myContext.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
     println("finished bind service")
 
