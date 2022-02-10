@@ -19,7 +19,7 @@
 
   <application>
     <activity
-      android:name="io.agora.agora_rtc_engine.AgoraRtcEnginePlugin$StartScreenShareActivity"
+      android:name="io.agora.agora_rtc_engine.StartScreenShareActivity"
       android:process=":screensharingsvc"
       android:theme="@android:style/Theme.Translucent"
       tools:ignore="Instantiatable" />
