@@ -62,7 +62,7 @@ open class AgoraRtcEnginePlugin :
 
   private val PROJECTION_REQ_CODE = 1
   private val DEFAULT_SHARE_FRAME_RATE = 15
-  open var mService: IExternalVideoInputService? = null
+  private var mService: IExternalVideoInputService? = null
   private var mServiceConnection: VideoInputServiceConnection? = null
 
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
@@ -265,6 +265,11 @@ open class AgoraRtcEnginePlugin :
     )
   }
 
+  fun setUpExternalVideoInput(data: Intent) {
+    println("is mService null: ${AgoraRtcEnginePlugin().mService == null}")
+    mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
+  }
+
   private fun getAssetAbsolutePath(call: MethodCall, result: Result) {
     call.arguments<String>()?.let {
       val assetKey = registrar?.lookupKeyForAsset(it)
@@ -329,8 +334,7 @@ class StartScreenShareActivity : Activity() {
       AgoraRtcEnginePlugin().setVideoConfig(metrics.widthPixels, metrics.heightPixels)
       try {
         println("trying mService setExternalVideoInput")
-        AgoraRtcEnginePlugin().mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
-        println("is mService null: ${AgoraRtcEnginePlugin().mService == null}")
+        AgoraRtcEnginePlugin().setUpExternalVideoInput(data)
         println("finished mService setExternalVideoInput")
       } catch (e: RemoteException) {
         e.printStackTrace()
