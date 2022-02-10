@@ -266,7 +266,8 @@ open class AgoraRtcEnginePlugin :
   }
 
   fun setUpExternalVideoInput(data: Intent) {
-    println("mService: $mService")
+    println("mServiceConnection: ${mServiceConnection.toString()}")
+    println("mService: ${mService.toString()}")
     mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
   }
 
@@ -340,7 +341,7 @@ class StartScreenShareActivity : Activity() {
         e.printStackTrace()
       }
     }
-    println("share screen activity finished")
     finish()
+    println("share screen activity finished")
   }
 }
