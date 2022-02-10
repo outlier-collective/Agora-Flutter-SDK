@@ -41,6 +41,7 @@ public class ExternalVideoInputService extends Service
   @Override
   public IBinder onBind(Intent intent)
   {
+    System.out.println("ExternalVideoInputService onBind() has been called");
     startForeground();
     startSourceManager();
     return mService.asBinder();

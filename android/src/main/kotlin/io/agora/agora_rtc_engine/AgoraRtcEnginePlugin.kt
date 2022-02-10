@@ -327,7 +327,7 @@ class StartScreenShareActivity : Activity() {
     if (requestCode == 1 && resultCode == RESULT_OK) {
       println("onActivityResult result should execute")
       val metrics = DisplayMetrics()
-      this.getWindowManager().getDefaultDisplay().getMetrics(metrics)
+      this.windowManager.getDefaultDisplay().getMetrics(metrics)
       var percent = 0f
       val hp = metrics.heightPixels.toFloat() - 1920f
       val wp = metrics.widthPixels.toFloat() - 1080f

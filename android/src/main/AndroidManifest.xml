@@ -21,10 +21,9 @@
     <activity
       android:name="io.agora.agora_rtc_engine.StartScreenShareActivity"
       android:process=":screensharingsvc"
-      android:theme="@android:style/Theme.Translucent"
-      tools:ignore="Instantiatable" />
+      android:theme="@android:style/Theme.Translucent" />
     <service android:name="io.agora.videohelpers.ExternalVideoInputService"
-      android:exported="true"
+      android:exported="false"
       android:foregroundServiceType="mediaProjection" />
   </application>
 </manifest>
