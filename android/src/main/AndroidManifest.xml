@@ -25,6 +25,6 @@
       tools:ignore="Instantiatable" />
     <service android:name="io.agora.videohelpers.ExternalVideoInputService"
       android:exported="true"
-      android:foregroundServiceType="mediaProjection"
+      android:foregroundServiceType="mediaProjection" />
   </application>
 </manifest>
