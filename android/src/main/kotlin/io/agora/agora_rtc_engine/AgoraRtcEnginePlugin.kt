@@ -252,6 +252,7 @@ open class AgoraRtcEnginePlugin :
     val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
       .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     myContext.startActivity(screenShareIntent)
+    print("bind service mService: ${mService.toString()}")
     println("finished start screen share activity")
   }
 
@@ -264,13 +265,6 @@ open class AgoraRtcEnginePlugin :
         VideoEncoderConfiguration.STANDARD_BITRATE, ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT
       )
     )
-  }
-
-  fun setUpExternalVideoInput(data: Intent) {
-    println("mServiceConnection: ${mServiceConnection.toString()}")
-    println("mService: ${mService.toString()}")
-    println("engine: ${engine().toString()}")
-    mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
   }
 
   private fun getAssetAbsolutePath(call: MethodCall, result: Result) {
