@@ -39,20 +39,21 @@ public class ExternalVideoInputService extends Service
 
   @Nullable
   @Override
-  public IBinder onBind(Intent intent)
-  {
+  public IBinder onBind(Intent intent) {
     System.out.println("ExternalVideoInputService onBind() has been called");
     startForeground();
     startSourceManager();
     return mService.asBinder();
   }
 
-  public IExternalVideoInputService getBinder() {
+  public IExternalVideoInputService getmService() {
+    System.out.println("ExternalVideoInputService getBinder() has been called");
     return mService;
   }
 
   private void startForeground()
   {
+    System.out.println("ExternalVideoInputService startForeground() has been called");
     createNotificationChannel();
 
     Intent notificationIntent = new Intent(getApplicationContext(),
@@ -83,6 +84,7 @@ public class ExternalVideoInputService extends Service
 
   private void createNotificationChannel()
   {
+    System.out.println("ExternalVideoInputService startForeground() has been called");
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
     {
       int importance = NotificationManager.IMPORTANCE_DEFAULT;
