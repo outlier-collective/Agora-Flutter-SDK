@@ -346,7 +346,9 @@ class StartScreenShareActivity : Activity() {
       try {
         println("trying mService setExternalVideoInput")
         println("mService: ${AgoraRtcEnginePlugin.mService}")
-        AgoraRtcEnginePlugin.mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
+        val binder = ExternalVideoInputService().binder
+        println("binder: $binder")
+        binder.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
         println("finished mService setExternalVideoInput")
       } catch (e: RemoteException) {
         e.printStackTrace()

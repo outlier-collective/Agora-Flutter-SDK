@@ -47,6 +47,10 @@ public class ExternalVideoInputService extends Service
     return mService.asBinder();
   }
 
+  public IExternalVideoInputService getBinder() {
+    return mService;
+  }
+
   private void startForeground()
   {
     createNotificationChannel();
