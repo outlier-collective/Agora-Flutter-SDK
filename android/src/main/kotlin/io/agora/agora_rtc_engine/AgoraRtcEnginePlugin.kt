@@ -62,7 +62,6 @@ open class AgoraRtcEnginePlugin :
 
   private val PROJECTION_REQ_CODE = 1
   private val DEFAULT_SHARE_FRAME_RATE = 15
-  private var mService: IExternalVideoInputService? = null
   private var mServiceConnection: VideoInputServiceConnection? = null
 
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
@@ -78,6 +77,8 @@ open class AgoraRtcEnginePlugin :
     // Define a tag String to represent the FlutterFragment within this
     // Activity's FragmentManager. This value can be whatever you'd like.
     const val TAG_FLUTTER_FRAGMENT = "flutter_fragment"
+
+    var mService: IExternalVideoInputService? = null
 
     @JvmStatic
     fun registerWith(registrar: Registrar) {
@@ -266,9 +267,10 @@ open class AgoraRtcEnginePlugin :
   }
 
   fun setUpExternalVideoInput(data: Intent) {
-    println("mServiceConnection: ${this.mServiceConnection.toString()}")
-    println("mService: ${this.mService.toString()}")
-    this.mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
+    println("mServiceConnection: ${mServiceConnection.toString()}")
+    println("mService: ${mService.toString()}")
+    println("engine: ${engine().toString()}")
+    mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
   }
 
   private fun getAssetAbsolutePath(call: MethodCall, result: Result) {
@@ -336,7 +338,8 @@ class StartScreenShareActivity : Activity() {
       AgoraRtcEnginePlugin().setVideoConfig(metrics.widthPixels, metrics.heightPixels)
       try {
         println("trying mService setExternalVideoInput")
-        AgoraRtcEnginePlugin().setUpExternalVideoInput(data)
+        println("mService: ${AgoraRtcEnginePlugin.mService.toString()}")
+        AgoraRtcEnginePlugin.mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
         println("finished mService setExternalVideoInput")
       } catch (e: RemoteException) {
         e.printStackTrace()
