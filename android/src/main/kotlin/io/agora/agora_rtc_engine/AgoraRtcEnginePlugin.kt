@@ -64,36 +64,6 @@ open class AgoraRtcEnginePlugin :
   open var mService: IExternalVideoInputService? = null
   private var mServiceConnection: VideoInputServiceConnection? = null
 
-  private var captureIntent: Intent? = null
-
-  val screenShareLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-    println("onActivityResult reached")
-    if (result.resultCode == RESULT_OK) {
-      val metrics = DisplayMetrics()
-      myActivity.windowManager.getDefaultDisplay().getMetrics(metrics)
-      var percent = 0f
-      val hp = metrics.heightPixels.toFloat() - 1920f
-      val wp = metrics.widthPixels.toFloat() - 1080f
-      percent = if (hp < wp) {
-        (metrics.widthPixels.toFloat() - 1080f) / metrics.widthPixels.toFloat()
-      } else {
-        (metrics.heightPixels.toFloat() - 1920f) / metrics.heightPixels.toFloat()
-      }
-      metrics.heightPixels = (metrics.heightPixels.toFloat() - metrics.heightPixels * percent).toInt()
-      metrics.widthPixels = (metrics.widthPixels.toFloat() - metrics.widthPixels * percent).toInt()
-      result.data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels)
-      result.data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
-      result.data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
-      result.data!!.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, DEFAULT_SHARE_FRAME_RATE)
-      setVideoConfig(metrics.widthPixels, metrics.heightPixels);
-      try {
-        mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, result.data!!)
-      } catch (e: RemoteException) {
-        e.printStackTrace()
-      }
-    }
-  }
-
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
   // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
   // plugin registration via this function while apps migrate to use the new Android APIs
@@ -282,6 +252,17 @@ open class AgoraRtcEnginePlugin :
     println("finished start screen share activity")
   }
 
+  fun setVideoConfig(width: Int, height: Int) {
+    /**Setup video stream encoding configs */
+    engine()?.setVideoEncoderConfiguration(
+      VideoEncoderConfiguration(
+        VideoDimensions(width, height),
+        VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15,
+        VideoEncoderConfiguration.STANDARD_BITRATE, ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT
+      )
+    )
+  }
+
   private fun getAssetAbsolutePath(call: MethodCall, result: Result) {
     call.arguments<String>()?.let {
       val assetKey = registrar?.lookupKeyForAsset(it)
@@ -297,17 +278,6 @@ open class AgoraRtcEnginePlugin :
     result.error(IllegalArgumentException::class.simpleName, null, null)
   }
 
-  fun setVideoConfig(width: Int, height: Int) {
-    /**Setup video stream encoding configs */
-    engine()?.setVideoEncoderConfiguration(
-      VideoEncoderConfiguration(
-        VideoDimensions(width, height),
-        VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15,
-        VideoEncoderConfiguration.STANDARD_BITRATE, ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT
-      )
-    )
-  }
-
   inner class VideoInputServiceConnection : ServiceConnection, Activity() {
     @RequiresApi(api = Build.VERSION_CODES.M)
     override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
@@ -316,6 +286,7 @@ open class AgoraRtcEnginePlugin :
     }
 
     override fun onServiceDisconnected(componentName: ComponentName) {
+      println("video input service disconnected")
       mService = null
     }
   }
@@ -357,12 +328,13 @@ class StartScreenShareActivity : Activity() {
       try {
         println("trying mService setExternalVideoInput")
         AgoraRtcEnginePlugin().mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
+        print(AgoraRtcEnginePlugin().mService == null)
         println("finished mService setExternalVideoInput")
       } catch (e: RemoteException) {
         e.printStackTrace()
       }
     }
     println("share screen activity finished")
-    finish()
+//    finish()
   }
 }

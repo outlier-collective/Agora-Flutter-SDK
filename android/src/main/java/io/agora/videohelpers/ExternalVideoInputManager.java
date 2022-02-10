@@ -77,6 +77,7 @@ public class ExternalVideoInputManager implements IVideoSource {
   boolean setExternalVideoInput(int type, Intent intent) {
     // Do not reset current input if the target type is
     // the same as the current which is still running.
+    System.out.println("ExternalVideoInputManager setExternalVideoInput() called");
     if (mCurInputType == type && mCurVideoInput != null
       && mCurVideoInput.isRunning()) {
       return false;
