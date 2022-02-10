@@ -333,7 +333,10 @@ class StartScreenShareActivity : Activity() {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     println("onActivityResult reached")
+    println(requestCode)
+    println(resultCode)
     if (requestCode == 1 && resultCode == RESULT_OK) {
+      println("onActivityResult result should execute")
       val metrics = DisplayMetrics()
       this.getWindowManager().getDefaultDisplay().getMetrics(metrics)
       var percent = 0f
@@ -350,12 +353,16 @@ class StartScreenShareActivity : Activity() {
       data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
       data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
       data.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, 15)
-      AgoraRtcEnginePlugin().setVideoConfig(metrics.widthPixels, metrics.heightPixels);
+      AgoraRtcEnginePlugin().setVideoConfig(metrics.widthPixels, metrics.heightPixels)
+      try {
+        println("trying mService setExternalVideoInput")
+        AgoraRtcEnginePlugin().mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
+        println("finished mService setExternalVideoInput")
+      } catch (e: RemoteException) {
+        e.printStackTrace()
+      }
     }
-    try {
-      AgoraRtcEnginePlugin().mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
-    } catch (e: RemoteException) {
-      e.printStackTrace()
-    }
+    println("share screen activity finished")
+    finish()
   }
 }
