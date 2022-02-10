@@ -287,7 +287,7 @@ open class AgoraRtcEnginePlugin :
       if (mService != null) {
         println("mService is not null and starting screenShareIntent")
         val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
-//          .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+          .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         myContext.startActivity(screenShareIntent)
       }
     }
