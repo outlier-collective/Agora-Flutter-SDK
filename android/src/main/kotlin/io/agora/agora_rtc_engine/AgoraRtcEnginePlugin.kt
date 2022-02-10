@@ -214,11 +214,8 @@ open class AgoraRtcEnginePlugin :
 //      engine()?.stopPreview()
 //      engine()?.muteLocalVideoStream(true)
 
-//      bindVideoService()
-      println("finished screen share method call")
-
       bindVideoService()
-      
+
       return
     }
 
@@ -250,10 +247,10 @@ open class AgoraRtcEnginePlugin :
     myContext.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
     println("finished bind service")
 
-    val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
-      .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    myContext.startActivity(screenShareIntent)
-    println("finished start screen share activity")
+//    val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
+//      .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//    myContext.startActivity(screenShareIntent)
+//    println("finished start screen share activity")
   }
 
   fun setVideoConfig(width: Int, height: Int) {
@@ -287,6 +284,13 @@ open class AgoraRtcEnginePlugin :
       println("prev mService has been set as $mService")
       mService = iBinder as IExternalVideoInputService
       println("mService has been set as $mService")
+
+      if (mService != null) {
+        println("mService is not null and starting screenShareIntent")
+        val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
+          .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        myContext.startActivity(screenShareIntent)
+      }
     }
 
     override fun onServiceDisconnected(componentName: ComponentName) {

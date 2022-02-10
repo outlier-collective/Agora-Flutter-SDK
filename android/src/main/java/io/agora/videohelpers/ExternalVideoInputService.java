@@ -25,13 +25,13 @@ public class ExternalVideoInputService extends Service
   public void onCreate()
   {
     super.onCreate();
+    System.out.println("ExternalVideoInputService onCreate() called");
     mSourceManager = new ExternalVideoInputManager(this.getApplicationContext());
     mService = new IExternalVideoInputService.Stub()
     {
       @Override
       public boolean setExternalVideoInput(int type, Intent intent) throws RemoteException
       {
-        System.out.println("ExternalVideoInputService onCreate() called");
         return mSourceManager.setExternalVideoInput(type, intent);
       }
     };
