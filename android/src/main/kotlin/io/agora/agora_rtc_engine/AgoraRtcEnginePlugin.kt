@@ -266,9 +266,9 @@ open class AgoraRtcEnginePlugin :
   }
 
   fun setUpExternalVideoInput(data: Intent) {
-    println("mServiceConnection: ${mServiceConnection.toString()}")
-    println("mService: ${mService.toString()}")
-    mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
+    println("mServiceConnection: ${this.mServiceConnection.toString()}")
+    println("mService: ${this.mService.toString()}")
+    this.mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
   }
 
   private fun getAssetAbsolutePath(call: MethodCall, result: Result) {
@@ -289,6 +289,7 @@ open class AgoraRtcEnginePlugin :
   inner class VideoInputServiceConnection : ServiceConnection {
     @RequiresApi(api = Build.VERSION_CODES.M)
     override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
+      println("prev mService has been set as ${mService.toString()}")
       mService = iBinder as IExternalVideoInputService
       println("mService has been set as ${mService.toString()}")
     }
