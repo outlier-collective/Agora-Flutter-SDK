@@ -33,6 +33,7 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewRegistry
 import io.flutter.plugin.common.MethodChannel.Result
+import kotlinx.coroutines.async
 
 
 /** AgoraRtcEnginePlugin */
@@ -246,6 +247,7 @@ open class AgoraRtcEnginePlugin :
     mServiceConnection = VideoInputServiceConnection()
     myContext.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
     println("finished bind service")
+
     val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
       .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     myContext.startActivity(screenShareIntent)
@@ -278,11 +280,11 @@ open class AgoraRtcEnginePlugin :
     result.error(IllegalArgumentException::class.simpleName, null, null)
   }
 
-  inner class VideoInputServiceConnection : ServiceConnection, Activity() {
+  inner class VideoInputServiceConnection : ServiceConnection {
     @RequiresApi(api = Build.VERSION_CODES.M)
     override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
-      println("video input service connected")
       mService = iBinder as IExternalVideoInputService
+      println("mService has been set as ${mService.toString()}")
     }
 
     override fun onServiceDisconnected(componentName: ComponentName) {
@@ -328,7 +330,7 @@ class StartScreenShareActivity : Activity() {
       try {
         println("trying mService setExternalVideoInput")
         AgoraRtcEnginePlugin().mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
-        print(AgoraRtcEnginePlugin().mService == null)
+        println("is mService null: ${AgoraRtcEnginePlugin().mService == null}")
         println("finished mService setExternalVideoInput")
       } catch (e: RemoteException) {
         e.printStackTrace()
