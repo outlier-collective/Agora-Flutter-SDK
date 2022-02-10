@@ -4,5 +4,4 @@ import io.agora.rtc.RtcEngine;
 
 public class Constants {
   static public RtcEngine rtcEngine = null;
-  static public IExternalVideoInputService mService = null;
 }

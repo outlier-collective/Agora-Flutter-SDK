@@ -9,9 +9,7 @@ import android.media.projection.MediaProjectionManager
 import android.os.*
 import android.util.DisplayMetrics
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.FrameLayout
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
@@ -33,7 +31,6 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewRegistry
 import io.flutter.plugin.common.MethodChannel.Result
-import kotlinx.coroutines.async
 
 
 /** AgoraRtcEnginePlugin */
@@ -77,6 +74,8 @@ open class AgoraRtcEnginePlugin :
     // Define a tag String to represent the FlutterFragment within this
     // Activity's FragmentManager. This value can be whatever you'd like.
     const val TAG_FLUTTER_FRAGMENT = "flutter_fragment"
+
+    var mService: IExternalVideoInputService? = null
 
     @JvmStatic
     fun registerWith(registrar: Registrar) {
@@ -131,6 +130,7 @@ open class AgoraRtcEnginePlugin :
     manager.release()
   }
 
+  @RequiresApi(Build.VERSION_CODES.M)
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     // Your plugin is now associated with an Android Activity.
     //
@@ -159,6 +159,8 @@ open class AgoraRtcEnginePlugin :
 
     fragmentManager = supportFragmentManager
     println("fragment manager: ${fragmentManager.toString()}")
+
+    bindVideoService()
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
@@ -214,8 +216,13 @@ open class AgoraRtcEnginePlugin :
 //      engine()?.stopPreview()
 //      engine()?.muteLocalVideoStream(true)
 
-      bindVideoService()
+//      bindVideoService()
       println("finished screen share method call")
+
+      val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+      myContext.startActivity(screenShareIntent)
+      println("finished start screen share activity")
       return
     }
 
@@ -281,19 +288,14 @@ open class AgoraRtcEnginePlugin :
 
   inner class VideoInputServiceConnection : ServiceConnection {
     override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
-      println("prev mService has been set as ${Constants.mService}")
-      Constants.mService = iBinder as IExternalVideoInputService
-      println("mService has been set as ${Constants.mService}")
-
-      val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
-        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-      myContext.startActivity(screenShareIntent)
-      println("finished start screen share activity")
+      println("prev mService has been set as ${mService}")
+      mService = iBinder as IExternalVideoInputService
+      println("mService has been set as ${mService}")
     }
 
     override fun onServiceDisconnected(componentName: ComponentName) {
       println("video input service disconnected")
-      Constants.mService = null
+      mService = null
     }
   }
 }
@@ -333,8 +335,8 @@ class StartScreenShareActivity : Activity() {
       AgoraRtcEnginePlugin().setVideoConfig(metrics.widthPixels, metrics.heightPixels)
       try {
         println("trying mService setExternalVideoInput")
-        println("mService: ${Constants.mService}")
-        Constants.mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
+        println("mService: ${AgoraRtcEnginePlugin.mService}")
+        AgoraRtcEnginePlugin.mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
         println("finished mService setExternalVideoInput")
       } catch (e: RemoteException) {
         e.printStackTrace()
