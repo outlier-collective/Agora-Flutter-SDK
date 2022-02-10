@@ -78,8 +78,6 @@ open class AgoraRtcEnginePlugin :
     // Activity's FragmentManager. This value can be whatever you'd like.
     const val TAG_FLUTTER_FRAGMENT = "flutter_fragment"
 
-    var mService: IExternalVideoInputService? = null
-
     @JvmStatic
     fun registerWith(registrar: Registrar) {
       AgoraRtcEnginePlugin().apply {
@@ -252,7 +250,6 @@ open class AgoraRtcEnginePlugin :
     val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
       .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     myContext.startActivity(screenShareIntent)
-    print("bind service mService: ${mService.toString()}")
     println("finished start screen share activity")
   }
 
@@ -283,16 +280,15 @@ open class AgoraRtcEnginePlugin :
   }
 
   inner class VideoInputServiceConnection : ServiceConnection {
-    @RequiresApi(api = Build.VERSION_CODES.M)
     override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
-      println("prev mService has been set as ${mService.toString()}")
-      mService = iBinder as IExternalVideoInputService
-      println("mService has been set as ${mService.toString()}")
+      println("prev mService has been set as ${Constants.mService}")
+      Constants.mService = iBinder as IExternalVideoInputService
+      println("mService has been set as ${Constants.mService}")
     }
 
     override fun onServiceDisconnected(componentName: ComponentName) {
       println("video input service disconnected")
-      mService = null
+      Constants.mService = null
     }
   }
 }
@@ -332,8 +328,8 @@ class StartScreenShareActivity : Activity() {
       AgoraRtcEnginePlugin().setVideoConfig(metrics.widthPixels, metrics.heightPixels)
       try {
         println("trying mService setExternalVideoInput")
-        println("mService: ${AgoraRtcEnginePlugin.mService.toString()}")
-        AgoraRtcEnginePlugin.mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
+        println("mService: ${Constants.mService}")
+        Constants.mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
         println("finished mService setExternalVideoInput")
       } catch (e: RemoteException) {
         e.printStackTrace()
