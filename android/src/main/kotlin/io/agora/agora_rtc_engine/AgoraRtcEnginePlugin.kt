@@ -346,7 +346,7 @@ class StartScreenShareActivity : Activity() {
 
     override fun onServiceDisconnected(componentName: ComponentName) {
       println("video input service disconnected")
-      AgoraRtcEnginePlugin.mService = null
+      mService = null
     }
 
     override fun onBindingDied(name: ComponentName?) {
