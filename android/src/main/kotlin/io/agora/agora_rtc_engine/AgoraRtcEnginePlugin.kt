@@ -8,6 +8,7 @@ import android.content.ServiceConnection
 import android.media.projection.MediaProjectionManager
 import android.os.*
 import android.util.DisplayMetrics
+import android.view.WindowManager
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
@@ -145,7 +146,6 @@ open class AgoraRtcEnginePlugin :
     // leave hints, and state saving callbacks by using the
     // appropriate methods on the binding.
     myActivity = binding.getActivity()
-    moveTaskToBack(true)
     println("plugin attached to activity")
 
 //    val vParams: ViewGroup.LayoutParams = FrameLayout.LayoutParams(
@@ -322,6 +322,9 @@ class StartScreenShareActivity : Activity() {
       dataIntent = data
       val metrics = DisplayMetrics()
       this.windowManager.getDefaultDisplay().getMetrics(metrics)
+      window.setFlags(
+        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
       var percent = 0f
       val hp = metrics.heightPixels.toFloat() - 1920f
       val wp = metrics.widthPixels.toFloat() - 1080f
