@@ -46,6 +46,10 @@ public class ExternalVideoInputService extends Service
     startForeground();
     startSourceManager();
     try {
+      System.out.println("---------------");
+      System.out.println(mService);
+      System.out.println(AgoraRtcEnginePlugin.Companion.getDataIntent());
+      System.out.println("---------------");
       mService.setExternalVideoInput(
         ExternalVideoInputManager.TYPE_SCREEN_SHARE, AgoraRtcEnginePlugin.Companion.getDataIntent()
       );

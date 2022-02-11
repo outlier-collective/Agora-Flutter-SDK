@@ -358,6 +358,22 @@ class StartScreenShareActivity : Activity() {
     println(resultCode)
     if (requestCode == 1 && resultCode == RESULT_OK) {
       AgoraRtcEnginePlugin.dataIntent = data
+      val metrics = DisplayMetrics()
+      this.windowManager.getDefaultDisplay().getMetrics(metrics)
+      var percent = 0f
+      val hp = metrics.heightPixels.toFloat() - 1920f
+      val wp = metrics.widthPixels.toFloat() - 1080f
+      percent = if (hp < wp) {
+        (metrics.widthPixels.toFloat() - 1080f) / metrics.widthPixels.toFloat()
+      } else {
+        (metrics.heightPixels.toFloat() - 1920f) / metrics.heightPixels.toFloat()
+      }
+      metrics.heightPixels = (metrics.heightPixels.toFloat() - metrics.heightPixels * percent).toInt()
+      metrics.widthPixels = (metrics.widthPixels.toFloat() - metrics.widthPixels * percent).toInt()
+      AgoraRtcEnginePlugin.dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels)
+      AgoraRtcEnginePlugin.dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
+      AgoraRtcEnginePlugin.dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
+      AgoraRtcEnginePlugin.dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, 15)
 //      AgoraRtcEnginePlugin().startVideoService()
       val videoInputIntent = Intent(this, ExternalVideoInputService::class.java)
 //      mServiceConnection = AgoraRtcEnginePlugin().VideoInputServiceConnection()
