@@ -71,14 +71,6 @@ public class ScreenShareClient extends Fragment {
     }
   }
 
-  @RequiresApi(api = Build.VERSION_CODES.M)
-  public void unbindVideoService() {
-    if (mServiceConnection != null) {
-      context.unbindService(mServiceConnection);
-      mServiceConnection = null;
-    }
-  }
-
   @Override
   public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
     super.onActivityResult(requestCode, resultCode, data);

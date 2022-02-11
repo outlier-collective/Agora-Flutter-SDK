@@ -213,10 +213,11 @@ open class AgoraRtcEnginePlugin :
       Constants.rtcEngine = engine()
 //      engine()?.stopPreview()
 //      engine()?.muteLocalVideoStream(true)
-      println("rtc engine constant: ${Constants.rtcEngine}")
-      println(Constants.rtcEngine)
       bindVideoService()
-
+      return
+    } else if (call.method == "stopScreenShare") {
+      println("stopping screen share method call")
+      unbindVideoService()
       return
     }
 
@@ -254,12 +255,17 @@ open class AgoraRtcEnginePlugin :
     println("finished start screen share activity")
   }
 
+  @RequiresApi(api = Build.VERSION_CODES.M)
+  private fun unbindVideoService() {
+    StartScreenShareActivity().finish()
+  }
+
   fun setVideoConfig(width: Int, height: Int) {
     /**Setup video stream encoding configs */
     engine()?.setVideoEncoderConfiguration(
       VideoEncoderConfiguration(
         VideoDimensions(width, height),
-        VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_15,
+        VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30,
         VideoEncoderConfiguration.STANDARD_BITRATE, ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT
       )
     )
@@ -282,18 +288,26 @@ open class AgoraRtcEnginePlugin :
 }
 
 class StartScreenShareActivity : Activity() {
-  var mService: IExternalVideoInputService? = null
-  var mServiceConnection: VideoInputServiceConnection? = null
-  var dataIntent: Intent? = null
-  var myContext: Context? = null
+  private var mService: IExternalVideoInputService? = null
+  private var mServiceConnection: VideoInputServiceConnection? = null
+  private var dataIntent: Intent? = null
+  private var screenShareContext: Context? = null
 
   override fun onCreate(bundle: Bundle?) {
     super.onCreate(bundle)
-    myContext = this
-    println("StartScreenShareActivity created")
+    screenShareContext = this
     val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
     val captureIntent = mpm.createScreenCaptureIntent()
     this.startActivityForResult(captureIntent, 1)
+  }
+
+  override fun onDestroy() {
+    println("StartScreenShareActivity destroyed")
+    super.onDestroy()
+    if (mServiceConnection != null) {
+      screenShareContext?.unbindService(mServiceConnection!!)
+      mServiceConnection = null
+    }
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -318,13 +332,12 @@ class StartScreenShareActivity : Activity() {
       dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels)
       dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
       dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
-      dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, 15)
+      dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, 30)
       AgoraRtcEnginePlugin().setVideoConfig(metrics.widthPixels, metrics.heightPixels)
 
-      val videoInputIntent = Intent(myContext, ExternalVideoInputService::class.java)
+      val videoInputIntent = Intent(screenShareContext, ExternalVideoInputService::class.java)
       mServiceConnection = VideoInputServiceConnection()
-      val didBind = myContext?.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
-      println("finished bind service as: $didBind")
+      screenShareContext?.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
     }
 //    finish()
     println("share screen activity finished")
@@ -335,12 +348,8 @@ class StartScreenShareActivity : Activity() {
     override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
       mService = iBinder as IExternalVideoInputService
       if (mService != null) {
-        println("mService is not null and starting screenShareIntent")
         try {
-          println("mService: $mService")
-          println("dataIntent: $dataIntent")
           mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, dataIntent!!)
-          println("finished mService setExternalVideoInput")
         } catch (e: RemoteException) {
           e.printStackTrace()
         }

@@ -61,8 +61,6 @@ class IRtcChannel {
     fun setDefaultMuteAllRemoteVideoStreams(params: Map<String, *>, callback: Callback)
 
     fun enableRemoteSuperResolution(params: Map<String, *>, callback: Callback)
-
-    fun startScreenShare()
   }
 
   interface RtcVoicePositionInterface {
@@ -292,10 +290,6 @@ class RtcChannelManager(
         params["enabled"] as Boolean
       )
     )
-  }
-
-  override fun startScreenShare() {
-    TODO("Not yet implemented")
   }
 
   override fun setRemoteVoicePosition(params: Map<String, *>, callback: Callback) {
