@@ -242,15 +242,15 @@ open class AgoraRtcEnginePlugin :
   @RequiresApi(api = Build.VERSION_CODES.M)
   private fun bindVideoService() {
     println("reached bind service")
-    val videoInputIntent = Intent(myContext, ExternalVideoInputService::class.java)
-    mServiceConnection = VideoInputServiceConnection()
-    val didBind = myContext.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
-    println("finished bind service as: $didBind")
+//    val videoInputIntent = Intent(myContext, ExternalVideoInputService::class.java)
+//    mServiceConnection = VideoInputServiceConnection()
+//    val didBind = myContext.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
+//    println("finished bind service as: $didBind")
 
-//    val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
-//      .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//    myContext.startActivity(screenShareIntent)
-//    println("finished start screen share activity")
+    val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
+      .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    myContext.startActivity(screenShareIntent)
+    println("finished start screen share activity")
   }
 
   fun setVideoConfig(width: Int, height: Int) {
@@ -278,38 +278,10 @@ open class AgoraRtcEnginePlugin :
     }
     result.error(IllegalArgumentException::class.simpleName, null, null)
   }
-
-  inner class VideoInputServiceConnection : ServiceConnection {
-    override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
-      mService = iBinder as IExternalVideoInputService
-      println("mService has been set as $mService")
-
-      if (mService != null) {
-        println("mService is not null and starting screenShareIntent")
-        val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
-          .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        myContext.startActivity(screenShareIntent)
-      }
-    }
-
-    override fun onServiceDisconnected(componentName: ComponentName) {
-      println("video input service disconnected")
-      mService = null
-    }
-
-    override fun onBindingDied(name: ComponentName?) {
-      println("binding died")
-      super.onBindingDied(name)
-    }
-
-    override fun onNullBinding(name: ComponentName?) {
-      println("on null binding")
-      super.onNullBinding(name)
-    }
-  }
 }
 
 class StartScreenShareActivity : Activity() {
+  var dataIntent: Intent? = null
   override fun onCreate(bundle: Bundle?) {
     super.onCreate(bundle)
     println("StartScreenShareActivity created")
@@ -324,7 +296,7 @@ class StartScreenShareActivity : Activity() {
     println(requestCode)
     println(resultCode)
     if (requestCode == 1 && resultCode == RESULT_OK) {
-      println("onActivityResult result should execute")
+      dataIntent = data
       val metrics = DisplayMetrics()
       this.windowManager.getDefaultDisplay().getMetrics(metrics)
       var percent = 0f
@@ -337,23 +309,53 @@ class StartScreenShareActivity : Activity() {
       }
       metrics.heightPixels = (metrics.heightPixels.toFloat() - metrics.heightPixels * percent).toInt()
       metrics.widthPixels = (metrics.widthPixels.toFloat() - metrics.widthPixels * percent).toInt()
-      data!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels)
-      data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
-      data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
-      data.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, 15)
+      dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels)
+      dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
+      dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
+      dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, 15)
       AgoraRtcEnginePlugin().setVideoConfig(metrics.widthPixels, metrics.heightPixels)
-      try {
-        println("trying mService setExternalVideoInput")
-        println("mService: ${AgoraRtcEnginePlugin.mService}")
-        val binder = ExternalVideoInputService.mService
-        println("binder: $binder")
-        binder?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
-        println("finished mService setExternalVideoInput")
-      } catch (e: RemoteException) {
-        e.printStackTrace()
+
+      val videoInputIntent = Intent(this, ExternalVideoInputService::class.java)
+      val didBind = this.bindService(videoInputIntent, VideoInputServiceConnection()!!, BIND_AUTO_CREATE)
+      println("finished bind service as: $didBind")
+    }
+//    finish()
+    println("share screen activity finished")
+  }
+
+
+  inner class VideoInputServiceConnection : ServiceConnection {
+    override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
+      val mService = iBinder as IExternalVideoInputService
+
+      if (mService != null) {
+        println("mService is not null and starting screenShareIntent")
+        try {
+          println("mService: $mService")
+//          val binder = ExternalVideoInputService.mService
+//          println("binder: $binder")
+          println("dataIntent: $dataIntent")
+          mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, dataIntent!!)
+          println("finished mService setExternalVideoInput")
+        } catch (e: RemoteException) {
+          e.printStackTrace()
+        }
       }
     }
-    finish()
-    println("share screen activity finished")
+
+    override fun onServiceDisconnected(componentName: ComponentName) {
+      println("video input service disconnected")
+      AgoraRtcEnginePlugin.mService = null
+    }
+
+    override fun onBindingDied(name: ComponentName?) {
+      println("binding died")
+      super.onBindingDied(name)
+    }
+
+    override fun onNullBinding(name: ComponentName?) {
+      println("on null binding")
+      super.onNullBinding(name)
+    }
   }
 }
