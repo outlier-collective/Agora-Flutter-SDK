@@ -284,9 +284,11 @@ class StartScreenShareActivity : Activity() {
   var mService: IExternalVideoInputService? = null
   var mServiceConnection: VideoInputServiceConnection? = null
   var dataIntent: Intent? = null
+  var myActivity: Activity? = null
 
   override fun onCreate(bundle: Bundle?) {
     super.onCreate(bundle)
+    myActivity = this
     println("StartScreenShareActivity created")
     val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
     val captureIntent = mpm.createScreenCaptureIntent()
@@ -318,9 +320,9 @@ class StartScreenShareActivity : Activity() {
       dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, 15)
       AgoraRtcEnginePlugin().setVideoConfig(metrics.widthPixels, metrics.heightPixels)
 
-      val videoInputIntent = Intent(this, ExternalVideoInputService::class.java)
+      val videoInputIntent = Intent(myActivity, ExternalVideoInputService::class.java)
       mServiceConnection = VideoInputServiceConnection()
-      val didBind = this.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
+      val didBind = myActivity?.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
       println("finished bind service as: $didBind")
     }
 //    finish()
