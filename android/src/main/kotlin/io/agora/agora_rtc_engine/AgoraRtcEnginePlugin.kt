@@ -8,8 +8,6 @@ import android.content.ServiceConnection
 import android.media.projection.MediaProjectionManager
 import android.os.*
 import android.util.DisplayMetrics
-import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
@@ -299,6 +297,10 @@ class StartScreenShareActivity : Activity() {
     this.startActivityForResult(captureIntent, 1)
 //    this.setVisible(false)
     this.setFinishOnTouchOutside(false)
+  }
+
+  override fun onBackPressed() {
+    super.onBackPressed()
   }
 
   override fun onDestroy() {
