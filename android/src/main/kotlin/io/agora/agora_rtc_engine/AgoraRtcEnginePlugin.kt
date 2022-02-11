@@ -59,7 +59,7 @@ open class AgoraRtcEnginePlugin :
 
   private val PROJECTION_REQ_CODE = 1
   private val DEFAULT_SHARE_FRAME_RATE = 15
-  private var mServiceConnection: VideoInputServiceConnection? = null
+//  private var mServiceConnection: VideoInputServiceConnection? = null
 
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
   // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
