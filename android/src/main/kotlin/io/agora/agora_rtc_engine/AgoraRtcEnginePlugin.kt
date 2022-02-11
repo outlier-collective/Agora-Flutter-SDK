@@ -211,8 +211,6 @@ open class AgoraRtcEnginePlugin :
     if (call.method == "startScreenShare") {
       println("starting screen share method call")
       Constants.rtcEngine = engine()
-//      engine()?.stopPreview()
-//      engine()?.muteLocalVideoStream(true)
       bindVideoService()
       return
     } else if (call.method == "stopScreenShare") {
@@ -299,15 +297,19 @@ class StartScreenShareActivity : Activity() {
     val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
     val captureIntent = mpm.createScreenCaptureIntent()
     this.startActivityForResult(captureIntent, 1)
+//    this.setVisible(false)
+    this.moveTaskToBack(true)
+//    this.setFinishOnTouchOutside(false)
   }
 
   override fun onDestroy() {
-    println("StartScreenShareActivity destroyed")
     super.onDestroy()
+    println("StartScreenShareActivity destroyed")
     if (mServiceConnection != null) {
       screenShareContext?.unbindService(mServiceConnection!!)
       mServiceConnection = null
     }
+    Constants.rtcEngine.enableVideo()
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
