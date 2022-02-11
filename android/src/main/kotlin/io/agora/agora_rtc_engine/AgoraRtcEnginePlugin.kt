@@ -358,12 +358,7 @@ class StartScreenShareActivity : Activity() {
     println(resultCode)
     if (requestCode == 1 && resultCode == RESULT_OK) {
       AgoraRtcEnginePlugin.dataIntent = data
-//      AgoraRtcEnginePlugin().startVideoService()
-      val videoInputIntent = Intent(this, ExternalVideoInputService::class.java)
-//      mServiceConnection = AgoraRtcEnginePlugin().VideoInputServiceConnection()
-      val didBind = this.bindService(
-        videoInputIntent, AgoraRtcEnginePlugin().VideoInputServiceConnection()!!, BIND_AUTO_CREATE)
-      println("start video service is $didBind")
+      AgoraRtcEnginePlugin().startVideoService()
     }
     finish()
     println("share screen activity finished")
