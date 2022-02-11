@@ -248,16 +248,16 @@ open class AgoraRtcEnginePlugin :
 //    val didBind = myContext.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
 //    println("finished bind service as: $didBind")
 
-    val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
+    val screenShareIntent = Intent(this, StartScreenShareActivity::class.java).also { intent = it }
       .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    myContext.startActivity(screenShareIntent)
+    this.startActivity(screenShareIntent)
     println("finished start screen share activity")
   }
 
   fun startVideoService() {
-    val videoInputIntent = Intent(this, ExternalVideoInputService::class.java)
+    val videoInputIntent = Intent(applicationContext, ExternalVideoInputService::class.java)
     mServiceConnection = VideoInputServiceConnection()
-    val didBind = this.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
+    val didBind = applicationContext.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
     println("start video service is $didBind")
   }
 
