@@ -19,7 +19,7 @@ public class ExternalVideoInputService extends Service
   private static final String CHANNEL_ID = "ExternalVideo";
 
   private ExternalVideoInputManager mSourceManager;
-  private IExternalVideoInputService mService;
+  public static IExternalVideoInputService mService;
 
   @Override
   public void onCreate()
