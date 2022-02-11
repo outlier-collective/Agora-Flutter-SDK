@@ -213,7 +213,8 @@ open class AgoraRtcEnginePlugin :
       Constants.rtcEngine = engine()
 //      engine()?.stopPreview()
 //      engine()?.muteLocalVideoStream(true)
-
+      println("rtc engine constant: ${Constants.rtcEngine}")
+      println(Constants.rtcEngine)
       bindVideoService()
 
       return
