@@ -341,8 +341,9 @@ class StartScreenShareActivity : Activity() {
       val videoInputIntent = Intent(screenShareContext, ExternalVideoInputService::class.java)
       mServiceConnection = VideoInputServiceConnection()
       screenShareContext?.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
+    } else {
+      finish()
     }
-//    finish()
     println("share screen activity finished")
   }
 
