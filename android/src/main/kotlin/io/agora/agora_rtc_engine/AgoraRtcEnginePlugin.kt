@@ -281,7 +281,10 @@ open class AgoraRtcEnginePlugin :
 }
 
 class StartScreenShareActivity : Activity() {
+  var mService: IExternalVideoInputService? = null
+  var mServiceConnection: VideoInputServiceConnection? = null
   var dataIntent: Intent? = null
+
   override fun onCreate(bundle: Bundle?) {
     super.onCreate(bundle)
     println("StartScreenShareActivity created")
@@ -316,7 +319,8 @@ class StartScreenShareActivity : Activity() {
       AgoraRtcEnginePlugin().setVideoConfig(metrics.widthPixels, metrics.heightPixels)
 
       val videoInputIntent = Intent(this, ExternalVideoInputService::class.java)
-      val didBind = this.bindService(videoInputIntent, VideoInputServiceConnection()!!, BIND_AUTO_CREATE)
+      mServiceConnection = VideoInputServiceConnection()
+      val didBind = this.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
       println("finished bind service as: $didBind")
     }
 //    finish()
@@ -325,16 +329,12 @@ class StartScreenShareActivity : Activity() {
 
 
   inner class VideoInputServiceConnection : ServiceConnection {
-    var mService: IExternalVideoInputService? = null
-
     override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
       mService = iBinder as IExternalVideoInputService
       if (mService != null) {
         println("mService is not null and starting screenShareIntent")
         try {
           println("mService: $mService")
-//          val binder = ExternalVideoInputService.mService
-//          println("binder: $binder")
           println("dataIntent: $dataIntent")
           mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, dataIntent!!)
           println("finished mService setExternalVideoInput")
