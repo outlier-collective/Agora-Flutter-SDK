@@ -149,16 +149,16 @@ open class AgoraRtcEnginePlugin :
     myActivity = binding.getActivity()
     println("plugin attached to activity")
 
-    val vParams: ViewGroup.LayoutParams = FrameLayout.LayoutParams(
-      ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-    )
-    val container = FrameLayout(myContext)
-    container.layoutParams = vParams
-    container.id = id
-    myActivity.setContentView(container, vParams)
-
-    fragmentManager = supportFragmentManager
-    println("fragment manager: ${fragmentManager.toString()}")
+//    val vParams: ViewGroup.LayoutParams = FrameLayout.LayoutParams(
+//      ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+//    )
+//    val container = FrameLayout(myContext)
+//    container.layoutParams = vParams
+//    container.id = id
+//    myActivity.setContentView(container, vParams)
+//
+//    fragmentManager = supportFragmentManager
+//    println("fragment manager: ${fragmentManager.toString()}")
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
