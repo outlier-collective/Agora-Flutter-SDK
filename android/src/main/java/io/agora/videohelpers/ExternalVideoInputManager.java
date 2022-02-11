@@ -16,6 +16,7 @@ import android.view.Surface;
 
 import androidx.annotation.RequiresApi;
 
+import io.agora.agora_rtc_engine.AgoraRtcEnginePlugin;
 import io.agora.gles.ProgramTextureOES;
 import io.agora.gles.core.EglCore;
 import io.agora.gles.core.GlUtil;
@@ -224,6 +225,7 @@ public class ExternalVideoInputManager implements IVideoSource {
       mThreadContext.program = new ProgramTextureOES();
 
       // Sets the custom video source
+      System.out.println(Constants.rtcEngine);
       Constants.rtcEngine.setVideoSource(ExternalVideoInputManager.this);
     }
 
