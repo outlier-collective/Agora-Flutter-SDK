@@ -365,7 +365,7 @@ class StartScreenShareActivity : Activity() {
         videoInputIntent, AgoraRtcEnginePlugin().VideoInputServiceConnection()!!, BIND_AUTO_CREATE)
       println("start video service is $didBind")
     }
-    finish()
+//    finish()
     println("share screen activity finished")
   }
 }

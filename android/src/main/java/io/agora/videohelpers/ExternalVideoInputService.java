@@ -13,6 +13,8 @@ import android.os.RemoteException;
 
 import org.jetbrains.annotations.Nullable;
 
+import io.agora.agora_rtc_engine.AgoraRtcEnginePlugin;
+
 public class ExternalVideoInputService extends Service
 {
   private static final int NOTIFICATION_ID = 1;
@@ -43,6 +45,13 @@ public class ExternalVideoInputService extends Service
     System.out.println("ExternalVideoInputService onBind() has been called");
     startForeground();
     startSourceManager();
+    try {
+      mService.setExternalVideoInput(
+        ExternalVideoInputManager.TYPE_SCREEN_SHARE, AgoraRtcEnginePlugin.Companion.getDataIntent()
+      );
+    } catch (RemoteException e) {
+      e.printStackTrace();
+    }
     return mService.asBinder();
   }
 
