@@ -298,8 +298,7 @@ class StartScreenShareActivity : Activity() {
     val captureIntent = mpm.createScreenCaptureIntent()
     this.startActivityForResult(captureIntent, 1)
 //    this.setVisible(false)
-    this.moveTaskToBack(true)
-//    this.setFinishOnTouchOutside(false)
+    this.setFinishOnTouchOutside(false)
   }
 
   override fun onDestroy() {

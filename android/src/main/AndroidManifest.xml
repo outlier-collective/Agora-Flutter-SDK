@@ -19,7 +19,8 @@
 
   <application>
     <activity
-      android:name="io.agora.agora_rtc_engine.StartScreenShareActivity" />
+      android:name="io.agora.agora_rtc_engine.StartScreenShareActivity"
+      android:theme="@android:style/Theme.Dialog" />
     <service android:name="io.agora.videohelpers.ExternalVideoInputService"
       android:exported="false"
       android:foregroundServiceType="mediaProjection" />
