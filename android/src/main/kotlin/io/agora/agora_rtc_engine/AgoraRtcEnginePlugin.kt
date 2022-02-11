@@ -322,9 +322,6 @@ class StartScreenShareActivity : Activity() {
       dataIntent = data
       val metrics = DisplayMetrics()
       this.windowManager.getDefaultDisplay().getMetrics(metrics)
-      window.setFlags(
-        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
       var percent = 0f
       val hp = metrics.heightPixels.toFloat() - 1920f
       val wp = metrics.widthPixels.toFloat() - 1080f
