@@ -295,12 +295,12 @@ class StartScreenShareActivity : Activity() {
     val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
     val captureIntent = mpm.createScreenCaptureIntent()
     this.startActivityForResult(captureIntent, 1)
-//    this.setVisible(false)
+    moveTaskToBack(false)
     this.setFinishOnTouchOutside(false)
   }
 
   override fun onBackPressed() {
-//    super.onBackPressed()
+    // prevent activity from getting destroyed on back button
   }
 
   override fun onDestroy() {
