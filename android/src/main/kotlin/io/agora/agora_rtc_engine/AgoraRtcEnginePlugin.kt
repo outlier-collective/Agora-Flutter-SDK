@@ -75,7 +75,7 @@ open class AgoraRtcEnginePlugin :
     // Activity's FragmentManager. This value can be whatever you'd like.
     const val TAG_FLUTTER_FRAGMENT = "flutter_fragment"
 
-    var mService: IExternalVideoInputService? = null
+//    var mService: IExternalVideoInputService? = null
 
     @JvmStatic
     fun registerWith(registrar: Registrar) {
@@ -325,9 +325,10 @@ class StartScreenShareActivity : Activity() {
 
 
   inner class VideoInputServiceConnection : ServiceConnection {
-    override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
-      val mService = iBinder as IExternalVideoInputService
+    var mService: IExternalVideoInputService? = null
 
+    override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
+      mService = iBinder as IExternalVideoInputService
       if (mService != null) {
         println("mService is not null and starting screenShareIntent")
         try {
