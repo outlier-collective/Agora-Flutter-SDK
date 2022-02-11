@@ -145,6 +145,7 @@ open class AgoraRtcEnginePlugin :
     // leave hints, and state saving callbacks by using the
     // appropriate methods on the binding.
     myActivity = binding.getActivity()
+    moveTaskToBack(true)
     println("plugin attached to activity")
 
 //    val vParams: ViewGroup.LayoutParams = FrameLayout.LayoutParams(
@@ -291,7 +292,6 @@ class StartScreenShareActivity : Activity() {
 
   override fun onCreate(bundle: Bundle?) {
     super.onCreate(bundle)
-    moveTaskToBack(true)
     screenShareContext = this
     val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
     val captureIntent = mpm.createScreenCaptureIntent()
