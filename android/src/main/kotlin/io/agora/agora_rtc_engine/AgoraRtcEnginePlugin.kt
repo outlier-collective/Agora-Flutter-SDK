@@ -295,7 +295,7 @@ class StartScreenShareActivity : Activity() {
     val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
     val captureIntent = mpm.createScreenCaptureIntent()
     this.startActivityForResult(captureIntent, 1)
-    moveTaskToBack(false)
+    moveTaskToBack(true)
     this.setFinishOnTouchOutside(false)
   }
 
