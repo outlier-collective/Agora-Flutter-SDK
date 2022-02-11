@@ -291,11 +291,11 @@ class StartScreenShareActivity : Activity() {
 
   override fun onCreate(bundle: Bundle?) {
     super.onCreate(bundle)
+    moveTaskToBack(true)
     screenShareContext = this
     val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
     val captureIntent = mpm.createScreenCaptureIntent()
     this.startActivityForResult(captureIntent, 1)
-    moveTaskToBack(true)
     this.setFinishOnTouchOutside(false)
   }
 
