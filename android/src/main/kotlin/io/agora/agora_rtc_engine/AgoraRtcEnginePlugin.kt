@@ -241,11 +241,6 @@ open class AgoraRtcEnginePlugin :
   @RequiresApi(api = Build.VERSION_CODES.M)
   private fun bindVideoService() {
     println("reached bind service")
-//    val videoInputIntent = Intent(myContext, ExternalVideoInputService::class.java)
-//    mServiceConnection = VideoInputServiceConnection()
-//    val didBind = myContext.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
-//    println("finished bind service as: $didBind")
-
     val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
       .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     myContext.startActivity(screenShareIntent)
@@ -293,11 +288,6 @@ class StartScreenShareActivity : Activity() {
   override fun onCreate(bundle: Bundle?) {
     super.onCreate(bundle)
     screenShareContext = this
-    val alert = AlertDialog.Builder(this)
-    alert.setTitle("You are sharing your screen")
-    alert.setPositiveButton("Stop screen sharing", null)
-    alert.show()
-
     val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
     val captureIntent = mpm.createScreenCaptureIntent()
     this.startActivityForResult(captureIntent, 1)
