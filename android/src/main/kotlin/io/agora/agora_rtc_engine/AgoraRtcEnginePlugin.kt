@@ -320,7 +320,7 @@ open class AgoraRtcEnginePlugin :
     override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
       mService = iBinder as IExternalVideoInputService
       if (mService != null) {
-          val mpm = myContext.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+          val mpm = applicationContext.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
         val captureIntent = mpm.createScreenCaptureIntent()
         myActivity.startActivityForResult(captureIntent, 1)
 //        try {
