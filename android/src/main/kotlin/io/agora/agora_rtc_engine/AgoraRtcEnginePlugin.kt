@@ -286,7 +286,7 @@ class StartScreenShareActivity : Activity() {
   override fun onCreate(bundle: Bundle?) {
     super.onCreate(bundle)
     screenShareContext = this
-    window.setLayout(1, 1)
+    window.setLayout(0, 0)
     val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
     val captureIntent = mpm.createScreenCaptureIntent()
     this.startActivityForResult(captureIntent, 1)
@@ -312,14 +312,14 @@ class StartScreenShareActivity : Activity() {
     println("onActivityResult reached")
     if (requestCode == 1 && resultCode == RESULT_OK) {
 
-      val alertDialog = AlertDialog.Builder(this).create()
-      alertDialog.setTitle("You are sharing your screen")
-//      alertDialog.setMessage("Message")
-
-      alertDialog.setButton(
-        AlertDialog.BUTTON_POSITIVE, "Stop screen sharing"
-      ) { _, _ -> finish() }
-      alertDialog.show()
+//      val alertDialog = AlertDialog.Builder(this).create()
+//      alertDialog.setTitle("You are sharing your screen")
+////      alertDialog.setMessage("Message")
+//
+//      alertDialog.setButton(
+//        AlertDialog.BUTTON_POSITIVE, "Stop screen sharing"
+//      ) { _, _ -> finish() }
+//      alertDialog.show()
 
       dataIntent = data
       val metrics = DisplayMetrics()
