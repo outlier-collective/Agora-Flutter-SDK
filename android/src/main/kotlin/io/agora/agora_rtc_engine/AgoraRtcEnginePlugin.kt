@@ -34,7 +34,7 @@ import io.flutter.plugin.common.MethodChannel.Result
 
 /** AgoraRtcEnginePlugin */
 open class AgoraRtcEnginePlugin :
-    FragmentActivity(), ActivityAware, FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
+    Activity(), ActivityAware, FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
   private var registrar: Registrar? = null
   private var binding: FlutterPlugin.FlutterPluginBinding? = null
   private lateinit var myContext: Context
