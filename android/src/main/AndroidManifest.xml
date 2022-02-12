@@ -18,7 +18,6 @@
     tools:ignore="ProtectedPermissions" />
 
   <application>
-    <activity android:name="io.agora.agora_rtc_engine.AgoraRtcEnginePlugin" />
     <service android:name="io.agora.videohelpers.ExternalVideoInputService"
       android:exported="false"
       android:foregroundServiceType="mediaProjection" />
