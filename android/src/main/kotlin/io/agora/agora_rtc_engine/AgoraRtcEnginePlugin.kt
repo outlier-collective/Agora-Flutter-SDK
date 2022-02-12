@@ -320,7 +320,7 @@ open class AgoraRtcEnginePlugin :
       if (mService != null) {
           val mpm = myContext.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
         val captureIntent = mpm.createScreenCaptureIntent()
-        startActivityForResult(captureIntent, 1)
+        myActivity.startActivityForResult(captureIntent, 1)
 //        try {
 //          mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, dataIntent!!)
 //        } catch (e: RemoteException) {
