@@ -1,6 +1,7 @@
 package io.agora.agora_rtc_engine
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -8,7 +9,6 @@ import android.content.ServiceConnection
 import android.media.projection.MediaProjectionManager
 import android.os.*
 import android.util.DisplayMetrics
-import android.view.WindowManager
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
@@ -29,7 +29,6 @@ import io.flutter.plugin.common.*
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewRegistry
-import io.flutter.plugin.common.MethodChannel.Result
 
 
 /** AgoraRtcEnginePlugin */
@@ -293,6 +292,11 @@ class StartScreenShareActivity : Activity() {
   override fun onCreate(bundle: Bundle?) {
     super.onCreate(bundle)
     screenShareContext = this
+    val alert = AlertDialog.Builder(this)
+    alert.setTitle("You are sharing your screen")
+    alert.setPositiveButton("Stop screen sharing", null)
+    alert.show()
+
     val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
     val captureIntent = mpm.createScreenCaptureIntent()
     this.startActivityForResult(captureIntent, 1)
