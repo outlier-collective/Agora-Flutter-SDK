@@ -1,11 +1,9 @@
 package io.agora.agora_rtc_engine
 
+import android.R.id.message
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
 import android.media.projection.MediaProjectionManager
 import android.os.*
 import android.util.DisplayMetrics
@@ -312,6 +310,16 @@ class StartScreenShareActivity : Activity() {
     super.onActivityResult(requestCode, resultCode, data)
     println("onActivityResult reached")
     if (requestCode == 1 && resultCode == RESULT_OK) {
+
+      val alertDialog = AlertDialog.Builder(this).create()
+      alertDialog.setTitle("You are sharing your screen")
+//      alertDialog.setMessage("Message")
+
+      alertDialog.setButton(
+        AlertDialog.BUTTON_POSITIVE, "Stop screen sharing"
+      ) { _, _ -> finish() }
+      alertDialog.show()
+
       dataIntent = data
       val metrics = DisplayMetrics()
       this.windowManager.getDefaultDisplay().getMetrics(metrics)
