@@ -311,8 +311,6 @@ class StartScreenShareActivity : Activity() {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     println("onActivityResult reached")
-    println(requestCode)
-    println(resultCode)
     if (requestCode == 1 && resultCode == RESULT_OK) {
       dataIntent = data
       val metrics = DisplayMetrics()
