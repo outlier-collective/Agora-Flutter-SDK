@@ -1,7 +1,6 @@
 package io.agora.agora_rtc_engine
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -10,8 +9,8 @@ import android.media.projection.MediaProjectionManager
 import android.os.*
 import android.util.DisplayMetrics
 import androidx.annotation.NonNull
+import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcEngineManager
@@ -59,6 +58,11 @@ open class AgoraRtcEnginePlugin :
   private val PROJECTION_REQ_CODE = 1
   private val DEFAULT_SHARE_FRAME_RATE = 15
 //  private var mServiceConnection: VideoInputServiceConnection? = null
+
+  private var mService: IExternalVideoInputService? = null
+  private var mServiceConnection: VideoInputServiceConnection? = null
+  private var dataIntent: Intent? = null
+//  private var screenShareContext: Context? = null
 
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
   // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
@@ -214,7 +218,7 @@ open class AgoraRtcEnginePlugin :
       return
     } else if (call.method == "stopScreenShare") {
       println("stopping screen share method call")
-      unbindVideoService()
+//      unbindVideoService()
       return
     }
 
@@ -240,19 +244,23 @@ open class AgoraRtcEnginePlugin :
 
   @RequiresApi(api = Build.VERSION_CODES.M)
   private fun bindVideoService() {
-    println("reached bind service")
-    val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
-      .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    myContext.startActivity(screenShareIntent)
-    println("finished start screen share activity")
+//    println("reached bind service")
+//    val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
+//      .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//    myContext.startActivity(screenShareIntent)
+//    println("finished start screen share activity")
+
+    val videoInputIntent = Intent(myContext, ExternalVideoInputService::class.java)
+    mServiceConnection = VideoInputServiceConnection()
+    myContext.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
   }
 
-  @RequiresApi(api = Build.VERSION_CODES.M)
-  private fun unbindVideoService() {
-    StartScreenShareActivity().finish()
-  }
+//  @RequiresApi(api = Build.VERSION_CODES.M)
+//  private fun unbindVideoService() {
+//    StartScreenShareActivity().finish()
+//  }
 
-  fun setVideoConfig(width: Int, height: Int) {
+  private fun setVideoConfig(width: Int, height: Int) {
     /**Setup video stream encoding configs */
     engine()?.setVideoEncoderConfiguration(
       VideoEncoderConfiguration(
@@ -277,81 +285,47 @@ open class AgoraRtcEnginePlugin :
     }
     result.error(IllegalArgumentException::class.simpleName, null, null)
   }
-}
 
-class StartScreenShareActivity : Activity() {
-  private var mService: IExternalVideoInputService? = null
-  private var mServiceConnection: VideoInputServiceConnection? = null
-  private var dataIntent: Intent? = null
-  private var screenShareContext: Context? = null
-
-  override fun onCreate(bundle: Bundle?) {
-    super.onCreate(bundle)
-    screenShareContext = this
-    val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-    val captureIntent = mpm.createScreenCaptureIntent()
-    this.startActivityForResult(captureIntent, 1)
-    this.setFinishOnTouchOutside(false)
-  }
-
-  override fun onBackPressed() {
-    // prevent activity from getting destroyed on back button
-  }
-
-  override fun onDestroy() {
-    super.onDestroy()
-    println("StartScreenShareActivity destroyed")
-    if (mServiceConnection != null) {
-      screenShareContext?.unbindService(mServiceConnection!!)
-      mServiceConnection = null
-    }
-    Constants.rtcEngine.enableVideo()
-  }
-
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+  override fun onActivityResult(requestCode: Int, resultCode: Int, @Nullable data: Intent) {
     super.onActivityResult(requestCode, resultCode, data)
-    println("onActivityResult reached")
-    println(requestCode)
-    println(resultCode)
-    if (requestCode == 1 && resultCode == RESULT_OK) {
-      dataIntent = data
-      val metrics = DisplayMetrics()
-      this.windowManager.getDefaultDisplay().getMetrics(metrics)
-      var percent = 0f
-      val hp = metrics.heightPixels.toFloat() - 1920f
-      val wp = metrics.widthPixels.toFloat() - 1080f
-      percent = if (hp < wp) {
-        (metrics.widthPixels.toFloat() - 1080f) / metrics.widthPixels.toFloat()
-      } else {
-        (metrics.heightPixels.toFloat() - 1920f) / metrics.heightPixels.toFloat()
+    if (resultCode == RESULT_OK) {
+      try {
+        val metrics = DisplayMetrics()
+        myActivity.windowManager.getDefaultDisplay().getMetrics(metrics)
+        var percent = 0f
+        val hp = metrics.heightPixels.toFloat() - 1920f
+        val wp = metrics.widthPixels.toFloat() - 1080f
+        percent = if (hp < wp) {
+          (metrics.widthPixels.toFloat() - 1080f) / metrics.widthPixels.toFloat()
+        } else {
+          (metrics.heightPixels.toFloat() - 1920f) / metrics.heightPixels.toFloat()
+        }
+        metrics.heightPixels = (metrics.heightPixels.toFloat() - metrics.heightPixels * percent).toInt()
+        metrics.widthPixels = (metrics.widthPixels.toFloat() - metrics.widthPixels * percent).toInt()
+        data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels)
+        data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
+        data.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
+        data.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, DEFAULT_SHARE_FRAME_RATE)
+        setVideoConfig(metrics.widthPixels, metrics.heightPixels)
+        mService!!.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, data)
+      } catch (e: RemoteException) {
+        e.printStackTrace()
       }
-      metrics.heightPixels = (metrics.heightPixels.toFloat() - metrics.heightPixels * percent).toInt()
-      metrics.widthPixels = (metrics.widthPixels.toFloat() - metrics.widthPixels * percent).toInt()
-      dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels)
-      dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
-      dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
-      dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, 30)
-      AgoraRtcEnginePlugin().setVideoConfig(metrics.widthPixels, metrics.heightPixels)
-
-      val videoInputIntent = Intent(screenShareContext, ExternalVideoInputService::class.java)
-      mServiceConnection = VideoInputServiceConnection()
-      screenShareContext?.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
-    } else {
-      finish()
     }
-    println("share screen activity finished")
   }
-
 
   inner class VideoInputServiceConnection : ServiceConnection {
     override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
       mService = iBinder as IExternalVideoInputService
       if (mService != null) {
-        try {
-          mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, dataIntent!!)
-        } catch (e: RemoteException) {
-          e.printStackTrace()
-        }
+          val mpm = myContext.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+        val captureIntent = mpm.createScreenCaptureIntent()
+        startActivityForResult(captureIntent, 1)
+//        try {
+//          mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, dataIntent!!)
+//        } catch (e: RemoteException) {
+//          e.printStackTrace()
+//        }
       }
     }
 
