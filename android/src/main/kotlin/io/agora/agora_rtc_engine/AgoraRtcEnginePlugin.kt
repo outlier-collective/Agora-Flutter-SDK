@@ -8,6 +8,8 @@ import android.content.ServiceConnection
 import android.media.projection.MediaProjectionManager
 import android.os.*
 import android.util.DisplayMetrics
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
@@ -152,13 +154,13 @@ open class AgoraRtcEnginePlugin :
     myActivity = binding.getActivity()
     println("plugin attached to activity")
 
-//    val vParams: ViewGroup.LayoutParams = FrameLayout.LayoutParams(
-//      ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-//    )
-//    val container = FrameLayout(myContext)
-//    container.layoutParams = vParams
-//    container.id = id
-//    myActivity.setContentView(container, vParams)
+    val vParams: ViewGroup.LayoutParams = FrameLayout.LayoutParams(
+      ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+    )
+    val container = FrameLayout(myContext)
+    container.layoutParams = vParams
+    container.id = id
+    myActivity.setContentView(container, vParams)
 //
 //    fragmentManager = supportFragmentManager
 //    println("fragment manager: ${fragmentManager.toString()}")
