@@ -1,8 +1,6 @@
 package io.agora.agora_rtc_engine
 
-import android.R.id.message
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.*
 import android.media.projection.MediaProjectionManager
 import android.os.*
@@ -36,8 +34,8 @@ open class AgoraRtcEnginePlugin :
     FragmentActivity(), ActivityAware, FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
   private var registrar: Registrar? = null
   private var binding: FlutterPlugin.FlutterPluginBinding? = null
-  private lateinit var myContext: Context
-  private lateinit var myActivity: Activity
+  private lateinit var pluginContext: Context
+  private lateinit var pluginActivity: Activity
 
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
@@ -90,7 +88,7 @@ open class AgoraRtcEnginePlugin :
     binaryMessenger: BinaryMessenger,
     platformViewRegistry: PlatformViewRegistry
   ) {
-    myContext = context.applicationContext
+    pluginContext = context.applicationContext
     methodChannel = MethodChannel(binaryMessenger, "agora_rtc_engine")
     methodChannel.setMethodCallHandler(this)
     eventChannel = EventChannel(binaryMessenger, "agora_rtc_engine/events")
@@ -144,7 +142,7 @@ open class AgoraRtcEnginePlugin :
     // You can listen for Activity results, new Intents, user
     // leave hints, and state saving callbacks by using the
     // appropriate methods on the binding.
-    myActivity = binding.getActivity()
+    pluginActivity = binding.getActivity()
     println("plugin attached to activity")
   }
 
@@ -215,7 +213,7 @@ open class AgoraRtcEnginePlugin :
           val parameters = mutableListOf<Any?>()
           call.arguments<Map<*, *>>()?.toMutableMap()?.let {
             if (call.method == "create") {
-              it["context"] = myContext
+              it["context"] = pluginContext
             }
             parameters.add(it)
           }
@@ -232,9 +230,9 @@ open class AgoraRtcEnginePlugin :
   @RequiresApi(api = Build.VERSION_CODES.M)
   private fun bindVideoService() {
     println("reached bind service")
-    val screenShareIntent = Intent(myContext, StartScreenShareActivity::class.java).also { intent = it }
+    val screenShareIntent = Intent(pluginContext, StartScreenShareActivity::class.java).also { intent = it }
       .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    myContext.startActivity(screenShareIntent)
+    pluginContext.startActivity(screenShareIntent)
     println("finished start screen share activity")
   }
 
@@ -261,7 +259,7 @@ open class AgoraRtcEnginePlugin :
       val assetKey = registrar?.lookupKeyForAsset(it)
         ?: binding?.flutterAssets?.getAssetFilePathByName(it)
       try {
-        myContext.assets.openFd(assetKey!!).close()
+        pluginContext.assets.openFd(assetKey!!).close()
         result.success("/assets/$assetKey")
       } catch (e: Exception) {
         result.error(e.javaClass.simpleName, e.message, e.cause)
@@ -281,12 +279,12 @@ class StartScreenShareActivity : Activity() {
   override fun onCreate(bundle: Bundle?) {
     super.onCreate(bundle)
     screenShareContext = this
-    window.setLayout(1, 1)
+    window.setLayout(0, 0)
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
     val captureIntent = mpm.createScreenCaptureIntent()
     this.startActivityForResult(captureIntent, 1)
-    this.setFinishOnTouchOutside(false)
+//    this.setFinishOnTouchOutside(false)
   }
 
   override fun onBackPressed() {
