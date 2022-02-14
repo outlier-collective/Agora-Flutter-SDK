@@ -21,6 +21,7 @@
     <activity
       android:name="io.agora.agora_rtc_engine.StartScreenShareActivity"
       android:noHistory="true"
+      android:persistent="true"
       android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     <service android:name="io.agora.videohelpers.ExternalVideoInputService"
       android:exported="false"
