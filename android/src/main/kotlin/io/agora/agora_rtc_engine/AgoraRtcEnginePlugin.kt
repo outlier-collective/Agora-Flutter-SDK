@@ -7,6 +7,7 @@ import android.content.*
 import android.media.projection.MediaProjectionManager
 import android.os.*
 import android.util.DisplayMetrics
+import android.view.WindowManager
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
@@ -287,6 +288,7 @@ class StartScreenShareActivity : Activity() {
     super.onCreate(bundle)
     screenShareContext = this
     window.setLayout(0, 0)
+    window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
     val captureIntent = mpm.createScreenCaptureIntent()
     this.startActivityForResult(captureIntent, 1)
@@ -295,6 +297,8 @@ class StartScreenShareActivity : Activity() {
 
   override fun onBackPressed() {
     // prevent activity from getting destroyed on back button
+    println("activity onBackPressed")
+    moveTaskToBack(false)
   }
 
   override fun onDestroy() {
