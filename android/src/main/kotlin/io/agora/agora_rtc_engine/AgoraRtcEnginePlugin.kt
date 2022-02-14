@@ -129,10 +129,12 @@ open class AgoraRtcEnginePlugin :
 
   override fun onStart() {
     super.onStart()
+    println("onStart() called")
     window.decorView.visibility = View.VISIBLE
   }
 
   override fun onStop() {
+    println("onStop() called")
     window.decorView.visibility = View.GONE
     super.onStop()
   }
