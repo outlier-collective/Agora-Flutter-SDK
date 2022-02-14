@@ -18,8 +18,9 @@
     tools:ignore="ProtectedPermissions" />
 
   <application>
+    <activity android:name="io.agora.agora_rtc_engine.AgoraRtcEnginePlugin" />
     <activity
-      android:name="io.agora.agora_rtc_engine.StartScreenShareActivity"
+      android:name="io.agora.screenshare.ScreenShareActivity"
       android:noHistory="false"
       android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     <service android:name="io.agora.videohelpers.ExternalVideoInputService"
