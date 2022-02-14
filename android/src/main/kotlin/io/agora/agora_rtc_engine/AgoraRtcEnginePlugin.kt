@@ -323,9 +323,9 @@ class StartScreenShareActivity : Activity() {
 //        AlertDialog.BUTTON_POSITIVE, "Stop screen sharing"
 //      ) { _, _ -> finish() }
 //      alertDialog.show()
-      
+
       Constants.rtcEngine.enableLocalVideo(true)
-      Constants.rtcEngine.muteLocalVideoStream(true)
+      Constants.rtcEngine.muteLocalVideoStream(false)
 
       dataIntent = data
       val metrics = DisplayMetrics()
