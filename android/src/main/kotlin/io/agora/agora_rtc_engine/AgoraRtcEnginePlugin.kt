@@ -2,23 +2,14 @@ package io.agora.agora_rtc_engine
 
 import android.app.Activity
 import android.content.*
-import android.media.projection.MediaProjectionManager
 import android.os.*
-import android.util.DisplayMetrics
-import android.view.View
-import android.view.WindowManager
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcEngineManager
-import io.agora.rtc.video.VideoEncoderConfiguration
-import io.agora.rtc.video.VideoEncoderConfiguration.ORIENTATION_MODE
-import io.agora.rtc.video.VideoEncoderConfiguration.VideoDimensions
-import io.agora.screenshare.StartScreenShareActivity
+import io.agora.screenshare.ScreenShareActivity
 import io.agora.videohelpers.Constants
-import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.*
 import io.flutter.plugin.common.*
@@ -26,7 +17,6 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewRegistry
 import io.flutter.plugin.common.MethodChannel.Result
-
 
 /** AgoraRtcEnginePlugin */
 open class AgoraRtcEnginePlugin :
@@ -48,14 +38,6 @@ open class AgoraRtcEnginePlugin :
   private val handler = Handler(Looper.getMainLooper())
   private val rtcChannelPlugin = AgoraRtcChannelPlugin(this)
 
-  private var fragmentManager: FragmentManager? = null
-  private var flutterFragment: FlutterFragment? = null
-  private val id = 0x123456
-
-  private val PROJECTION_REQ_CODE = 1
-  private val DEFAULT_SHARE_FRAME_RATE = 15
-//  private var mServiceConnection: VideoInputServiceConnection? = null
-
   // This static function is optional and equivalent to onAttachedToEngine. It supports the old
   // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
   // plugin registration via this function while apps migrate to use the new Android APIs
@@ -66,12 +48,6 @@ open class AgoraRtcEnginePlugin :
   // depending on the user's project. onAttachedToEngine or registerWith must both be defined
   // in the same class.
   companion object {
-    // Define a tag String to represent the FlutterFragment within this
-    // Activity's FragmentManager. This value can be whatever you'd like.
-    const val TAG_FLUTTER_FRAGMENT = "flutter_fragment"
-
-//    var mService: IExternalVideoInputService? = null
-
     @JvmStatic
     fun registerWith(registrar: Registrar) {
       AgoraRtcEnginePlugin().apply {
@@ -194,7 +170,6 @@ open class AgoraRtcEnginePlugin :
       getAssetAbsolutePath(call, result)
       return
     }
-
     if (call.method == "startScreenShare") {
       println("starting screen share method call")
       Constants.rtcEngine = engine()
@@ -229,7 +204,7 @@ open class AgoraRtcEnginePlugin :
   @RequiresApi(api = Build.VERSION_CODES.M)
   private fun bindVideoService() {
     println("reached bind service")
-    val screenShareIntent = Intent(pluginContext, StartScreenShareActivity::class.java).also { intent = it }
+    val screenShareIntent = Intent(pluginContext, ScreenShareActivity::class.java).also { intent = it }
       .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     pluginContext.startActivity(screenShareIntent)
     println("finished start screen share activity")
@@ -237,20 +212,9 @@ open class AgoraRtcEnginePlugin :
 
   @RequiresApi(api = Build.VERSION_CODES.M)
   private fun unbindVideoService() {
-    StartScreenShareActivity().finish()
+    ScreenShareActivity().finish()
     engine()?.enableLocalVideo(false)
     engine()?.muteLocalVideoStream(true)
-  }
-
-  fun setVideoConfig(width: Int, height: Int) {
-    /**Setup video stream encoding configs */
-    engine()?.setVideoEncoderConfiguration(
-      VideoEncoderConfiguration(
-        VideoDimensions(width, height),
-        VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30,
-        VideoEncoderConfiguration.STANDARD_BITRATE, ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT
-      )
-    )
   }
 
   private fun getAssetAbsolutePath(call: MethodCall, result: Result) {

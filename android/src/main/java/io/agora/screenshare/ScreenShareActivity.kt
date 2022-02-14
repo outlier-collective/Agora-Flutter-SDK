@@ -12,13 +12,13 @@ import android.os.RemoteException
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
-import io.agora.agora_rtc_engine.AgoraRtcEnginePlugin
+import io.agora.rtc.video.VideoEncoderConfiguration
 import io.agora.videohelpers.Constants
 import io.agora.videohelpers.ExternalVideoInputManager
 import io.agora.videohelpers.ExternalVideoInputService
 import io.agora.videohelpers.IExternalVideoInputService
 
-class StartScreenShareActivity : Activity() {
+class ScreenShareActivity : Activity() {
   private var mService: IExternalVideoInputService? = null
   private var mServiceConnection: VideoInputServiceConnection? = null
   private var dataIntent: Intent? = null
@@ -68,6 +68,17 @@ class StartScreenShareActivity : Activity() {
     Constants.rtcEngine.enableVideo()
   }
 
+  fun setVideoConfig(width: Int, height: Int) {
+    /**Setup video stream encoding configs */
+    Constants.rtcEngine.setVideoEncoderConfiguration(
+      VideoEncoderConfiguration(
+        VideoEncoderConfiguration.VideoDimensions(width, height),
+        VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30,
+        VideoEncoderConfiguration.STANDARD_BITRATE, VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT
+      )
+    )
+  }
+
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     println("onActivityResult reached")
@@ -102,7 +113,7 @@ class StartScreenShareActivity : Activity() {
       dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
       dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
       dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, 30)
-      AgoraRtcEnginePlugin().setVideoConfig(metrics.widthPixels, metrics.heightPixels)
+      setVideoConfig(metrics.widthPixels, metrics.heightPixels)
 
       val videoInputIntent = Intent(screenShareContext, ExternalVideoInputService::class.java)
       mServiceConnection = VideoInputServiceConnection()
