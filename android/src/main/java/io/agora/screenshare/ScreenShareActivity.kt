@@ -50,7 +50,8 @@ class ScreenShareActivity : Activity() {
   override fun onBackPressed() {
     // prevent activity from getting destroyed on back button
     println("activity onBackPressed")
-    moveTaskToBack(false)
+//    moveTaskToBack(false)
+    super.onBackPressed()
   }
 
   override fun onDetachedFromWindow() {
