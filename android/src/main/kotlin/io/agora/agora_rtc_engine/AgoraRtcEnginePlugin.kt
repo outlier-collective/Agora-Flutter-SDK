@@ -281,7 +281,7 @@ class StartScreenShareActivity : Activity() {
   override fun onCreate(bundle: Bundle?) {
     super.onCreate(bundle)
     screenShareContext = this
-    window.setLayout(0, 0)
+    window.setLayout(1, 1)
     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
     val captureIntent = mpm.createScreenCaptureIntent()
