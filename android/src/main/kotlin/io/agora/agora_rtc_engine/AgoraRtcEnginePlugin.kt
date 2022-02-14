@@ -301,6 +301,11 @@ class StartScreenShareActivity : Activity() {
     moveTaskToBack(false)
   }
 
+  override fun onDetachedFromWindow() {
+    println("activity onDetachedFromWindow")
+//    super.onDetachedFromWindow()
+  }
+
   override fun onDestroy() {
     super.onDestroy()
     println("StartScreenShareActivity destroyed")
