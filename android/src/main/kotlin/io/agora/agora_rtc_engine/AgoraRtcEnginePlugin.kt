@@ -127,18 +127,6 @@ open class AgoraRtcEnginePlugin :
     manager.release()
   }
 
-  override fun onStart() {
-    super.onStart()
-    println("onStart() called")
-    window.decorView.visibility = View.VISIBLE
-  }
-
-  override fun onStop() {
-    println("onStop() called")
-    window.decorView.visibility = View.GONE
-    super.onStop()
-  }
-
   @RequiresApi(Build.VERSION_CODES.M)
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     // Your plugin is now associated with an Android Activity.
@@ -288,6 +276,18 @@ class StartScreenShareActivity : Activity() {
   private var mServiceConnection: VideoInputServiceConnection? = null
   private var dataIntent: Intent? = null
   private var screenShareContext: Context? = null
+
+  override fun onStart() {
+    super.onStart()
+    println("onStart() called")
+    window.decorView.visibility = View.VISIBLE
+  }
+
+  override fun onStop() {
+    println("onStop() called")
+    window.decorView.visibility = View.GONE
+    super.onStop()
+  }
 
   override fun onCreate(bundle: Bundle?) {
     super.onCreate(bundle)
