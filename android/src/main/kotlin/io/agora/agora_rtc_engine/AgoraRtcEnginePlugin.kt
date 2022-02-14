@@ -146,20 +146,10 @@ open class AgoraRtcEnginePlugin :
     // appropriate methods on the binding.
     myActivity = binding.getActivity()
     println("plugin attached to activity")
-
-//    val vParams: ViewGroup.LayoutParams = FrameLayout.LayoutParams(
-//      ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-//    )
-//    val container = FrameLayout(myContext)
-//    container.layoutParams = vParams
-//    container.id = id
-//    myActivity.setContentView(container, vParams)
-//
-//    fragmentManager = supportFragmentManager
-//    println("fragment manager: ${fragmentManager.toString()}")
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
+    println("plugin onDetachedFromActivityForConfigChanges()")
     // The Activity your plugin was associated with has been
     // destroyed due to config changes. It will be right back
     // but your plugin must clean up any references to that
@@ -167,12 +157,14 @@ open class AgoraRtcEnginePlugin :
   }
 
   override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+    println("plugin onReattachedToActivityForConfigChanges()")
     // Your plugin is now associated with a new Activity instance
     // after config changes took place. You may now re-establish
     // a reference to the Activity and associated resources.
   }
 
   override fun onDetachedFromActivity() {
+    println("plugin onDetachedFromActivity()")
     // Your plugin is no longer associated with an Activity.
     // You must clean up all resources and references. Your
     // plugin may, or may not ever be associated with an Activity
