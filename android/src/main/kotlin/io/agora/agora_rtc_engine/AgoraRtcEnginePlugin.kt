@@ -241,6 +241,8 @@ open class AgoraRtcEnginePlugin :
   @RequiresApi(api = Build.VERSION_CODES.M)
   private fun unbindVideoService() {
     StartScreenShareActivity().finish()
+    engine()?.enableLocalVideo(false)
+    engine()?.muteLocalVideoStream(true)
   }
 
   fun setVideoConfig(width: Int, height: Int) {
@@ -321,6 +323,9 @@ class StartScreenShareActivity : Activity() {
 //        AlertDialog.BUTTON_POSITIVE, "Stop screen sharing"
 //      ) { _, _ -> finish() }
 //      alertDialog.show()
+      
+      Constants.rtcEngine.enableLocalVideo(true)
+      Constants.rtcEngine.muteLocalVideoStream(true)
 
       dataIntent = data
       val metrics = DisplayMetrics()
