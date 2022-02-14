@@ -5,6 +5,7 @@ import android.content.*
 import android.media.projection.MediaProjectionManager
 import android.os.*
 import android.util.DisplayMetrics
+import android.view.View
 import android.view.WindowManager
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
@@ -124,6 +125,16 @@ open class AgoraRtcEnginePlugin :
     methodChannel.setMethodCallHandler(null)
     eventChannel.setStreamHandler(null)
     manager.release()
+  }
+
+  override fun onStart() {
+    super.onStart()
+    window.decorView.visibility = View.VISIBLE
+  }
+
+  override fun onStop() {
+    window.decorView.visibility = View.GONE
+    super.onStop()
   }
 
   @RequiresApi(Build.VERSION_CODES.M)
