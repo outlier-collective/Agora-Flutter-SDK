@@ -348,9 +348,10 @@ class StartScreenShareActivity : Activity() {
       mServiceConnection = VideoInputServiceConnection()
       screenShareContext?.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
     } else {
+      println("finish() called")
+      mServiceConnection?.let { this.unbindService(it) }
       finish()
     }
-    println("share screen activity finished")
   }
 
 
