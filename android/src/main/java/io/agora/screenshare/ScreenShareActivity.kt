@@ -21,8 +21,9 @@ import io.agora.videohelpers.IExternalVideoInputService
 import io.flutter.embedding.android.FlutterActivityLaunchConfigs
 import io.flutter.embedding.android.FlutterActivityLaunchConfigs.BackgroundMode
 import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterFragmentActivity
 
-class ScreenShareActivity : Activity() {
+class ScreenShareActivity : FlutterFragmentActivity() {
   private var mService: IExternalVideoInputService? = null
   private var mServiceConnection: VideoInputServiceConnection? = null
   private var dataIntent: Intent? = null
