@@ -23,6 +23,7 @@ import io.agora.gles.core.GlUtil;
 import io.agora.rtc.RtcEngine;
 import io.agora.rtc.base.IRtcEngine;
 import io.agora.rtc.base.RtcEngineManager;
+import io.agora.rtc.mediaio.AgoraDefaultSource;
 import io.agora.rtc.mediaio.IVideoFrameConsumer;
 import io.agora.rtc.mediaio.IVideoSource;
 import io.agora.rtc.mediaio.MediaIO;
@@ -234,7 +235,8 @@ public class ExternalVideoInputManager implements IVideoSource {
           return;
       }
       // Release external video source
-      Constants.rtcEngine.setVideoSource(null);
+//      Constants.rtcEngine.setVideoSource(null);
+      Constants.rtcEngine.setVideoSource(new AgoraDefaultSource());
       mSurface.release();
       mEglCore.makeNothingCurrent();
       mEglCore.releaseSurface(mEglSurface);
