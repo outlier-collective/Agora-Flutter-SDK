@@ -29,9 +29,10 @@ class ScreenShareActivity : FlutterFragmentActivity() {
   private var dataIntent: Intent? = null
   private var screenShareContext: Context? = null
 
-//  override fun getBackgroundMode() {
-//    return BackgroundMode.transparent
-//  }
+  override fun getBackgroundMode(): FlutterActivityLaunchConfigs.BackgroundMode {
+    println("override getBackgroundMode")
+    return BackgroundMode.transparent
+  }
 
   override fun onAttachedToWindow() {
     // do nothing
