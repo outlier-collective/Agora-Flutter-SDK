@@ -82,11 +82,6 @@ open class AgoraRtcEnginePlugin :
     )
   }
 
-  override fun getBackgroundMode(): FlutterActivityLaunchConfigs.BackgroundMode {
-    println("getBackgroundMode() called")
-    return BackgroundMode.transparent
-  }
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
