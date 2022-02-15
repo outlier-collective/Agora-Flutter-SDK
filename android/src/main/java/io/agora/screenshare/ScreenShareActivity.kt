@@ -19,13 +19,13 @@ import io.agora.videohelpers.ExternalVideoInputService
 import io.agora.videohelpers.IExternalVideoInputService
 import io.flutter.embedding.android.FlutterActivityLaunchConfigs
 
-class ScreenShareActivity : Activity(), FlutterActivityLaunchConfigs.BackgroundMode{
+class ScreenShareActivity : Activity(), FlutterActivityLaunchConfigs {
   private var mService: IExternalVideoInputService? = null
   private var mServiceConnection: VideoInputServiceConnection? = null
   private var dataIntent: Intent? = null
   private var screenShareContext: Context? = null
 
-  override fun getBackgroundMode(): FlutterActivityLaunchConfigs.BackgroundMode {
+  override fun getBackgroundMode() {
     return FlutterActivityLaunchConfigs.BackgroundMode.transparent
   }
 
