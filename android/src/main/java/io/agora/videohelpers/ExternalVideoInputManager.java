@@ -16,17 +16,12 @@ import android.view.Surface;
 
 import androidx.annotation.RequiresApi;
 
-import io.agora.agora_rtc_engine.AgoraRtcEnginePlugin;
 import io.agora.gles.ProgramTextureOES;
 import io.agora.gles.core.EglCore;
 import io.agora.gles.core.GlUtil;
-import io.agora.rtc.RtcEngine;
-import io.agora.rtc.base.IRtcEngine;
-import io.agora.rtc.base.RtcEngineManager;
 import io.agora.rtc.mediaio.IVideoFrameConsumer;
 import io.agora.rtc.mediaio.IVideoSource;
 import io.agora.rtc.mediaio.MediaIO;
-import io.agora.screenshare.ScreenShareClient;
 
 /**
  * {@link IVideoSource}
@@ -225,16 +220,16 @@ public class ExternalVideoInputManager implements IVideoSource {
       mThreadContext.program = new ProgramTextureOES();
 
       // Sets the custom video source
-      System.out.println(Constants.rtcEngine);
-      Constants.rtcEngine.setVideoSource(ExternalVideoInputManager.this);
+      System.out.println(Engine.rtcEngine);
+      Engine.rtcEngine.setVideoSource(ExternalVideoInputManager.this);
     }
 
     private void release() {
-      if (Constants.rtcEngine == null) {
+      if (Engine.rtcEngine == null) {
           return;
       }
       // Release external video source
-      Constants.rtcEngine.setVideoSource(null);
+      Engine.rtcEngine.setVideoSource(null);
       mSurface.release();
       mEglCore.makeNothingCurrent();
       mEglCore.releaseSurface(mEglSurface);

@@ -13,18 +13,14 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.DisplayMetrics;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-import android.view.LayoutInflater;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
-import io.agora.rtc.RtcEngine;
-import io.agora.videohelpers.Constants;
 import io.agora.videohelpers.ExternalVideoInputManager;
 import io.agora.videohelpers.ExternalVideoInputService;
 import io.agora.videohelpers.IExternalVideoInputService;

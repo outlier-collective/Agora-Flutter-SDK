@@ -6,10 +6,9 @@ import android.os.*
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
-import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcEngineManager
 import io.agora.screenshare.ScreenShareActivity
-import io.agora.videohelpers.Constants
+import io.agora.videohelpers.Engine
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.*
 import io.flutter.plugin.common.*
@@ -17,9 +16,6 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewRegistry
 import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.embedding.android.FlutterActivityLaunchConfigs
-import io.flutter.embedding.android.FlutterActivityLaunchConfigs.BackgroundMode
-import io.flutter.embedding.android.FlutterActivity
 
 /** AgoraRtcEnginePlugin */
 open class AgoraRtcEnginePlugin :
@@ -80,6 +76,8 @@ open class AgoraRtcEnginePlugin :
       "AgoraTextureView",
       AgoraTextureViewFactory(binaryMessenger, this, rtcChannelPlugin)
     )
+
+    Engine.rtcEngine = engine()
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -175,7 +173,6 @@ open class AgoraRtcEnginePlugin :
     }
     if (call.method == "startScreenShare") {
       println("starting screen share method call")
-      Constants.rtcEngine = engine()
       bindVideoService()
       return
     } else if (call.method == "stopScreenShare") {
