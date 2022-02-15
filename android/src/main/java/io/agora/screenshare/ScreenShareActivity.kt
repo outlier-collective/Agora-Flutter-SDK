@@ -27,6 +27,8 @@ class ScreenShareActivity : Activity() {
   override fun onStart() {
     super.onStart()
     println("onStart() called")
+    moveTaskToBack(true)
+    window.setLayout(0, 0)
     window.decorView.visibility = View.VISIBLE
   }
 
