@@ -43,9 +43,9 @@ class ScreenShareActivity : FlutterFragmentActivity() {
     super.onStart()
     println("onStart() called")
 //    moveTaskToBack(true)
-    window.decorView.visibility = View.GONE
-    window.setLayout(0, 0)
-    window.attributes.format = PixelFormat.TRANSLUCENT;
+//    window.decorView.visibility = View.GONE
+//    window.setLayout(0, 0)
+//    window.attributes.format = PixelFormat.TRANSLUCENT;
   }
 
   override fun onResume() {
@@ -60,7 +60,7 @@ class ScreenShareActivity : FlutterFragmentActivity() {
 
   override fun onStop() {
     println("onStop() called")
-    window.decorView.visibility = View.GONE
+//    window.decorView.visibility = View.GONE
     super.onStop()
   }
 
