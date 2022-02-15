@@ -67,7 +67,6 @@ class ScreenShareActivity : Activity() {
     val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
     val captureIntent = mpm.createScreenCaptureIntent()
     this.startActivityForResult(captureIntent, 1)
-//    this.setFinishOnTouchOutside(false)
   }
 
   override fun onBackPressed() {
