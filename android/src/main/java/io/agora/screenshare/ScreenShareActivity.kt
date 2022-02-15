@@ -21,7 +21,7 @@ import io.flutter.embedding.android.FlutterActivityLaunchConfigs
 import io.flutter.embedding.android.FlutterActivity
 
 
-class ScreenShareActivity : Activity(), FlutterActivity {
+class ScreenShareActivity : Activity(), FlutterActivity() {
   private var mService: IExternalVideoInputService? = null
   private var mServiceConnection: VideoInputServiceConnection? = null
   private var dataIntent: Intent? = null
