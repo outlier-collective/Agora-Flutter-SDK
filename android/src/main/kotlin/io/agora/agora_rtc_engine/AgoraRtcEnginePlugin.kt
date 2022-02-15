@@ -17,6 +17,8 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewRegistry
 import io.flutter.plugin.common.MethodChannel.Result
+import io.flutter.embedding.android.FlutterActivityLaunchConfigs
+import io.flutter.embedding.android.FlutterActivity
 
 /** AgoraRtcEnginePlugin */
 open class AgoraRtcEnginePlugin :
@@ -77,6 +79,11 @@ open class AgoraRtcEnginePlugin :
       "AgoraTextureView",
       AgoraTextureViewFactory(binaryMessenger, this, rtcChannelPlugin)
     )
+  }
+
+  override fun getBackgroundMode(): FlutterActivityLaunchConfigs.BackgroundMode {
+    println("getBackgroundMode() called")
+    return BackgroundMode.transparent
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
