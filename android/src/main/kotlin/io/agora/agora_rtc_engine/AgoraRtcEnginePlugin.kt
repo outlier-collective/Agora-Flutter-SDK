@@ -177,11 +177,6 @@ open class AgoraRtcEnginePlugin :
       Constants.rtcEngine = engine()
       bindVideoService()
       return
-    } else if (call.method == "stopScreenShare") {
-      println("stopping screen share method call")
-      unbindVideoService()
-      engine()?.setVideoSource(AgoraDefaultSource())
-      return
     }
 
     manager.javaClass.declaredMethods.find { it.name == call.method }?.let { function ->
@@ -211,13 +206,6 @@ open class AgoraRtcEnginePlugin :
       .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     pluginContext.startActivity(screenShareIntent)
     println("finished start screen share activity")
-  }
-
-  @RequiresApi(api = Build.VERSION_CODES.M)
-  private fun unbindVideoService() {
-    ScreenShareActivity().finish()
-    engine()?.enableLocalVideo(false)
-    engine()?.muteLocalVideoStream(true)
   }
 
   private fun getAssetAbsolutePath(call: MethodCall, result: Result) {

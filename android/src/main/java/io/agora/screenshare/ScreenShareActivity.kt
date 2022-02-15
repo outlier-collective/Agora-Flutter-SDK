@@ -19,12 +19,24 @@ import io.agora.videohelpers.ExternalVideoInputManager
 import io.agora.videohelpers.ExternalVideoInputService
 import io.agora.videohelpers.IExternalVideoInputService
 
-
 class ScreenShareActivity : Activity() {
+  private val requestCode: Int = 1
+
   private var mService: IExternalVideoInputService? = null
   private var mServiceConnection: VideoInputServiceConnection? = null
   private var dataIntent: Intent? = null
   private var screenShareContext: Context? = null
+
+  private fun initScreenSharing() {
+    Constants.rtcEngine.enableLocalVideo(true)
+    Constants.rtcEngine.muteLocalVideoStream(false)
+
+    setContentView(R.layout.dialog)
+    this.setFinishOnTouchOutside(false)
+
+    val stopSharingButton = findViewById<Button>(R.id.stopScreenSharingButton)
+    stopSharingButton.setOnClickListener { finish() }
+  }
 
   private fun stopScreenSharing() {
     if (mServiceConnection != null) {
@@ -39,20 +51,13 @@ class ScreenShareActivity : Activity() {
   override fun onCreate(bundle: Bundle?) {
     super.onCreate(bundle)
     screenShareContext = this
-    setContentView(R.layout.dialog)
-    this.setFinishOnTouchOutside(false)
-
-    val stopSharingButton = findViewById<Button>(R.id.stopScreenSharingButton)
-    stopSharingButton.setOnClickListener { finish() }
-
     val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
     val captureIntent = mpm.createScreenCaptureIntent()
-    this.startActivityForResult(captureIntent, 1)
+    this.startActivityForResult(captureIntent, requestCode)
   }
 
   override fun onBackPressed() {
-    // prevent activity from getting destroyed on back button
-    println("activity onBackPressed")
+    // Don't call super method here to prevent destroying activity
   }
 
   override fun onDestroy() {
@@ -62,7 +67,7 @@ class ScreenShareActivity : Activity() {
   }
 
   private fun setVideoConfig(width: Int, height: Int) {
-    /**Setup video stream encoding configs */
+    // Setup video stream encoding configs
     Constants.rtcEngine.setVideoEncoderConfiguration(
       VideoEncoderConfiguration(
         VideoEncoderConfiguration.VideoDimensions(width, height),
@@ -75,19 +80,8 @@ class ScreenShareActivity : Activity() {
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     println("onActivityResult reached")
-    if (requestCode == 1 && resultCode == RESULT_OK) {
-
-//      val alertDialog = AlertDialog.Builder(this).create()
-//      alertDialog.setTitle("You are sharing your screen")
-////      alertDialog.setMessage("Message")
-//
-//      alertDialog.setButton(
-//        AlertDialog.BUTTON_POSITIVE, "Stop screen sharing"
-//      ) { _, _ -> finish() }
-//      alertDialog.show()
-
-      Constants.rtcEngine.enableLocalVideo(true)
-      Constants.rtcEngine.muteLocalVideoStream(false)
+    if (requestCode == requestCode && resultCode == RESULT_OK) {
+      initScreenSharing()
 
       dataIntent = data
       val metrics = DisplayMetrics()
@@ -117,7 +111,6 @@ class ScreenShareActivity : Activity() {
       finish()
     }
   }
-
 
   inner class VideoInputServiceConnection : ServiceConnection {
     override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {

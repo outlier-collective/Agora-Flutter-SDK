@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:gravity="center"
-  android:background="#4B4B4B"
+  android:background="#181818"
   android:orientation="vertical">
   <TextView
     android:layout_width="250dp"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:paddingTop="20dp"
-    android:paddingBottom="20dp"
+    android:padding="20dp"
     android:textColor="#FFFFFF"
+    android:textSize="14sp"
     android:text="You are sharing your screen. Feel free to background the app!"/>
-  <Button
+  <com.google.android.material.button.MaterialButton
     android:id="@+id/stopScreenSharingButton"
+    style="@style/Widget.MaterialComponents.Button"
+    app:cornerRadius="50dp"
     android:background="#FFFFFF"
     android:layout_width="wrap_content"
     android:layout_height="40dp"
+    android:paddingHorizontal="30dp"
     android:textColor="#000000"
+    android:textSize="14sp"
     android:text="Stop Sharing"
     android:textAllCaps="false" />
+  <View
+    android:layout_width="250dp"
+    android:layout_height="20dp" />
 </LinearLayout>
