@@ -82,10 +82,10 @@ class ScreenShareActivity : Activity() {
       screenShareContext?.unbindService(mServiceConnection!!)
       mServiceConnection = null
     }
-    Constants.rtcEngine.enableVideo()
+//    Constants.rtcEngine.enableVideo()
   }
 
-  fun setVideoConfig(width: Int, height: Int) {
+  private fun setVideoConfig(width: Int, height: Int) {
     /**Setup video stream encoding configs */
     Constants.rtcEngine.setVideoEncoderConfiguration(
       VideoEncoderConfiguration(
