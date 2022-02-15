@@ -28,9 +28,9 @@ class ScreenShareActivity : Activity() {
   private var dataIntent: Intent? = null
   private var screenShareContext: Context? = null
 
-  override fun getBackgroundMode() {
-    return FlutterActivityLaunchConfigs.BackgroundMode.transparent
-  }
+//  override fun getBackgroundMode() {
+//    return BackgroundMode.transparent
+//  }
 
   override fun onAttachedToWindow() {
     // do nothing
@@ -41,9 +41,19 @@ class ScreenShareActivity : Activity() {
     super.onStart()
     println("onStart() called")
 //    moveTaskToBack(true)
+    window.decorView.visibility = View.GONE
     window.setLayout(0, 0)
     window.attributes.format = PixelFormat.TRANSLUCENT;
-    window.decorView.visibility = View.GONE
+  }
+
+  override fun onResume() {
+    println("activity resumed")
+    super.onResume()
+  }
+
+  override fun onPause() {
+    println("activity paused")
+    super.onPause()
   }
 
   override fun onStop() {
