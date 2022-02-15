@@ -28,9 +28,9 @@ class ScreenShareActivity : Activity() {
   private var dataIntent: Intent? = null
   private var screenShareContext: Context? = null
 
-//  override fun getBackgroundMode(): FlutterActivityLaunchConfigs.BackgroundMode {
-//    return BackgroundMode.transparent
-//  }
+  override fun getBackgroundMode() {
+    return FlutterActivityLaunchConfigs.BackgroundMode.transparent
+  }
 
   override fun onAttachedToWindow() {
     // do nothing
@@ -76,13 +76,13 @@ class ScreenShareActivity : Activity() {
   }
 
   override fun onDestroy() {
-    super.onDestroy()
     println("StartScreenShareActivity destroyed")
     if (mServiceConnection != null) {
       screenShareContext?.unbindService(mServiceConnection!!)
       mServiceConnection = null
     }
 //    Constants.rtcEngine.enableVideo()
+    super.onDestroy()
   }
 
   private fun setVideoConfig(width: Int, height: Int) {
