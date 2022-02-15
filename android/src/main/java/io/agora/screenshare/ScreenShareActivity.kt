@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.graphics.PixelFormat
 import android.media.projection.MediaProjectionManager
 import android.os.Bundle
 import android.os.IBinder
@@ -20,16 +21,15 @@ import io.agora.videohelpers.IExternalVideoInputService
 import io.flutter.embedding.android.FlutterActivityLaunchConfigs
 import io.flutter.embedding.android.FlutterActivity
 
-
-class ScreenShareActivity : Activity(), FlutterActivity() {
+class ScreenShareActivity : Activity() {
   private var mService: IExternalVideoInputService? = null
   private var mServiceConnection: VideoInputServiceConnection? = null
   private var dataIntent: Intent? = null
   private var screenShareContext: Context? = null
 
-  override fun getBackgroundMode(): FlutterActivityLaunchConfigs.BackgroundMode {
-    return BackgroundMode.transparent
-  }
+//  override fun getBackgroundMode(): FlutterActivityLaunchConfigs.BackgroundMode {
+//    return BackgroundMode.transparent
+//  }
 
   override fun onAttachedToWindow() {
     // do nothing
@@ -41,6 +41,7 @@ class ScreenShareActivity : Activity(), FlutterActivity() {
     println("onStart() called")
 //    moveTaskToBack(true)
     window.setLayout(0, 0)
+    window.attributes.format = PixelFormat.TRANSLUCENT;
     window.decorView.visibility = View.VISIBLE
   }
 
