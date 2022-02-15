@@ -5,34 +5,25 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.graphics.PixelFormat
 import android.media.projection.MediaProjectionManager
 import android.os.Bundle
 import android.os.IBinder
 import android.os.RemoteException
 import android.util.DisplayMetrics
-import android.view.View
-import android.view.WindowManager
+import android.widget.Button
+import io.agora.agora_rtc_engine.R
 import io.agora.rtc.video.VideoEncoderConfiguration
 import io.agora.videohelpers.Constants
 import io.agora.videohelpers.ExternalVideoInputManager
 import io.agora.videohelpers.ExternalVideoInputService
 import io.agora.videohelpers.IExternalVideoInputService
-import io.flutter.embedding.android.FlutterActivityLaunchConfigs
-import io.flutter.embedding.android.FlutterActivityLaunchConfigs.BackgroundMode
-import io.flutter.embedding.android.FlutterActivity
-import io.flutter.embedding.android.FlutterFragmentActivity
 
-class ScreenShareActivity : FlutterFragmentActivity() {
+
+class ScreenShareActivity : Activity() {
   private var mService: IExternalVideoInputService? = null
   private var mServiceConnection: VideoInputServiceConnection? = null
   private var dataIntent: Intent? = null
   private var screenShareContext: Context? = null
-
-  override fun getBackgroundMode(): FlutterActivityLaunchConfigs.BackgroundMode {
-    println("override getBackgroundMode()")
-    return FlutterActivityLaunchConfigs.BackgroundMode.transparent
-  }
 
   override fun onAttachedToWindow() {
     // do nothing
@@ -67,8 +58,12 @@ class ScreenShareActivity : FlutterFragmentActivity() {
   override fun onCreate(bundle: Bundle?) {
     super.onCreate(bundle)
     screenShareContext = this
-    window.setLayout(0, 0)
-    window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    setContentView(R.layout.dialog)
+    this.setFinishOnTouchOutside(false)
+
+    val stopSharingButton = findViewById<Button>(R.id.stopScreenSharingButton)
+    stopSharingButton.setOnClickListener { finish() }
+
     val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
     val captureIntent = mpm.createScreenCaptureIntent()
     this.startActivityForResult(captureIntent, 1)
