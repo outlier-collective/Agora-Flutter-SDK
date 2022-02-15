@@ -14,10 +14,13 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
 import io.agora.rtc.video.VideoEncoderConfiguration
-import io.agora.videohelpers.Engine
+import io.agora.videohelpers.Constants
 import io.agora.videohelpers.ExternalVideoInputManager
 import io.agora.videohelpers.ExternalVideoInputService
 import io.agora.videohelpers.IExternalVideoInputService
+import io.flutter.embedding.android.FlutterActivityLaunchConfigs
+import io.flutter.embedding.android.FlutterActivityLaunchConfigs.BackgroundMode
+import io.flutter.embedding.android.FlutterActivity
 
 class ScreenShareActivity : Activity() {
   private var mService: IExternalVideoInputService? = null
@@ -79,12 +82,12 @@ class ScreenShareActivity : Activity() {
       screenShareContext?.unbindService(mServiceConnection!!)
       mServiceConnection = null
     }
-    Engine.rtcEngine.enableVideo()
+    Constants.rtcEngine.enableVideo()
   }
 
   fun setVideoConfig(width: Int, height: Int) {
     /**Setup video stream encoding configs */
-    Engine.rtcEngine.setVideoEncoderConfiguration(
+    Constants.rtcEngine.setVideoEncoderConfiguration(
       VideoEncoderConfiguration(
         VideoEncoderConfiguration.VideoDimensions(width, height),
         VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30,
@@ -107,8 +110,8 @@ class ScreenShareActivity : Activity() {
 //      ) { _, _ -> finish() }
 //      alertDialog.show()
 
-      Engine.rtcEngine.enableLocalVideo(true)
-      Engine.rtcEngine.muteLocalVideoStream(false)
+      Constants.rtcEngine.enableLocalVideo(true)
+      Constants.rtcEngine.muteLocalVideoStream(false)
 
       dataIntent = data
       val metrics = DisplayMetrics()
