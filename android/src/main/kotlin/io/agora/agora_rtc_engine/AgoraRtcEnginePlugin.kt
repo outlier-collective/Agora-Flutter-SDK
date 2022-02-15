@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcEngineManager
+import io.agora.rtc.mediaio.AgoraDefaultSource
 import io.agora.screenshare.ScreenShareActivity
 import io.agora.videohelpers.Constants
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -17,9 +18,7 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewRegistry
 import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.embedding.android.FlutterActivityLaunchConfigs
-import io.flutter.embedding.android.FlutterActivityLaunchConfigs.BackgroundMode
-import io.flutter.embedding.android.FlutterActivity
+
 
 /** AgoraRtcEnginePlugin */
 open class AgoraRtcEnginePlugin :
@@ -181,6 +180,7 @@ open class AgoraRtcEnginePlugin :
     } else if (call.method == "stopScreenShare") {
       println("stopping screen share method call")
       unbindVideoService()
+      engine()?.setVideoSource(AgoraDefaultSource())
       return
     }
 
