@@ -22,7 +22,7 @@
     <activity
       android:name="io.agora.screenshare.ScreenShareActivity"
       android:noHistory="false"
-      android:theme="@android:style/Theme.Dialog" />
+      android:theme="@style/Theme.Transparent" />
     <service android:name="io.agora.videohelpers.ExternalVideoInputService"
       android:exported="false"
       android:foregroundServiceType="mediaProjection" />
