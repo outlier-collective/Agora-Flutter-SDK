@@ -18,6 +18,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewRegistry
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.embedding.android.FlutterActivityLaunchConfigs
+import io.flutter.embedding.android.FlutterActivityLaunchConfigs.BackgroundMode
 import io.flutter.embedding.android.FlutterActivity
 
 /** AgoraRtcEnginePlugin */
