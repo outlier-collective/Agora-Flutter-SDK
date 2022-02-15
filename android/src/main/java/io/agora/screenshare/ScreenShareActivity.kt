@@ -43,7 +43,7 @@ class ScreenShareActivity : Activity() {
 //    moveTaskToBack(true)
     window.setLayout(0, 0)
     window.attributes.format = PixelFormat.TRANSLUCENT;
-    window.decorView.visibility = View.VISIBLE
+    window.decorView.visibility = View.GONE
   }
 
   override fun onStop() {
