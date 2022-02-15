@@ -105,10 +105,6 @@ class ScreenShareActivity : Activity() {
       val videoInputIntent = Intent(screenShareContext, ExternalVideoInputService::class.java)
       mServiceConnection = VideoInputServiceConnection()
       screenShareContext?.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
-    } else {
-      println("finish() called")
-      mServiceConnection?.let { screenShareContext?.unbindService(it) }
-      finish()
     }
   }
 
@@ -127,16 +123,6 @@ class ScreenShareActivity : Activity() {
     override fun onServiceDisconnected(componentName: ComponentName) {
       println("video input service disconnected")
       mService = null
-    }
-
-    override fun onBindingDied(name: ComponentName?) {
-      println("binding died")
-      super.onBindingDied(name)
-    }
-
-    override fun onNullBinding(name: ComponentName?) {
-      println("on null binding")
-      super.onNullBinding(name)
     }
   }
 }
