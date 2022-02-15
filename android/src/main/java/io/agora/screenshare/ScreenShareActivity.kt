@@ -12,6 +12,7 @@ import android.os.RemoteException
 import android.util.DisplayMetrics
 import android.widget.Button
 import io.agora.agora_rtc_engine.R
+import io.agora.rtc.mediaio.AgoraDefaultSource
 import io.agora.rtc.video.VideoEncoderConfiguration
 import io.agora.videohelpers.Constants
 import io.agora.videohelpers.ExternalVideoInputManager
@@ -25,34 +26,14 @@ class ScreenShareActivity : Activity() {
   private var dataIntent: Intent? = null
   private var screenShareContext: Context? = null
 
-  override fun onAttachedToWindow() {
-    // do nothing
-    print("onAttachedToWindow() called")
-  }
-
-  override fun onStart() {
-    super.onStart()
-    println("onStart() called")
-//    moveTaskToBack(true)
-//    window.decorView.visibility = View.GONE
-//    window.setLayout(0, 0)
-//    window.attributes.format = PixelFormat.TRANSLUCENT;
-  }
-
-  override fun onResume() {
-    println("activity resumed")
-    super.onResume()
-  }
-
-  override fun onPause() {
-    println("activity paused")
-    super.onPause()
-  }
-
-  override fun onStop() {
-    println("onStop() called")
-//    window.decorView.visibility = View.GONE
-    super.onStop()
+  private fun stopScreenSharing() {
+    if (mServiceConnection != null) {
+      screenShareContext?.unbindService(mServiceConnection!!)
+      mServiceConnection = null
+    }
+    Constants.rtcEngine.enableLocalVideo(false)
+    Constants.rtcEngine.muteLocalVideoStream(true)
+    Constants.rtcEngine.setVideoSource(AgoraDefaultSource())
   }
 
   override fun onCreate(bundle: Bundle?) {
@@ -72,22 +53,11 @@ class ScreenShareActivity : Activity() {
   override fun onBackPressed() {
     // prevent activity from getting destroyed on back button
     println("activity onBackPressed")
-//    moveTaskToBack(false)
-    super.onBackPressed()
-  }
-
-  override fun onDetachedFromWindow() {
-    println("activity onDetachedFromWindow")
-//    super.onDetachedFromWindow()
   }
 
   override fun onDestroy() {
     println("StartScreenShareActivity destroyed")
-    if (mServiceConnection != null) {
-      screenShareContext?.unbindService(mServiceConnection!!)
-      mServiceConnection = null
-    }
-//    Constants.rtcEngine.enableVideo()
+    stopScreenSharing()
     super.onDestroy()
   }
 
