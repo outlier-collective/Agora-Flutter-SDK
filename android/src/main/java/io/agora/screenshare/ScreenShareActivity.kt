@@ -18,8 +18,10 @@ import io.agora.videohelpers.ExternalVideoInputManager
 import io.agora.videohelpers.ExternalVideoInputService
 import io.agora.videohelpers.IExternalVideoInputService
 import io.flutter.embedding.android.FlutterActivityLaunchConfigs
+import io.flutter.embedding.android.FlutterActivity
 
-class ScreenShareActivity : Activity() {
+
+class ScreenShareActivity : Activity(), FlutterActivity {
   private var mService: IExternalVideoInputService? = null
   private var mServiceConnection: VideoInputServiceConnection? = null
   private var dataIntent: Intent? = null
@@ -27,6 +29,11 @@ class ScreenShareActivity : Activity() {
 
   override fun getBackgroundMode(): FlutterActivityLaunchConfigs.BackgroundMode {
     return BackgroundMode.transparent
+  }
+
+  override fun onAttachedToWindow() {
+    // do nothing
+    print("onAttachedToWindow() called")
   }
 
   override fun onStart() {
