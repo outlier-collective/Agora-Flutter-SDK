@@ -7,4 +7,8 @@
     <item name="android:backgroundDimEnabled">false</item>
     <item name="colorPrimaryDark">@android:color/transparent</item>
   </style>
+  <style name="DialogButton" parent="@style/Widget.MaterialComponents.Button">
+    <item name="fontFamily">@font/sf_pro_rounded_family</item>
+    <item name="android:letterSpacing">0.02</item>
+</style>
 </resources>
