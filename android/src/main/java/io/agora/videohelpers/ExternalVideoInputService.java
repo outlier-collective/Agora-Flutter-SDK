@@ -46,11 +46,6 @@ public class ExternalVideoInputService extends Service
     return mService.asBinder();
   }
 
-  public IExternalVideoInputService getmService() {
-    System.out.println("ExternalVideoInputService getBinder() has been called");
-    return mService;
-  }
-
   private void startForeground()
   {
     System.out.println("ExternalVideoInputService startForeground() has been called");

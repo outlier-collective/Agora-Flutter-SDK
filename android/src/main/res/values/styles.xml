@@ -1,7 +1,7 @@
 <resources>
-  <style name="DialogStyle" parent="@style/Theme.MaterialComponents.Light.Dialog">
+  <style name="DialogStyle" parent="@style/Theme.MaterialComponents.Dialog">
     <item name="cornerRadius">50dp</item>
-    <item name="android:windowAnimationStyle">@null</item>
+    <item name="android:windowAnimationStyle">@android:style/Animation</item>
     <item name="borderWidth">0.75dp</item>
   </style>
   <style name="DialogButtonStyle" parent="@style/Widget.MaterialComponents.Button">
