@@ -1,5 +1,4 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-  <item android:drawable="#2F3031"/>
   <item
     android:top="0.75dp"
     android:left="0.75dp"
