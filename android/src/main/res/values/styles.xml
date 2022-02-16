@@ -1,6 +1,8 @@
 <resources>
-  <style name="DialogStyle" parent="@style/ThemeOverlay.MaterialComponents.Dialog">
+  <style name="DialogStyle" parent="@style/Theme.MaterialComponents.Light.Dialog">
+    <item name="cornerFamily">rounded</item>
     <item name="cornerSize">10dp</item>
+    <item name="animationMode">fade</item>
   </style>
   <style name="DialogButtonStyle" parent="@style/Widget.MaterialComponents.Button">
     <item name="fontFamily">@font/sf_pro_rounded_family</item>
