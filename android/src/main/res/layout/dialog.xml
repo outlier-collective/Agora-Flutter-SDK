@@ -13,11 +13,12 @@
     android:padding="20dp"
     android:textColor="#FFFFFF"
     android:textSize="14sp"
-    android:text="You are sharing your screen. Feel free to background the app!"/>
+    android:fontFamily="@font/sf_pro_rounded_family"
+    android:text="@string/screenShareDialogTitleText"/>
   <com.google.android.material.button.MaterialButton
+    style="@style/Widget.MaterialComponents.Button"
     android:id="@+id/stopScreenSharingButton"
     android:theme="@style/Theme.MaterialComponents"
-    style="@style/Widget.MaterialComponents.Button"
     app:backgroundTint="#FFFFFF"
     app:cornerRadius="50dp"
     android:layout_width="wrap_content"
@@ -25,7 +26,7 @@
     android:paddingHorizontal="30dp"
     android:textColor="#000000"
     android:textSize="14sp"
-    android:text="Stop Sharing"
+    android:text="@string/screenShareDialogButtonText"
     android:textAllCaps="false" />
   <View
     android:layout_width="250dp"
