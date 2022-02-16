@@ -1,5 +1,8 @@
 <resources>
-  <style name="DialogButton" parent="@style/Widget.MaterialComponents.Button">
+  <style name="DialogStyle" parent="@style/ThemeOverlay.MaterialComponents.Dialog">
+    <item name="cornerSize">10dp</item>
+  </style>
+  <style name="DialogButtonStyle" parent="@style/Widget.MaterialComponents.Button">
     <item name="fontFamily">@font/sf_pro_rounded_family</item>
     <item name="android:letterSpacing">0.02</item>
   </style>

@@ -19,7 +19,7 @@
     android:letterSpacing="0.02"
     android:text="@string/screenShareDialogTitleText"/>
   <com.google.android.material.button.MaterialButton
-    style="@style/DialogButton"
+    style="@style/DialogButtonStyle"
     android:id="@+id/stopScreenSharingButton"
     android:theme="@style/Theme.MaterialComponents"
     app:backgroundTint="#FFFFFF"
