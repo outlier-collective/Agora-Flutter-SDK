@@ -57,9 +57,8 @@ public class ExternalVideoInputService extends Service
       this, 0, notificationIntent, 0);
 
     Notification.Builder builder = new Notification.Builder(this)
-      .setContentTitle(CHANNEL_ID)
-      .setContentIntent(pendingIntent)
-      .setContentText("Sharing screen");
+      .setContentTitle("Screen sharing")
+      .setContentIntent(pendingIntent);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
     {

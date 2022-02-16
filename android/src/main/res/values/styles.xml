@@ -3,6 +3,7 @@
     <item name="android:windowBackground">@drawable/dialog_background</item>
     <item name="android:windowAnimationStyle">@null</item>
     <item name="android:windowDisablePreview">true</item>
+    <item name="android:animationDuration">0</item>
   </style>
   <style name="DialogButtonStyle" parent="@style/Widget.MaterialComponents.Button">
     <item name="fontFamily">@font/sf_pro_rounded_family</item>
