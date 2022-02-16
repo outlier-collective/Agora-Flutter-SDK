@@ -13,6 +13,8 @@ import android.os.RemoteException;
 
 import org.jetbrains.annotations.Nullable;
 
+import io.agora.agora_rtc_engine.R;
+
 public class ExternalVideoInputService extends Service
 {
   private static final int NOTIFICATION_ID = 1;
@@ -57,8 +59,8 @@ public class ExternalVideoInputService extends Service
       this, 0, notificationIntent, 0);
 
     Notification.Builder builder = new Notification.Builder(this)
-      .setContentTitle("Screen sharing")
-      .setContentIntent(pendingIntent);
+      .setSmallIcon(R.mipmap.ic_launcher)
+      .setContentTitle("Screen sharing");
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
     {
