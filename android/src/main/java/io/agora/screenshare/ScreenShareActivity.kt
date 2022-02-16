@@ -42,10 +42,11 @@ class ScreenShareActivity : Activity() {
     if (mServiceConnection != null) {
       screenShareContext?.unbindService(mServiceConnection!!)
       mServiceConnection = null
+
+      Constants.rtcEngine.enableLocalVideo(false)
+      Constants.rtcEngine.muteLocalVideoStream(true)
+      Constants.rtcEngine.setVideoSource(AgoraDefaultSource())
     }
-    Constants.rtcEngine.enableLocalVideo(false)
-    Constants.rtcEngine.muteLocalVideoStream(true)
-    Constants.rtcEngine.setVideoSource(AgoraDefaultSource())
   }
 
   override fun onCreate(bundle: Bundle?) {
