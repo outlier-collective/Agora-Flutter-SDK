@@ -60,7 +60,7 @@ public class ExternalVideoInputService extends Service
 
     Notification.Builder builder = new Notification.Builder(this)
       .setSmallIcon(R.mipmap.ic_launcher)
-      .setContentTitle("Screen sharing");
+      .setContentTitle("Screen Sharing");
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
     {
