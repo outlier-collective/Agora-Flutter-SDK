@@ -62,7 +62,6 @@ class ScreenShareActivity : Activity() {
   }
 
   override fun onDestroy() {
-    println("StartScreenShareActivity destroyed")
     stopScreenSharing()
     super.onDestroy()
   }
@@ -80,7 +79,6 @@ class ScreenShareActivity : Activity() {
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
-    println("onActivityResult reached")
     if (requestCode == requestCode && resultCode == RESULT_OK) {
       initScreenSharing()
 
@@ -124,7 +122,6 @@ class ScreenShareActivity : Activity() {
     }
 
     override fun onServiceDisconnected(componentName: ComponentName) {
-      println("video input service disconnected")
       mService = null
     }
   }
