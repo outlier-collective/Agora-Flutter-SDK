@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="screenShareDialogTitleText">You are sharing your screen. Feel free to background the app!</string>
-  <string name="screenShareDialogButtonText">Stop Sharing</string>
+  <string name="screenShareDialogTitleText">You\'\re sharing your screen!</string>
+  <string name="screenShareDialogContentText">You can now switch apps \n for others to see.</string>
+  <string name="screenShareDialogButtonText">Stop sharing</string>
 </resources>
