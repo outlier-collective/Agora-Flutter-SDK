@@ -3,6 +3,7 @@
     <item name="android:windowBackground">@drawable/dialog_background</item>
     <item name="android:windowAnimationStyle">@null</item>
     <item name="android:windowShowAnimation">@null</item>
+    <item name="android:windowEnterAnimation">@null</item>
     <item name="android:windowDisablePreview">true</item>
   </style>
   <style name="DialogButtonStyle" parent="@style/Widget.MaterialComponents.Button">
