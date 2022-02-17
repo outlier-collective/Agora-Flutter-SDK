@@ -16,18 +16,13 @@ import android.view.Surface;
 
 import androidx.annotation.RequiresApi;
 
-import io.agora.agora_rtc_engine.AgoraRtcEnginePlugin;
 import io.agora.gles.ProgramTextureOES;
 import io.agora.gles.core.EglCore;
 import io.agora.gles.core.GlUtil;
-import io.agora.rtc.RtcEngine;
-import io.agora.rtc.base.IRtcEngine;
-import io.agora.rtc.base.RtcEngineManager;
 import io.agora.rtc.mediaio.AgoraDefaultSource;
 import io.agora.rtc.mediaio.IVideoFrameConsumer;
 import io.agora.rtc.mediaio.IVideoSource;
 import io.agora.rtc.mediaio.MediaIO;
-import io.agora.screenshare.ScreenShareClient;
 
 /**
  * {@link IVideoSource}

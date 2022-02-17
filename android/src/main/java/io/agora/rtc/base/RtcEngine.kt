@@ -1,12 +1,12 @@
 package io.agora.rtc.base
 
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
-import io.agora.rtc.*
+import io.agora.rtc.Constants
+import io.agora.rtc.IMetadataObserver
+import io.agora.rtc.RtcEngine
+import io.agora.rtc.RtcEngineEx
 import io.agora.rtc.internal.EncryptionConfig
 import io.agora.rtc.models.UserInfo
-import io.agora.screenshare.ScreenShareClient
 
 class IRtcEngine {
   interface RtcEngineInterface : RtcUserInfoInterface, RtcAudioInterface, RtcVideoInterface,

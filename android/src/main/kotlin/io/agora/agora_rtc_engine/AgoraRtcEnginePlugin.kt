@@ -96,7 +96,6 @@ open class AgoraRtcEnginePlugin :
   @RequiresApi(Build.VERSION_CODES.M)
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     pluginActivity = binding.getActivity()
-    println("plugin attached to activity")
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
@@ -135,7 +134,6 @@ open class AgoraRtcEnginePlugin :
       return
     }
     if (call.method == "startScreenShare") {
-      println("starting screen share method call")
       Constants.rtcEngine = engine()
       bindVideoService()
       return
