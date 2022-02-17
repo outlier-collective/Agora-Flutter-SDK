@@ -1286,11 +1286,6 @@ class RtcEngine with RtcEngineInterface {
   Future<void> startScreenShare() {
     return _invokeMethod('startScreenShare');
   }
-
-  @override
-  Future<void> stopScreenShare() {
-    return _invokeMethod('stopScreenShare');
-  }
 }
 
 /// @nodoc
@@ -2107,9 +2102,6 @@ mixin RtcVideoInterface {
 
   /// Starts screen sharing.
   Future<void> startScreenShare();
-
-  /// Stops screen sharing.
-  Future<void> stopScreenShare();
 }
 
 /// @nodoc
