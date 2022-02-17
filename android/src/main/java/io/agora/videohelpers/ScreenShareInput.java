@@ -1,30 +1,18 @@
 package io.agora.videohelpers;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.hardware.display.DisplayManager;
 import android.hardware.display.VirtualDisplay;
-import android.media.Image;
-import android.media.ImageReader;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.util.Log;
 import android.util.Size;
 import android.view.Surface;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
 
 class ScreenShareInput implements IExternalVideoInput {
   private static final String TAG = ScreenShareInput.class.getSimpleName();

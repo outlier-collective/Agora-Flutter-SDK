@@ -27,7 +27,6 @@ public class ExternalVideoInputService extends Service
   public void onCreate()
   {
     super.onCreate();
-    System.out.println("ExternalVideoInputService onCreate() called");
     mSourceManager = new ExternalVideoInputManager(this.getApplicationContext());
     mService = new IExternalVideoInputService.Stub()
     {
@@ -42,7 +41,6 @@ public class ExternalVideoInputService extends Service
   @Nullable
   @Override
   public IBinder onBind(Intent intent) {
-    System.out.println("ExternalVideoInputService onBind() has been called");
     startForeground();
     startSourceManager();
     return mService.asBinder();
@@ -50,7 +48,6 @@ public class ExternalVideoInputService extends Service
 
   private void startForeground()
   {
-    System.out.println("ExternalVideoInputService startForeground() has been called");
     createNotificationChannel();
 
     Intent notificationIntent = new Intent(getApplicationContext(),
@@ -81,7 +78,6 @@ public class ExternalVideoInputService extends Service
 
   private void createNotificationChannel()
   {
-    System.out.println("ExternalVideoInputService createNotificationChannel() has been called");
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
     {
       int importance = NotificationManager.IMPORTANCE_DEFAULT;
@@ -94,14 +90,12 @@ public class ExternalVideoInputService extends Service
 
   private void startSourceManager()
   {
-    System.out.println("ExternalVideoInputService startSourceManager() has been called");
     mSourceManager.start();
   }
 
   @Override
   public boolean onUnbind(Intent intent)
   {
-    System.out.println("ExternalVideoInputService onUnbind() has been called");
     stopSourceManager();
     stopForeground(true);
     return true;
@@ -109,7 +103,6 @@ public class ExternalVideoInputService extends Service
 
   private void stopSourceManager()
   {
-    System.out.println("ExternalVideoInputService stopSourceManager() has been called");
     if (mSourceManager != null)
     {
       mSourceManager.stop();

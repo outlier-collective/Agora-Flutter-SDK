@@ -230,7 +230,6 @@ public class ExternalVideoInputManager implements IVideoSource {
           return;
       }
       // Release external video source
-//      Constants.rtcEngine.setVideoSource(null);
       Constants.rtcEngine.setVideoSource(new AgoraDefaultSource());
       mSurface.release();
       mEglCore.makeNothingCurrent();
