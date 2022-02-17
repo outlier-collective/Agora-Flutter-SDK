@@ -32,8 +32,8 @@ class ScreenShareActivity : Activity() {
     Constants.rtcEngine.enableLocalVideo(true)
     Constants.rtcEngine.muteLocalVideoStream(false)
 
-    setContentView(R.layout.dialog)
     window.setWindowAnimations(R.style.DialogAnimationTheme)
+    setContentView(R.layout.dialog)
     this.setFinishOnTouchOutside(false)
 
     val stopSharingButton = findViewById<Button>(R.id.stopScreenSharingButton)
