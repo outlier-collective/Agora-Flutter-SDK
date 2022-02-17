@@ -1,13 +1,11 @@
 <resources>
   <style name="DialogStyle" parent="@style/Theme.MaterialComponents.Dialog">
     <item name="android:windowBackground">@drawable/dialog_background</item>
-    <item name="android:windowAnimationStyle">@null</item>
-    <item name="android:windowShowAnimation">@null</item>
-    <item name="android:windowEnterAnimation">@null</item>
-    <item name="android:activityOpenEnterAnimation">@null</item>
-    <item name="android:activityCloseEnterAnimation">@null</item>
-    <item name="android:activityOpenExitAnimation">@null</item>
-    <item name="android:activityCloseExitAnimation">@null</item>
+    <item name="android:windowAnimationStyle">@style/DialogAnimationTheme</item>
+  </style>
+  <style name="DialogAnimationTheme" parent="android:style/Animation.Activity">
+    <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+    <item name="android:windowExitAnimation">@android:anim/fade_out</item>
   </style>
   <style name="DialogButtonStyle" parent="@style/Widget.MaterialComponents.Button">
     <item name="fontFamily">@font/sf_pro_rounded_family</item>

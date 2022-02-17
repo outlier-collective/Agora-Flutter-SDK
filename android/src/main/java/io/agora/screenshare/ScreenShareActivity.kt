@@ -1,6 +1,7 @@
 package io.agora.screenshare
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -32,6 +33,7 @@ class ScreenShareActivity : Activity() {
     Constants.rtcEngine.muteLocalVideoStream(false)
 
     setContentView(R.layout.dialog)
+    window.setWindowAnimations(R.style.DialogAnimationTheme)
     this.setFinishOnTouchOutside(false)
 
     val stopSharingButton = findViewById<Button>(R.id.stopScreenSharingButton)
