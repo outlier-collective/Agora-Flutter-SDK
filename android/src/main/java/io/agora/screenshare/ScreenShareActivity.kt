@@ -32,7 +32,6 @@ class ScreenShareActivity : Activity() {
     Constants.rtcEngine.enableLocalVideo(true)
     Constants.rtcEngine.muteLocalVideoStream(false)
 
-    window.setWindowAnimations(R.style.DialogAnimationTheme)
     setContentView(R.layout.dialog)
     this.setFinishOnTouchOutside(false)
 
