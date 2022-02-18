@@ -73,7 +73,8 @@ class ScreenShareActivity : Activity() {
       VideoEncoderConfiguration(
         VideoEncoderConfiguration.VideoDimensions(width, height),
         VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30,
-        VideoEncoderConfiguration.STANDARD_BITRATE, VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE
+        VideoEncoderConfiguration.STANDARD_BITRATE,
+        VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_PORTRAIT
       )
     )
   }
