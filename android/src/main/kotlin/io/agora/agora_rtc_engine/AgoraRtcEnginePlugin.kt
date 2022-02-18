@@ -164,6 +164,7 @@ open class AgoraRtcEnginePlugin :
     val screenShareIntent = Intent(pluginContext, ScreenShareActivity::class.java).also { intent = it }
       .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     pluginContext.startActivity(screenShareIntent)
+    overridePendingTransition(R.anim.nav_default_pop_enter_anim, R.anim.nav_default_pop_exit_anim)
   }
 
   private fun getAssetAbsolutePath(call: MethodCall, result: Result) {
