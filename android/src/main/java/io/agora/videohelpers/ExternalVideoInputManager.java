@@ -325,7 +325,7 @@ public class ExternalVideoInputManager implements IVideoSource {
         }
 
         if (mConsumer != null) {
-          Log.e(TAG, "publish stream with ->width:" + mVideoWidth + ",height:" + mVideoHeight);
+          Log.e(TAG, "publish stream with ->width:" + mVideoWidth + ",height:" + mVideoHeight+ ",rotation:" + r);
           /**Receives the video frame in texture,and push it out
            * @param textureId ID of the texture
            * @param format Pixel format of the video frame
