@@ -5,6 +5,7 @@ import static io.agora.rtc.mediaio.MediaIO.PixelFormat.TEXTURE_OES;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.SurfaceTexture;
 import android.opengl.EGLSurface;
 import android.opengl.GLES11Ext;
@@ -13,6 +14,7 @@ import android.os.Build;
 import android.util.Log;
 import android.util.Size;
 import android.view.Surface;
+import android.view.WindowManager;
 
 import androidx.annotation.RequiresApi;
 
@@ -311,6 +313,17 @@ public class ExternalVideoInputManager implements IVideoSource {
         mEglCore.makeCurrent(mEglSurface);
         GLES20.glViewport(0, 0, mVideoWidth, mVideoHeight);
 
+        final int rotation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
+        int r = 0;
+        if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
+          Log.e(TAG, "PORTRAIT");
+        }
+
+        if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
+          Log.e(TAG, "LANDSCAPE");
+          r = 90;
+        }
+
         if (mConsumer != null) {
           Log.e(TAG, "publish stream with ->width:" + mVideoWidth + ",height:" + mVideoHeight);
           /**Receives the video frame in texture,and push it out
@@ -323,7 +336,7 @@ public class ExternalVideoInputManager implements IVideoSource {
            * @param matrix Matrix of the texture. The float value is between 0 and 1, such as 0.1, 0.2, and so on*/
           mConsumer.consumeTextureFrame(mTextureId,
             TEXTURE_OES.intValue(),
-            mVideoWidth, mVideoHeight, 0,
+            mVideoWidth, mVideoHeight, r,
             System.currentTimeMillis(), mTransform);
         }
 
