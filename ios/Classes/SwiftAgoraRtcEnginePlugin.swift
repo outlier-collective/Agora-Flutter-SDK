@@ -103,7 +103,8 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
             }
             broadcasterPickerContainer.addSubview(systemBroadcastPicker)
         } else {
-            self.showAlert(message: "Minimum support iOS version is 12.0")
+//            self.showAlert(message: "Minimum support iOS version is 12.0")
+            return
         }
         
     }
