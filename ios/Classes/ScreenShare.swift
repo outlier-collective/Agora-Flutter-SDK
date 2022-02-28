@@ -27,7 +27,7 @@ class ScreenShareEntry : UIViewController
     }
 }
 
-class : BaseViewController {
+class ScreenShareMain : BaseViewController {
     var localVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     var remoteVideo = Bundle.loadView(fromNib: "VideoView", withType: VideoView.self)
     
