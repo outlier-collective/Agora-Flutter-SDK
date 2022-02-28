@@ -67,6 +67,10 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
             getAssetAbsolutePath(call, result: result)
             return
         }
+        if call.method == "startScreenSharing" {
+            prepareSystemBroadcaster()
+            return
+        }
         if let params = call.arguments as? NSDictionary {
             let selector = NSSelectorFromString(call.method + "::")
             if manager.responds(to: selector) {
@@ -81,6 +85,23 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
             }
         }
         result(FlutterMethodNotImplemented)
+    }
+
+    private func prepareSystemBroadcaster() {
+        if #available(iOS 12.0, *) {
+            let frame = CGRect(x: 0, y:0, width: 60, height: 60)
+            let systemBroadcastPicker = RPSystemBroadcastPickerView(frame: frame)
+            systemBroadcastPicker.autoresizingMask = [.flexibleTopMargin, .flexibleRightMargin]
+            if let url = Bundle.main.url(forResource: "AgoraScreenShareExtension", withExtension: "appex", subdirectory: "PlugIns") {
+                if let bundle = Bundle(url: url) {
+                    systemBroadcastPicker.preferredExtension = bundle.bundleIdentifier
+                }
+            }
+            broadcasterPickerContainer.addSubview(systemBroadcastPicker)
+        } else {
+            self.showAlert(message: "Minimum support iOS version is 12.0")
+        }
+        
     }
     
     private func getAssetAbsolutePath(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
