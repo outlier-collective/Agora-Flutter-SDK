@@ -92,7 +92,7 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
         if #available(iOS 12.0, *) {
             let frame = CGRect(x: 0, y:0, width: 60, height: 60)
             let systemBroadcastPicker = RPSystemBroadcastPickerView(frame: frame)
-            systemBroadcastPicker.autoresizingMask = [.flexibleTopMargin, .flexibleRightMargin]
+//            systemBroadcastPicker.autoresizingMask = [.flexibleTopMargin, .flexibleRightMargin]
             if let url = Bundle.main.url(forResource: "AgoraScreenShareExtension", withExtension: "appex", subdirectory: "PlugIns") {
                 if let bundle = Bundle(url: url) {
                     systemBroadcastPicker.preferredExtension = bundle.bundleIdentifier
