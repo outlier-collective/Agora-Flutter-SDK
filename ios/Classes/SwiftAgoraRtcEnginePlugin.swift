@@ -1,5 +1,6 @@
 import Flutter
 import UIKit
+import ReplayKit
 
 public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
     private var registrar: FlutterPluginRegistrar?
