@@ -7,6 +7,9 @@ public class SwiftAgoraRtcEnginePlugin: NSObject, FlutterPlugin, FlutterStreamHa
     private var methodChannel: FlutterMethodChannel?
     private var eventChannel: FlutterEventChannel?
     private var eventSink: FlutterEventSink? = nil
+    
+    @IBOutlet weak var broadcasterPickerContainer: UIView!
+    
     private lazy var manager: RtcEngineManager = {
         return RtcEngineManager() { [weak self] methodName, data in
             self?.emit(methodName, data)
