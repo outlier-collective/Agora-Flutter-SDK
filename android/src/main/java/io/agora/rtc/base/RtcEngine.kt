@@ -562,22 +562,22 @@ open class RtcEngineManager(
     callback.resolve(engine) { it.uploadLogFile() }
   }
 
-  override fun setLocalAccessPoint(params: Map<String, *>, callback: Callback) {
-    callback.code(
-      engine?.setLocalAccessPoint(
-        arrayListOf<String>().apply {
-          (params["ips"] as? List<*>)?.let { list ->
-            list.forEach { item ->
-              (item as? String)?.let {
-                add(it)
-              }
-            }
-          }
-        },
-        params["domain"] as String
-      )
-    )
-  }
+//  override fun setLocalAccessPoint(params: Map<String, *>, callback: Callback) {
+//    callback.code(
+//      engine?.setLocalAccessPoint(
+//        arrayListOf<String>().apply {
+//          (params["ips"] as? List<*>)?.let { list ->
+//            list.forEach { item ->
+//              (item as? String)?.let {
+//                add(it)
+//              }
+//            }
+//          }
+//        },
+//        params["domain"] as String
+//      )
+//    )
+//  }
 
   override fun enableVirtualBackground(params: Map<String, *>, callback: Callback) {
     callback.code(
