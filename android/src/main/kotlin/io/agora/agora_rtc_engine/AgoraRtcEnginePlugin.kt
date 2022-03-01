@@ -7,6 +7,7 @@ import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
 import io.agora.rtc.RtcEngine
+import io.agora.rtc.ScreenCaptureParameters
 import io.agora.rtc.base.RtcEngineManager
 import io.agora.screenshare.ScreenShareActivity
 import io.agora.videohelpers.Constants
@@ -134,9 +135,10 @@ open class AgoraRtcEnginePlugin :
       return
     }
     if (call.method == "startScreenShare") {
-      Constants.rtcEngine = engine()
-      bindVideoService()
-      return
+//      Constants.rtcEngine = engine()
+//      bindVideoService()
+//      return
+      engine()?.startScreenCapture(ScreenCaptureParameters())
     }
 
     manager.javaClass.declaredMethods.find { it.name == call.method }?.let { function ->
