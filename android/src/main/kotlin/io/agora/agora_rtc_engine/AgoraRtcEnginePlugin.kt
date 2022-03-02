@@ -139,7 +139,6 @@ open class AgoraRtcEnginePlugin :
 //      bindVideoService()
 //      return
       engine()?.startScreenCapture(ScreenCaptureParameters())
-      return
     }
 
     manager.javaClass.declaredMethods.find { it.name == call.method }?.let { function ->
