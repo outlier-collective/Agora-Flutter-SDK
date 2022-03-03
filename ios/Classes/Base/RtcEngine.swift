@@ -1196,14 +1196,14 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func setLocalAccessPoint(_ params: NSDictionary, _ callback: Callback) {
-        // let list = params["ips"] as! [Any]
-        // var ips: [String] = []
-        // for i in list.indices {
-        //     if let item = list[i] as? String {
-        //         ips.append(item)
-        //     }
-        // }
-        // callback.code(engine?.setLocalAccessPoint(ips, domain: params["domain"] as! String))
+        let list = params["ips"] as! [Any]
+        var ips: [String] = []
+        for i in list.indices {
+            if let item = list[i] as? String {
+                ips.append(item)
+            }
+        }
+        callback.code(engine?.setLocalAccessPoint(ips, domain: params["domain"] as! String))
     }
 
     @objc func pauseAllChannelMediaRelay(_ callback: Callback) {
