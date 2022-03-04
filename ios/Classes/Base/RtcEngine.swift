@@ -726,9 +726,9 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         }
     }
 
-    @objc func getAudioFileInfo(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.getAudioFileInfo(params["filePath"] as! String))
-    }
+    // @objc func getAudioFileInfo(_ params: NSDictionary, _ callback: Callback) {
+    //     callback.code(engine?.getAudioFileInfo(params["filePath"] as! String))
+    // }
 
     @objc func getAudioMixingCurrentPosition(_ callback: Callback) {
         callback.code(engine?.getAudioMixingCurrentPosition()) {
@@ -744,24 +744,24 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         callback.code(engine?.setAudioMixingPitch((params["pitch"] as! NSNumber).intValue))
     }
 
-    @objc func setAudioMixingPlaybackSpeed(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.setAudioMixingPlaybackSpeed(Int32((params["speed"] as! NSNumber).intValue)))
-    }
+    // @objc func setAudioMixingPlaybackSpeed(_ params: NSDictionary, _ callback: Callback) {
+    //     callback.code(engine?.setAudioMixingPlaybackSpeed(Int32((params["speed"] as! NSNumber).intValue)))
+    // }
 
-    @objc func getAudioTrackCount(_ callback: Callback) {
-        callback.code(engine?.getAudioTrackCount()) {
-            $0
-        }
-    }
+    // @objc func getAudioTrackCount(_ callback: Callback) {
+    //     callback.code(engine?.getAudioTrackCount()) {
+    //         $0
+    //     }
+    // }
 
-    @objc func selectAudioTrack(_ params: NSDictionary, _ callback: Callback) {
-        callback.code(engine?.selectAudioTrack((params["index"] as! NSNumber).intValue))
-    }
+    // @objc func selectAudioTrack(_ params: NSDictionary, _ callback: Callback) {
+    //     callback.code(engine?.selectAudioTrack((params["index"] as! NSNumber).intValue))
+    // }
 
-    @objc func setAudioMixingDualMonoMode(_ params: NSDictionary, _ callback: Callback) {
-        let mode = AgoraAudioMixingDualMonoMode(rawValue: UInt((params["mode"] as! NSNumber).intValue))
-        callback.code(engine?.setAudioMixingDualMonoMode(mode!))
-    }
+    // @objc func setAudioMixingDualMonoMode(_ params: NSDictionary, _ callback: Callback) {
+    //     let mode = AgoraAudioMixingDualMonoMode(rawValue: UInt((params["mode"] as! NSNumber).intValue))
+    //     callback.code(engine?.setAudioMixingDualMonoMode(mode!))
+    // }
 
     @objc func getEffectsVolume(_ callback: Callback) {
         callback.resolve(engine) {
@@ -1206,13 +1206,13 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
         // callback.code(engine?.setLocalAccessPoint(ips, domain: params["domain"] as! String))
     }
 
-    @objc func pauseAllChannelMediaRelay(_ callback: Callback) {
-        callback.code(engine?.pauseAllChannelMediaRelay())
-    }
+    // @objc func pauseAllChannelMediaRelay(_ callback: Callback) {
+    //     callback.code(engine?.pauseAllChannelMediaRelay())
+    // }
 
-    @objc func resumeAllChannelMediaRelay(_ callback: Callback) {
-        callback.code(engine?.resumeAllChannelMediaRelay())
-    }
+    // @objc func resumeAllChannelMediaRelay(_ callback: Callback) {
+    //     callback.code(engine?.resumeAllChannelMediaRelay())
+    // }
 
     @objc func enableVirtualBackground(_ params: NSDictionary, _ callback: Callback) {
         callback.code(engine?.enableVirtualBackground(params["enabled"] as! Bool, backData: mapToVirtualBackgroundSource(params["backgroundSource"] as! [String: Any])))
