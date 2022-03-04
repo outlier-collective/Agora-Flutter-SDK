@@ -6,7 +6,6 @@ import android.os.*
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
-import io.agora.rtc.base.RtcEngineManager
 import io.agora.screenshare.ScreenShareActivity
 import io.agora.videohelpers.Constants
 import android.content.Context
@@ -261,7 +260,7 @@ open class AgoraRtcEnginePlugin :
         return
       }
       else -> {
-        callApiMethodCallHandler.onMethodCall(call, result)\
+        callApiMethodCallHandler.onMethodCall(call, result)
       }
     }
   }
