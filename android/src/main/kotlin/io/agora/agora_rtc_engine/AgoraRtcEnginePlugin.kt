@@ -6,7 +6,6 @@ import android.os.*
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
-import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcEngineManager
 import io.agora.screenshare.ScreenShareActivity
 import io.agora.videohelpers.Constants
@@ -14,7 +13,6 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import androidx.annotation.NonNull
 import io.agora.iris.base.IrisEventHandler
 import io.agora.iris.rtc.IrisRtcEngine
 import io.agora.iris.rtc.base.ApiTypeEngine
@@ -172,7 +170,6 @@ open class AgoraRtcEnginePlugin :
     platformViewRegistry: PlatformViewRegistry
   ) {
     pluginContext = context.applicationContext
-    applicationContext = context.applicationContext
     irisRtcEngine = IrisRtcEngine(applicationContext)
     methodChannel = MethodChannel(binaryMessenger, "agora_rtc_engine")
     methodChannel.setMethodCallHandler(this)
@@ -249,7 +246,7 @@ open class AgoraRtcEnginePlugin :
       return
     }
     if (call.method == "startScreenShare") {
-      Constants.rtcEngine = engine()
+      Constants.rtcEngine = irisRtcEngine
       bindVideoService()
       return
     }
@@ -268,27 +265,30 @@ open class AgoraRtcEnginePlugin :
           return@onMethodCall
         } catch (e: Exception) {
           e.printStackTrace()
+        }
 
 //    val textureRegistry = registrar?.textures() ?: binding?.textureRegistry
 //    val messenger = registrar?.messenger() ?: binding?.binaryMessenger
 
-    // Iris supported
-    when (call.method) {
-        "createTextureRender" -> {
-          result.notImplemented()
-          return
+        // Iris supported
+        when (call.method) {
+          "createTextureRender" -> {
+            result.notImplemented()
+            return
+          }
+          "destroyTextureRender" -> {
+            result.notImplemented()
+            return
+          }
+          "getAssetAbsolutePath" -> {
+            getAssetAbsolutePath(call, result)
+            return
+          }
+          else -> {
+            callApiMethodCallHandler.onMethodCall(call, result)\
+          }
         }
-        "destroyTextureRender" -> {
-          result.notImplemented()
-          return
-        }
-        "getAssetAbsolutePath" -> {
-          getAssetAbsolutePath(call, result)
-          return
-        }
-        else -> {
-          callApiMethodCallHandler.onMethodCall(call, result)\
-        }
+      }
     }
   }
 
@@ -315,3 +315,4 @@ open class AgoraRtcEnginePlugin :
     result.error(IllegalArgumentException::class.simpleName, null, null)
   }
 }
+
