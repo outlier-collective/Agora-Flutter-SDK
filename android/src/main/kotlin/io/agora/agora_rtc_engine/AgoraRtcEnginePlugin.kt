@@ -240,13 +240,12 @@ open class AgoraRtcEnginePlugin :
 
   @RequiresApi(Build.VERSION_CODES.M)
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    if (call.method == "startScreenShare") {
-      Constants.rtcEngine = irisRtcEngine.rtcEngine as RtcEngine?
-      bindVideoService()
-      return
-    }
-
     when (call.method) {
+      "startScreenShare" -> {
+        Constants.rtcEngine = irisRtcEngine.rtcEngine as RtcEngine?
+        bindVideoService()
+        return
+      }
       "createTextureRender" -> {
         result.notImplemented()
         return
