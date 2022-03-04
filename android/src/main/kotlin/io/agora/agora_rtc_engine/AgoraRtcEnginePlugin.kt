@@ -260,6 +260,7 @@ open class AgoraRtcEnginePlugin :
       }
       else -> {
         callApiMethodCallHandler.onMethodCall(call, result)
+        return
       }
     }
   }
