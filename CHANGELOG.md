@@ -1,3 +1,13 @@
+# [5.0.0](https://github.com/AgoraIO/Flutter-SDK/compare/v4.2.1...v5.0.0) (2022-02-21)
+
+
+### Features
+
+* Add no-response bot ([#586](https://github.com/AgoraIO/Flutter-SDK/issues/586)) ([52cbacb](https://github.com/AgoraIO/Flutter-SDK/commit/52cbacbb44558cc3625f5839ff9184569a595340))
+* Support flutter desktop ([#600](https://github.com/AgoraIO/Flutter-SDK/issues/600)) ([2c4a133](https://github.com/AgoraIO/Flutter-SDK/commit/2c4a1330ce754797cde552b5dd4beee7fe886f91))
+
+## [4.2.1](https://github.com/AgoraIO/Flutter-SDK/compare/v4.2.0...v4.2.1) (2022-02-08)
+
 # [4.2.0](https://github.com/AgoraIO/Flutter-SDK/compare/v4.2.0-rc.2...v4.2.0) (2022-01-11)
 
 # [4.2.0-rc.2](https://github.com/AgoraIO/Flutter-SDK/compare/v4.2.0-rc.1...v4.2.0-rc.2) (2021-12-24)
@@ -73,6 +83,20 @@
 * add RtcEngineContext instead of RtcEngineConfig ([5dd294f](https://github.com/AgoraIO/Flutter-SDK/commit/5dd294fa95799dcc19d69775c19a13aeed61e2a2))
 * support native SDK 3.4.5 ([d1d8433](https://github.com/AgoraIO/Flutter-SDK/commit/d1d84330c9fcc1367cfe8160fe8c6d593c7bac9c))
 
+# [4.1.0-alpha.2](https://github.com/AgoraIO/Flutter-SDK/compare/v4.1.0-alpha.1...v4.1.0-alpha.2) (2021-06-16)
+
+
+### Bug Fixes
+
+* web build error ([8c57eae](https://github.com/AgoraIO/Flutter-SDK/commit/8c57eae792e3d02cedeb52b87c5350e65a6be7f9))
+
+# [4.1.0-alpha.1](https://github.com/AgoraIO/Flutter-SDK/compare/v4.1.0-alpha.0...v4.1.0-alpha.1) (2021-06-16)
+
+
+### Features
+
+* support screen share for desktop
+
 ## [4.0.2](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.1...v4.0.2) (2021-06-09)
 
 
@@ -80,6 +104,26 @@
 
 * Android build error ([3af4476](https://github.com/AgoraIO/Flutter-SDK/commit/3af44762ad765cde99024e2b080d4c88f34cfc09))
 * enum type cast bug, close [#345](https://github.com/AgoraIO/Flutter-SDK/issues/345) ([85d720d](https://github.com/AgoraIO/Flutter-SDK/commit/85d720d1f13a7ff340419135a9d397be798b750f))
+
+# [4.1.0-alpha.0](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.1...v4.1.0-alpha.0) (2021-06-04)
+
+
+### Bug Fixes
+
+* Android build error ([3af4476](https://github.com/AgoraIO/Flutter-SDK/commit/3af44762ad765cde99024e2b080d4c88f34cfc09))
+* build error ([8c80c1e](https://github.com/AgoraIO/Flutter-SDK/commit/8c80c1e43f86de3d62b281473f92f217513e139a))
+* mac render crash ([dee5ab9](https://github.com/AgoraIO/Flutter-SDK/commit/dee5ab9d0245859113b3411adfab60baad6ac7b4))
+* mobile `RtcStats` key error ([70cb58e](https://github.com/AgoraIO/Flutter-SDK/commit/70cb58efcfce21352f3f77076abe8c3f62998d6c))
+* remove unless import ([668650f](https://github.com/AgoraIO/Flutter-SDK/commit/668650f95fc052089f37898e6a7b5a735f08a3b5))
+* render error ([f409099](https://github.com/AgoraIO/Flutter-SDK/commit/f409099398f8d7d51c449bba00a0128fde90b113))
+* Web call `Platform` API error ([d760093](https://github.com/AgoraIO/Flutter-SDK/commit/d760093a5e3368108e54f9995c1956d9caaa8460))
+
+
+### Features
+
+* add `rtc_device_manager.dart` ([94e27c9](https://github.com/AgoraIO/Flutter-SDK/commit/94e27c91fb2efe630751551d1cfddc1ba657a735))
+* add device manager for Web ([18b5d90](https://github.com/AgoraIO/Flutter-SDK/commit/18b5d90ec320bff090dcb01cc8717c0781dd5a38))
+* add DeviceManager for windows ([dcf5630](https://github.com/AgoraIO/Flutter-SDK/commit/dcf56308c04b9d6da0aba31b5a3c04b4087db388))
 
 ## [4.0.1](https://github.com/AgoraIO/Flutter-SDK/compare/v4.0.0...v4.0.1) (2021-05-19)
 

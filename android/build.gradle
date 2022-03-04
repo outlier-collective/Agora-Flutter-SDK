@@ -6,6 +6,9 @@ def safeExtGet(prop, fallback) {
 }
 
 buildscript {
+  ext.agora_rtc_engine_kt_version = '1.5.31'
+  def kotlin_version = rootProject.ext.has('kotlin_version') ? rootProject.ext.get('kotlin_version') : "$agora_rtc_engine_kt_version"
+
   repositories {
     mavenCentral()
     google()
@@ -30,7 +33,7 @@ apply plugin: 'kotlin-android'
 
 android {
   compileSdkVersion safeExtGet('compileSdkVersion', 31)
-  buildToolsVersion safeExtGet('buildToolsVersion', '30.0.2')
+  buildToolsVersion safeExtGet('buildToolsVersion', '31.0.0')
 
   defaultConfig {
     minSdkVersion safeExtGet('minSdkVersion', 21)
@@ -49,9 +52,9 @@ android {
 }
 
 dependencies {
-  api 'com.github.agorabuilder:native-full-sdk:3.5.2'
+  api 'com.github.agorabuilder:iris-rtc:3.5.2'
 
-  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${safeExtGet('kotlin_version', '1.3.72')}"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${safeExtGet('kotlin_version', "$agora_rtc_engine_kt_version")}"
   implementation 'androidx.fragment:fragment-ktx:1.4.1'
   implementation 'androidx.annotation:annotation:1.3.0'
   implementation 'androidx.legacy:legacy-support-v4:1.0.0'
