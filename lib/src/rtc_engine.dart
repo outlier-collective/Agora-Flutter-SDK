@@ -1939,7 +1939,9 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> startScreenShare() async {}
+  Future<void> startScreenShare() async {
+    return _invokeMethod('startScreenShare');
+  }
 }
 
 /// @nodoc
