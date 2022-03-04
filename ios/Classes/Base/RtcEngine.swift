@@ -181,7 +181,7 @@ protocol RtcEngineAudioMixingInterface {
 
     func getAudioMixingDuration(_ params: NSDictionary, _ callback: Callback)
 
-    func getAudioFileInfo(_ params: NSDictionary, _ callback: Callback)
+    // func getAudioFileInfo(_ params: NSDictionary, _ callback: Callback)
 
     func getAudioMixingCurrentPosition(_ callback: Callback)
 
@@ -189,13 +189,13 @@ protocol RtcEngineAudioMixingInterface {
 
     func setAudioMixingPitch(_ params: NSDictionary, _ callback: Callback)
 
-    func setAudioMixingPlaybackSpeed(_ params: NSDictionary, _ callback: Callback)
+    // func setAudioMixingPlaybackSpeed(_ params: NSDictionary, _ callback: Callback)
 
-    func getAudioTrackCount(_ callback: Callback)
+    // func getAudioTrackCount(_ callback: Callback)
 
-    func selectAudioTrack(_ params: NSDictionary, _ callback: Callback)
+    // func selectAudioTrack(_ params: NSDictionary, _ callback: Callback)
 
-    func setAudioMixingDualMonoMode(_ params: NSDictionary, _ callback: Callback)
+    // func setAudioMixingDualMonoMode(_ params: NSDictionary, _ callback: Callback)
 }
 
 protocol RtcEngineAudioEffectInterface {
@@ -275,9 +275,9 @@ protocol RtcEngineMediaRelayInterface {
 
     func updateChannelMediaRelay(_ params: NSDictionary, _ callback: Callback)
 
-    func pauseAllChannelMediaRelay(_ callback: Callback)
+    // func pauseAllChannelMediaRelay(_ callback: Callback)
 
-    func resumeAllChannelMediaRelay(_ callback: Callback)
+    // func resumeAllChannelMediaRelay(_ callback: Callback)
 
     func stopChannelMediaRelay(_ callback: Callback)
 }
