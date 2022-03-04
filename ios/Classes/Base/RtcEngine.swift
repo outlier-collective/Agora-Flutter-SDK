@@ -954,14 +954,14 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func startEchoTest(_ params: NSDictionary, _ callback: Callback) {
-        if let intervalInSeconds = (params["intervalInSeconds"] as? NSNumber) {
-            callback.code(engine?.startEchoTest(withInterval: intervalInSeconds.intValue))
-            return
-        }
-        if let config = (params["config"] as? [String: Any]) {
-            callback.code(engine?.startEchoTest(withConfig: mapToEchoTestConfiguration(config)))
-            return
-        }
+        // if let intervalInSeconds = (params["intervalInSeconds"] as? NSNumber) {
+        //     callback.code(engine?.startEchoTest(withInterval: intervalInSeconds.intValue))
+        //     return
+        // }
+        // if let config = (params["config"] as? [String: Any]) {
+        //     callback.code(engine?.startEchoTest(withConfig: mapToEchoTestConfiguration(config)))
+        //     return
+        // }
         callback.code(engine?.startEchoTest())
     }
 
@@ -1219,10 +1219,10 @@ class RtcEngineManager: NSObject, RtcEngineInterface {
     }
 
     @objc func takeSnapshot(_ params: NSDictionary, _ callback: Callback) {
-        var code: Int32?
-        if let ret = engine?.takeSnapshot(params["channel"] as! String, uid: (params["uid"] as! NSNumber).intValue, filePath: params["filePath"] as! String) {
-            code = Int32(ret);
-        }
-        callback.code(code)
+        // var code: Int32?
+        // if let ret = engine?.takeSnapshot(params["channel"] as! String, uid: (params["uid"] as! NSNumber).intValue, filePath: params["filePath"] as! String) {
+        //     code = Int32(ret);
+        // }
+        // callback.code(code)
     }
 }
