@@ -241,53 +241,27 @@ open class AgoraRtcEnginePlugin :
 
   @RequiresApi(Build.VERSION_CODES.M)
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    if (call.method == "getAssetAbsolutePath") {
-      getAssetAbsolutePath(call, result)
-      return
-    }
     if (call.method == "startScreenShare") {
-      Constants.rtcEngine = irisRtcEngine
+      Constants.rtcEngine = irisRtcEngine.rtcEngine as RtcEngine?
       bindVideoService()
       return
     }
 
-    manager.javaClass.declaredMethods.find { it.name == call.method }?.let { function ->
-      function.let { method ->
-        try {
-          val parameters = mutableListOf<Any?>()
-          call.arguments<Map<*, *>>()?.toMutableMap()?.let {
-            if (call.method == "create") {
-              it["context"] = pluginContext
-            }
-            parameters.add(it)
-          }
-          method.invoke(manager, *parameters.toTypedArray(), ResultCallback(result))
-          return@onMethodCall
-        } catch (e: Exception) {
-          e.printStackTrace()
-        }
-
-//    val textureRegistry = registrar?.textures() ?: binding?.textureRegistry
-//    val messenger = registrar?.messenger() ?: binding?.binaryMessenger
-
-        // Iris supported
-        when (call.method) {
-          "createTextureRender" -> {
-            result.notImplemented()
-            return
-          }
-          "destroyTextureRender" -> {
-            result.notImplemented()
-            return
-          }
-          "getAssetAbsolutePath" -> {
-            getAssetAbsolutePath(call, result)
-            return
-          }
-          else -> {
-            callApiMethodCallHandler.onMethodCall(call, result)\
-          }
-        }
+    when (call.method) {
+      "createTextureRender" -> {
+        result.notImplemented()
+        return
+      }
+      "destroyTextureRender" -> {
+        result.notImplemented()
+        return
+      }
+      "getAssetAbsolutePath" -> {
+        getAssetAbsolutePath(call, result)
+        return
+      }
+      else -> {
+        callApiMethodCallHandler.onMethodCall(call, result)\
       }
     }
   }
