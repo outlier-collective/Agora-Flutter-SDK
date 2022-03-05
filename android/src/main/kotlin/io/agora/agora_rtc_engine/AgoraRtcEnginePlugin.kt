@@ -169,7 +169,7 @@ open class AgoraRtcEnginePlugin :
     platformViewRegistry: PlatformViewRegistry
   ) {
     pluginContext = context.applicationContext
-    irisRtcEngine = IrisRtcEngine(applicationContext)
+    irisRtcEngine = IrisRtcEngine(pluginContext)
     methodChannel = MethodChannel(binaryMessenger, "agora_rtc_engine")
     methodChannel.setMethodCallHandler(this)
     eventChannel = EventChannel(binaryMessenger, "agora_rtc_engine/events")
@@ -240,6 +240,7 @@ open class AgoraRtcEnginePlugin :
 
   @RequiresApi(Build.VERSION_CODES.M)
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+    print(call.method)
     when (call.method) {
       "startScreenShare" -> {
         Constants.rtcEngine = irisRtcEngine.rtcEngine as RtcEngine?
