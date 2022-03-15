@@ -321,7 +321,6 @@ public class ExternalVideoInputManager implements IVideoSource {
 
         if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
           Log.e(TAG, "LANDSCAPE");
-          r = 90;
         }
 
         if (mConsumer != null) {
