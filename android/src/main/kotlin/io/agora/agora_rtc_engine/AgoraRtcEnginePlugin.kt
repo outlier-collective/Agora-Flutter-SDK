@@ -1,10 +1,17 @@
 package io.agora.agora_rtc_engine
 
+import android.app.Activity
+import android.content.*
+import android.os.*
+import androidx.annotation.NonNull
+import androidx.annotation.RequiresApi
+import androidx.fragment.app.FragmentActivity
+import io.agora.screenshare.ScreenShareActivity
+import io.agora.videohelpers.Constants
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import androidx.annotation.NonNull
 import io.agora.iris.base.IrisEventHandler
 import io.agora.iris.rtc.IrisRtcEngine
 import io.agora.iris.rtc.base.ApiTypeEngine
@@ -12,6 +19,7 @@ import io.agora.rtc.RtcEngine
 import io.agora.rtc.base.RtcEngineRegistry
 import io.flutter.BuildConfig
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.activity.*
 import io.flutter.plugin.common.*
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
@@ -111,11 +119,14 @@ open class CallApiMethodCallHandler(
   }
 }
 
+
 /** AgoraRtcEnginePlugin */
-class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
+open class AgoraRtcEnginePlugin :
+    FragmentActivity(), ActivityAware, FlutterPlugin, MethodCallHandler, EventChannel.StreamHandler {
   private var registrar: Registrar? = null
   private var binding: FlutterPlugin.FlutterPluginBinding? = null
-  private lateinit var applicationContext: Context
+  private lateinit var pluginContext: Context
+  private lateinit var pluginActivity: Activity
 
   private lateinit var irisRtcEngine: IrisRtcEngine
 
@@ -157,8 +168,8 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     binaryMessenger: BinaryMessenger,
     platformViewRegistry: PlatformViewRegistry
   ) {
-    applicationContext = context.applicationContext
-    irisRtcEngine = IrisRtcEngine(applicationContext)
+    pluginContext = context.applicationContext
+    irisRtcEngine = IrisRtcEngine(pluginContext)
     methodChannel = MethodChannel(binaryMessenger, "agora_rtc_engine")
     methodChannel.setMethodCallHandler(this)
     eventChannel = EventChannel(binaryMessenger, "agora_rtc_engine/events")
@@ -193,6 +204,20 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     irisRtcEngine.destroy()
   }
 
+  @RequiresApi(Build.VERSION_CODES.M)
+  override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+    pluginActivity = binding.getActivity()
+  }
+
+  override fun onDetachedFromActivityForConfigChanges() {
+  }
+
+  override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+  }
+
+  override fun onDetachedFromActivity() {
+  }
+
   override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
 
     eventSink = events
@@ -213,29 +238,39 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
 //    }
 //  }
 
+  @RequiresApi(Build.VERSION_CODES.M)
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-//    val textureRegistry = registrar?.textures() ?: binding?.textureRegistry
-//    val messenger = registrar?.messenger() ?: binding?.binaryMessenger
-
-    // Iris supported
+    print(call.method)
     when (call.method) {
-        "createTextureRender" -> {
-          result.notImplemented()
-          return
-        }
-        "destroyTextureRender" -> {
-          result.notImplemented()
-          return
-        }
-        "getAssetAbsolutePath" -> {
-          getAssetAbsolutePath(call, result)
-          return
-        }
-        else -> {
-          callApiMethodCallHandler.onMethodCall(call, result)
-        }
+      "startScreenShare" -> {
+        Constants.rtcEngine = irisRtcEngine.rtcEngine as RtcEngine?
+        bindVideoService()
+        return
+      }
+      "createTextureRender" -> {
+        result.notImplemented()
+        return
+      }
+      "destroyTextureRender" -> {
+        result.notImplemented()
+        return
+      }
+      "getAssetAbsolutePath" -> {
+        getAssetAbsolutePath(call, result)
+        return
+      }
+      else -> {
+        callApiMethodCallHandler.onMethodCall(call, result)
+      }
     }
+  }
 
+  @RequiresApi(api = Build.VERSION_CODES.M)
+  private fun bindVideoService() {
+    val screenShareIntent = Intent(pluginContext, ScreenShareActivity::class.java).also { intent = it }
+      .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    pluginContext.startActivity(screenShareIntent)
+    overridePendingTransition(R.anim.nav_default_pop_enter_anim, R.anim.nav_default_pop_exit_anim)
   }
 
   private fun getAssetAbsolutePath(call: MethodCall, result: Result) {
@@ -243,7 +278,7 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
       val assetKey = registrar?.lookupKeyForAsset(it)
         ?: binding?.flutterAssets?.getAssetFilePathByName(it)
       try {
-        applicationContext.assets.openFd(assetKey!!).close()
+        pluginContext.assets.openFd(assetKey!!).close()
         result.success("/assets/$assetKey")
       } catch (e: Exception) {
         result.error(e.javaClass.simpleName, e.message, e.cause)
@@ -253,3 +288,4 @@ class AgoraRtcEnginePlugin : FlutterPlugin, MethodCallHandler, EventChannel.Stre
     result.error(IllegalArgumentException::class.simpleName, null, null)
   }
 }
+

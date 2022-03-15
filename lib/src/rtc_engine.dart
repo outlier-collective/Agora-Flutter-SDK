@@ -6,13 +6,13 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+import 'api_types.dart';
 import 'classes.dart';
 import 'enum_converter.dart';
 import 'enums.dart';
 import 'events.dart';
 import 'rtc_channel.dart';
 import 'rtc_device_manager.dart';
-import 'api_types.dart';
 
 ///
 /// The basic interface of the Agora SDK that implements the core functions of real-time communication.
@@ -20,8 +20,7 @@ import 'api_types.dart';
 ///
 class RtcEngine with RtcEngineInterface {
   static const MethodChannel _methodChannel = MethodChannel('agora_rtc_engine');
-  static const EventChannel _eventChannel =
-      EventChannel('agora_rtc_engine/events');
+  static const EventChannel _eventChannel = EventChannel('agora_rtc_engine/events');
   static final Stream _stream = _eventChannel.receiveBroadcastStream();
   static StreamSubscription? _subscription;
 
@@ -80,8 +79,7 @@ class RtcEngine with RtcEngineInterface {
 
   RtcEngine._(this._subProcess, {String? appGroup}) : _appGroup = appGroup;
 
-  Future<T?> _invokeMethod<T>(String method,
-      [Map<String, dynamic>? arguments]) {
+  Future<T?> _invokeMethod<T>(String method, [Map<String, dynamic>? arguments]) {
     if (kIsWeb || (Platform.isWindows || Platform.isMacOS)) {
       arguments?['subProcess'] = _subProcess;
     }
@@ -145,8 +143,7 @@ class RtcEngine with RtcEngineInterface {
   /// An error code, if the call fails.
   ///
   @deprecated
-  static Future<RtcEngine> createWithAreaCode(
-      String appId, List<AreaCode> areaCode) {
+  static Future<RtcEngine> createWithAreaCode(String appId, List<AreaCode> areaCode) {
     return createWithContext(RtcEngineContext(appId, areaCode: areaCode));
   }
 
@@ -234,8 +231,7 @@ class RtcEngine with RtcEngineInterface {
       final buffer = eventMap['buffer'];
       final subProcess = (eventMap['subProcess'] as bool?) ?? false;
       if (subProcess) {
-        _instance?._screenShareHelper?._handler
-            ?.process(methodName, data, buffer);
+        _instance?._screenShareHelper?._handler?.process(methodName, data, buffer);
       } else {
         _instance?._handler?.process(methodName, data, buffer);
       }
@@ -264,8 +260,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> joinChannel(
-      String? token, String channelName, String? optionalInfo, int optionalUid,
+  Future<void> joinChannel(String? token, String channelName, String? optionalInfo, int optionalUid,
       [ChannelMediaOptions? options]) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineJoinChannel.index,
@@ -280,8 +275,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> switchChannel(String? token, String channelName,
-      [ChannelMediaOptions? options]) {
+  Future<void> switchChannel(String? token, String channelName, [ChannelMediaOptions? options]) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSwitchChannel.index,
       'params': jsonEncode({
@@ -439,8 +433,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> joinChannelWithUserAccount(
-      String? token, String channelName, String userAccount,
+  Future<void> joinChannelWithUserAccount(String? token, String channelName, String userAccount,
       [ChannelMediaOptions? options]) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineJoinChannelWithUserAccount.index,
@@ -523,8 +516,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> enableAudioVolumeIndication(
-      int interval, int smooth, bool report_vad) {
+  Future<void> enableAudioVolumeIndication(int interval, int smooth, bool report_vad) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineEnableAudioVolumeIndication.index,
       'params': jsonEncode({
@@ -806,9 +798,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> startAudioMixing(
-      String filePath, bool loopback, bool replace, int cycle,
-      [int? startPos]) {
+  Future<void> startAudioMixing(String filePath, bool loopback, bool replace, int cycle, [int? startPos]) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineStartAudioMixing.index,
       'params': jsonEncode({
@@ -852,8 +842,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> addVideoWatermark(
-      String watermarkUrl, WatermarkOptions options) {
+  Future<void> addVideoWatermark(String watermarkUrl, WatermarkOptions options) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineAddVideoWaterMark.index,
       'params': jsonEncode({
@@ -1011,8 +1000,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> playEffect(int soundId, String filePath, int loopCount,
-      double pitch, double pan, int gain, bool publish,
+  Future<void> playEffect(int soundId, String filePath, int loopCount, double pitch, double pan, int gain, bool publish,
       [int? startPos]) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEnginePlayEffect.index,
@@ -1162,8 +1150,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setCameraCapturerConfiguration(
-      CameraCapturerConfiguration config) {
+  Future<void> setCameraCapturerConfiguration(CameraCapturerConfiguration config) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetCameraCapturerConfiguration.index,
       'params': jsonEncode({
@@ -1173,8 +1160,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setCameraExposurePosition(
-      double positionXinView, double positionYinView) {
+  Future<void> setCameraExposurePosition(double positionXinView, double positionYinView) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetCameraExposurePosition.index,
       'params': jsonEncode({
@@ -1185,8 +1171,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setCameraFocusPositionInPreview(
-      double positionX, double positionY) {
+  Future<void> setCameraFocusPositionInPreview(double positionX, double positionY) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetCameraFocusPositionInPreview.index,
       'params': jsonEncode({
@@ -1324,13 +1309,11 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setLocalVoiceEqualization(
-      AudioEqualizationBandFrequency bandFrequency, int bandGain) {
+  Future<void> setLocalVoiceEqualization(AudioEqualizationBandFrequency bandFrequency, int bandGain) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetLocalVoiceEqualization.index,
       'params': jsonEncode({
-        'bandFrequency':
-            AudioEqualizationBandFrequencyConverter(bandFrequency).value(),
+        'bandFrequency': AudioEqualizationBandFrequencyConverter(bandFrequency).value(),
         'bandGain': bandGain,
       }),
     });
@@ -1410,8 +1393,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setRemoteVideoStreamType(
-      int userId, VideoStreamType streamType) {
+  Future<void> setRemoteVideoStreamType(int userId, VideoStreamType streamType) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetRemoteVideoStreamType.index,
       'params': jsonEncode({
@@ -1446,8 +1428,7 @@ class RtcEngine with RtcEngineInterface {
 
   @override
   @deprecated
-  Future<void> startAudioRecording(String filePath,
-      AudioSampleRateType sampleRate, AudioRecordingQuality quality) {
+  Future<void> startAudioRecording(String filePath, AudioSampleRateType sampleRate, AudioRecordingQuality quality) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineStartAudioRecording.index,
       'params': jsonEncode({
@@ -1459,8 +1440,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> startAudioRecordingWithConfig(
-      AudioRecordingConfiguration config) {
+  Future<void> startAudioRecordingWithConfig(AudioRecordingConfiguration config) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineStartAudioRecording.index,
       'params': jsonEncode({
@@ -1470,8 +1450,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> startChannelMediaRelay(
-      ChannelMediaRelayConfiguration channelMediaRelayConfiguration) {
+  Future<void> startChannelMediaRelay(ChannelMediaRelayConfiguration channelMediaRelayConfiguration) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineStartChannelMediaRelay.index,
       'params': jsonEncode({
@@ -1481,8 +1460,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> startRhythmPlayer(
-      String sound1, String sound2, RhythmPlayerConfig config) {
+  Future<void> startRhythmPlayer(String sound1, String sound2, RhythmPlayerConfig config) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineStartRhythmPlayer.index,
       'params': jsonEncode({
@@ -1512,15 +1490,11 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> startEchoTest(
-      {int? intervalInSeconds, EchoTestConfiguration? config}) {
-    assert(intervalInSeconds == null || config == null,
-        'Only need one of the params');
+  Future<void> startEchoTest({int? intervalInSeconds, EchoTestConfiguration? config}) {
+    assert(intervalInSeconds == null || config == null, 'Only need one of the params');
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineStartEchoTest.index,
-      'params': jsonEncode(config == null
-          ? {'intervalInSeconds': intervalInSeconds}
-          : {'config': config.toJson()}),
+      'params': jsonEncode(config == null ? {'intervalInSeconds': intervalInSeconds} : {'config': config.toJson()}),
     });
   }
 
@@ -1611,8 +1585,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> updateChannelMediaRelay(
-      ChannelMediaRelayConfiguration channelMediaRelayConfiguration) {
+  Future<void> updateChannelMediaRelay(ChannelMediaRelayConfiguration channelMediaRelayConfiguration) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineUpdateChannelMediaRelay.index,
       'params': jsonEncode({
@@ -1691,8 +1664,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> sendCustomReportMessage(
-      String id, String category, String event, String label, int value) {
+  Future<void> sendCustomReportMessage(String id, String category, String event, String label, int value) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSendCustomReportMessage.index,
       'params': jsonEncode({
@@ -1706,13 +1678,11 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setAudioSessionOperationRestriction(
-      AudioSessionOperationRestriction restriction) {
+  Future<void> setAudioSessionOperationRestriction(AudioSessionOperationRestriction restriction) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetAudioSessionOperationRestriction.index,
       'params': jsonEncode({
-        'restriction':
-            AudioSessionOperationRestrictionConverter(restriction).value(),
+        'restriction': AudioSessionOperationRestrictionConverter(restriction).value(),
       }),
     });
   }
@@ -1726,8 +1696,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setAudioEffectParameters(
-      AudioEffectPreset preset, int param1, int param2) {
+  Future<void> setAudioEffectParameters(AudioEffectPreset preset, int param1, int param2) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetAudioEffectParameters.index,
       'params': jsonEncode({
@@ -1808,8 +1777,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> setVoiceBeautifierParameters(
-      VoiceBeautifierPreset preset, int param1, int param2) {
+  Future<void> setVoiceBeautifierParameters(VoiceBeautifierPreset preset, int param1, int param2) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineSetVoiceBeautifierParameters.index,
       'params': jsonEncode({
@@ -1915,8 +1883,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> updateScreenCaptureParameters(
-      ScreenCaptureParameters captureParams) {
+  Future<void> updateScreenCaptureParameters(ScreenCaptureParameters captureParams) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineUpdateScreenCaptureParameters.index,
       'params': jsonEncode({
@@ -1936,8 +1903,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> startScreenCapture(int windowId,
-      [int captureFreq = 0, Rect? rect, int bitrate = 0]) {
+  Future<void> startScreenCapture(int windowId, [int captureFreq = 0, Rect? rect, int bitrate = 0]) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineStartScreenCapture.index,
       'params': jsonEncode({
@@ -1950,8 +1916,7 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> enableVirtualBackground(
-      bool enabled, VirtualBackgroundSource backgroundSource) {
+  Future<void> enableVirtualBackground(bool enabled, VirtualBackgroundSource backgroundSource) {
     return _invokeMethod('callApi', {
       'apiType': ApiTypeEngine.kEngineEnableVirtualBackground.index,
       'params': jsonEncode({
@@ -1971,6 +1936,11 @@ class RtcEngine with RtcEngineInterface {
         'filePath': filePath,
       }),
     });
+  }
+
+  @override
+  Future<void> startScreenShare() async {
+    return _invokeMethod('startScreenShare');
   }
 }
 
@@ -2067,8 +2037,7 @@ mixin RtcEngineInterface
   ///
   /// Param [options] The channel media options. For details, see ChannelMediaOptions.
   ///
-  Future<void> joinChannel(
-      String? token, String channelName, String? optionalInfo, int optionalUid,
+  Future<void> joinChannel(String? token, String channelName, String? optionalInfo, int optionalUid,
       [ChannelMediaOptions? options]);
 
   ///
@@ -2095,8 +2064,7 @@ mixin RtcEngineInterface
   ///
   /// Param [options] The channel media options. See ChannelMediaOptions.
   ///
-  Future<void> switchChannel(String? token, String channelName,
-      [ChannelMediaOptions? options]);
+  Future<void> switchChannel(String? token, String channelName, [ChannelMediaOptions? options]);
 
   ///
   /// Leaves a channel.
@@ -2151,8 +2119,7 @@ mixin RtcEngineInterface
   /// Reports customized messages.
   /// Agora supports reporting and analyzing customized messages. This function is in the beta stage with a free trial. The ability provided in its beta test version is reporting a maximum of 10 message pieces within 6 seconds, with each message piece not exceeding 256 bytes and each string not exceeding 100 bytes. To try out this function, contact  and discuss the format of customized messages with us.
   ///
-  Future<void> sendCustomReportMessage(
-      String id, String category, String event, String label, int value);
+  Future<void> sendCustomReportMessage(String id, String category, String event, String label, int value);
 
   ///
   /// Retrieves the call ID.
@@ -2317,8 +2284,7 @@ mixin RtcEngineInterface
   ///
   /// Param [backgroundSource] The custom background image. For details, see VirtualBackgroundSource. To adapt the resolution of the custom background image to that of the video captured by the SDK, the SDK scales and crops the custom background image while ensuring that the content of the custom background image is not distorted.
   ///
-  Future<void> enableVirtualBackground(
-      bool enabled, VirtualBackgroundSource backgroundSource);
+  Future<void> enableVirtualBackground(bool enabled, VirtualBackgroundSource backgroundSource);
 
   ///
   /// Takes a snapshot of a video stream.
@@ -2394,8 +2360,7 @@ mixin RtcUserInfoInterface {
   ///
   ///
   ///
-  Future<void> joinChannelWithUserAccount(
-      String? token, String channelName, String userAccount,
+  Future<void> joinChannelWithUserAccount(String? token, String channelName, String userAccount,
       [ChannelMediaOptions? options]);
 
   ///
@@ -2597,8 +2562,7 @@ mixin RtcAudioInterface {
   ///
   /// Param [smooth]
   ///
-  Future<void> enableAudioVolumeIndication(
-      int interval, int smooth, bool report_vad);
+  Future<void> enableAudioVolumeIndication(int interval, int smooth, bool report_vad);
 }
 
 /// @nodoc
@@ -2838,9 +2802,7 @@ mixin RtcAudioMixingInterface {
   ///
   /// Param [startPos] The playback position (ms) of the music file.
   ///
-  Future<void> startAudioMixing(
-      String filePath, bool loopback, bool replace, int cycle,
-      [int? startPos]);
+  Future<void> startAudioMixing(String filePath, bool loopback, bool replace, int cycle, [int? startPos]);
 
   ///
   /// Stops playing and mixing the music file.
@@ -2918,8 +2880,7 @@ mixin RtcAudioMixingInterface {
   /// **return** ≥ 0: A successful method call. Returns the total duration (ms) of the specified music file.
   /// < 0: Failure.
   ///
-  @Deprecated(
-      'This method is deprecated as of v4.1.0. Use getAudioFileInfo instead.')
+  @Deprecated('This method is deprecated as of v4.1.0. Use getAudioFileInfo instead.')
   Future<int?> getAudioMixingDuration([String? filePath]);
 
   ///
@@ -3085,8 +3046,7 @@ mixin RtcAudioEffectInterface {
   /// Param [startPos] The playback position (ms) of the audio effect file.
   ///
   ///
-  Future<void> playEffect(int soundId, String filePath, int loopCount,
-      double pitch, double pan, int gain, bool publish,
+  Future<void> playEffect(int soundId, String filePath, int loopCount, double pitch, double pan, int gain, bool publish,
       [int? startPos]);
 
   ///
@@ -3197,8 +3157,7 @@ mixin RtcAudioEffectInterface {
   ///
   /// Param [restriction] The operational permission of the SDK on the audio session. See AudioSessionOperationRestriction. This parameter is in bit mask format, and each bit corresponds to a permission.
   ///
-  Future<void> setAudioSessionOperationRestriction(
-      AudioSessionOperationRestriction restriction);
+  Future<void> setAudioSessionOperationRestriction(AudioSessionOperationRestriction restriction);
 }
 
 /// @nodoc
@@ -3265,8 +3224,7 @@ mixin RtcVoiceChangerInterface {
   ///
   /// Param [bandGain] The gain of each band in dB. The value ranges between -15 and 15. The default value is 0.
   ///
-  Future<void> setLocalVoiceEqualization(
-      AudioEqualizationBandFrequency bandFrequency, int bandGain);
+  Future<void> setLocalVoiceEqualization(AudioEqualizationBandFrequency bandFrequency, int bandGain);
 
   ///
   /// Sets the local voice reverberation.
@@ -3418,8 +3376,7 @@ mixin RtcVoiceChangerInterface {
   ///
   ///
   ///
-  Future<void> setAudioEffectParameters(
-      AudioEffectPreset preset, int param1, int param2);
+  Future<void> setAudioEffectParameters(AudioEffectPreset preset, int param1, int param2);
 
   ///
   /// Sets parameters for the preset voice beautifier effects.
@@ -3459,8 +3416,7 @@ mixin RtcVoiceChangerInterface {
   ///
   ///
   ///
-  Future<void> setVoiceBeautifierParameters(
-      VoiceBeautifierPreset preset, int param1, int param2);
+  Future<void> setVoiceBeautifierParameters(VoiceBeautifierPreset preset, int param1, int param2);
 }
 
 /// @nodoc
@@ -3574,8 +3530,7 @@ mixin RtcMediaRelayInterface {
   ///
   /// Param [channelMediaRelayConfiguration] The configuration of the media stream relay. For details, see ChannelMediaRelayConfiguration.
   ///
-  Future<void> startChannelMediaRelay(
-      ChannelMediaRelayConfiguration channelMediaRelayConfiguration);
+  Future<void> startChannelMediaRelay(ChannelMediaRelayConfiguration channelMediaRelayConfiguration);
 
   ///
   /// Updates the channels for media stream relay.
@@ -3585,8 +3540,7 @@ mixin RtcMediaRelayInterface {
   ///
   /// Param [channelMediaRelayConfiguration] The configuration of the media stream relay. For more details, see ChannelMediaRelayConfiguration.
   ///
-  Future<void> updateChannelMediaRelay(
-      ChannelMediaRelayConfiguration channelMediaRelayConfiguration);
+  Future<void> updateChannelMediaRelay(ChannelMediaRelayConfiguration channelMediaRelayConfiguration);
 
   ///
   /// Stops the media stream relay. Once the relay stops, the host quits all the destination channels.
@@ -3796,8 +3750,7 @@ mixin RtcTestInterface {
   /// **Parameter** [intervalInSeconds] The time interval (s) between when you speak and when the recording plays back.
   ///
   /// **Parameter** [config] The configuration of the audio and video call loop test. See [EchoTestConfiguration].
-  Future<void> startEchoTest(
-      {int? intervalInSeconds, EchoTestConfiguration? config});
+  Future<void> startEchoTest({int? intervalInSeconds, EchoTestConfiguration? config});
 
   ///
   /// Stops the audio call test.
@@ -4015,8 +3968,7 @@ mixin RtcAudioRecorderInterface {
   /// Param [quality] Recording quality. For more details, see AudioRecordingQuality.
   ///
   @deprecated
-  Future<void> startAudioRecording(String filePath,
-      AudioSampleRateType sampleRate, AudioRecordingQuality quality);
+  Future<void> startAudioRecording(String filePath, AudioSampleRateType sampleRate, AudioRecordingQuality quality);
 
   ///
   /// Starts audio recording on the client.
@@ -4029,8 +3981,7 @@ mixin RtcAudioRecorderInterface {
   ///
   /// Param [config] Recording configuration. See AudioRecordingConfiguration.
   ///
-  Future<void> startAudioRecordingWithConfig(
-      AudioRecordingConfiguration config);
+  Future<void> startAudioRecordingWithConfig(AudioRecordingConfiguration config);
 
   ///
   /// Enables the virtual metronome.
@@ -4045,8 +3996,7 @@ mixin RtcAudioRecorderInterface {
   ///
   /// Param [config] The metronome configuration. See RhythmPlayerConfig.
   ///
-  Future<void> startRhythmPlayer(
-      String sound1, String sound2, RhythmPlayerConfig config);
+  Future<void> startRhythmPlayer(String sound1, String sound2, RhythmPlayerConfig config);
 
   ///
   /// Disables the virtual metronome.
@@ -4199,8 +4149,7 @@ mixin RtcCameraInterface {
   ///
   /// Param [positionY] The vertical coordinate of the touchpoint in the view.
   ///
-  Future<void> setCameraFocusPositionInPreview(
-      double positionX, double positionY);
+  Future<void> setCameraFocusPositionInPreview(double positionX, double positionY);
 
   ///
   /// Sets the camera exposure position.
@@ -4212,8 +4161,7 @@ mixin RtcCameraInterface {
   ///
   /// Param [positionYinView] The vertical coordinate of the touchpoint in the view.
   ///
-  Future<void> setCameraExposurePosition(
-      double positionXinView, double positionYinView);
+  Future<void> setCameraExposurePosition(double positionXinView, double positionYinView);
 
   ///
   /// Enables/Disables face detection for the local user.
@@ -4266,8 +4214,7 @@ mixin RtcCameraInterface {
   ///
   /// Param [config] The camera capturer configuration. See CameraCapturerConfiguration.
   ///
-  Future<void> setCameraCapturerConfiguration(
-      CameraCapturerConfiguration config);
+  Future<void> setCameraCapturerConfiguration(CameraCapturerConfiguration config);
 }
 
 /// @nodoc
@@ -4387,8 +4334,7 @@ mixin RtcScreenSharingInterface {
   ///
   /// Param [captureParams] The screen sharing encoding parameters. The default video dimension is 1920 x 1080, that is, 2,073,600 pixels. Agora uses the value of this parameter to calculate the charges. For details, see ScreenCaptureParameters.
   ///
-  Future<void> updateScreenCaptureParameters(
-      ScreenCaptureParameters captureParams);
+  Future<void> updateScreenCaptureParameters(ScreenCaptureParameters captureParams);
 
   ///
   /// Updates the screen sharing region.
@@ -4430,6 +4376,8 @@ mixin RtcScreenSharingInterface {
   ///
   // TODO(littlegnal): [MS-99459] Doc breack change captureFreq type int? -> int, bitrate type
   // int? -> int
-  Future<void> startScreenCapture(int windowId,
-      [int captureFreq, Rect? rect, int bitrate]);
+  Future<void> startScreenCapture(int windowId, [int captureFreq, Rect? rect, int bitrate]);
+
+  /// Start screen share.
+  Future<void> startScreenShare();
 }
