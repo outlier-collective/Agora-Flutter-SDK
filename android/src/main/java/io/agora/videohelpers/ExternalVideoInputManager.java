@@ -313,7 +313,7 @@ public class ExternalVideoInputManager implements IVideoSource {
         mEglCore.makeCurrent(mEglSurface);
         GLES20.glViewport(0, 0, mVideoWidth, mVideoHeight);
 
-        final int rotation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
+        final int rotation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
         int r = 0;
         if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
           Log.e(TAG, "PORTRAIT");
@@ -321,6 +321,7 @@ public class ExternalVideoInputManager implements IVideoSource {
 
         if (rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270) {
           Log.e(TAG, "LANDSCAPE");
+          r = 90;
         }
 
         if (mConsumer != null) {
