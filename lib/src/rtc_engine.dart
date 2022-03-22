@@ -1283,8 +1283,11 @@ class RtcEngine with RtcEngineInterface {
   }
 
   @override
-  Future<void> startScreenShare() {
-    return _invokeMethod('startScreenShare');
+  Future<void> startScreenShare(String channel, String token) {
+    return _invokeMethod('startScreenShare', {
+      'channel': channel,
+      'token': token,
+    });
   }
 }
 
@@ -2101,7 +2104,7 @@ mixin RtcVideoInterface {
   Future<void> enableRemoteSuperResolution(int uid, bool enabled);
 
   /// Starts screen sharing.
-  Future<void> startScreenShare();
+  Future<void> startScreenShare(String channel, String token);
 }
 
 /// @nodoc
