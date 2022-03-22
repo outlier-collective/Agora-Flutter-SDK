@@ -13,12 +13,12 @@ import io.agora.rtc.base.RtcEngineManager
 import io.agora.screenshare.ScreenShareActivity
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.*
+import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.*
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewRegistry
 import io.agora.videohelpers.Constants
-import io.flutter.plugin.common.MethodChannel.Results
 
 
 /** AgoraRtcEnginePlugin */
