@@ -138,40 +138,22 @@ open class AgoraRtcEnginePlugin :
       return
     }
     if (call.method == "startScreenShare") {
-      val channelId : String = call.argument<String>("channel")!!
-      val token : String = call.argument<String>("token")!!
-      println("asdf: $channelId")
-      println("asdf: $token")
+//      val channel : String = call.argument<String>("channel")!!
+//      val token : String = call.argument<String>("token")!!
+//      println("asdf: $channel")
+//      println("asdf: $token")
+
 //      Constants.rtcEngine = engine()
 //      bindVideoService()
-//      val screenShareEngine = RtcEngine.create(pluginContext, "54da13a8cc454880ac1cfbed3c0f441a", iRtcEngineEventHandler)
-//
-//      screenShareEngine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
-//      screenShareEngine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
-//      screenShareEngine.enableVideo();
-//
-//      val screenCaptureParameters = ScreenCaptureParameters()
-//      screenCaptureParameters.captureAudio = true
-//      screenCaptureParameters.captureVideo = true
-//      val videoCaptureParameters = VideoCaptureParameters()
-//      screenCaptureParameters.videoCaptureParameters = videoCaptureParameters
-//      screenShareEngine!!.startScreenCapture(screenCaptureParameters)
 
-//      val prefs: SharedPreferences = pluginContext
-//        .getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
-//      val channelId: String? = prefs.getString("flutter.channelId", null)
-//      val token: String? = prefs.getString("flutter.token", null)
-//      println("XXX")
-//      println(channelId)
-//      println(token)
-//      println("XXX")
-
-//      val option = ChannelMediaOptions()
-//      option.autoSubscribeAudio = true
-//      option.autoSubscribeVideo = true
-//      screenShareEngine.muteAllRemoteAudioStreams(true);
-//      screenShareEngine.muteAllRemoteVideoStreams(true);
-//      screenShareEngine.joinChannel(token, channelId, "", 0, option)
+      val prefs: SharedPreferences = pluginContext
+        .getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
+      val channel: String? = prefs.getString("flutter.channel", null)
+      val token: String? = prefs.getString("flutter.token", null)
+      println("XXX")
+      println("asdf: $channel")
+      println("asdf: $token")
+      println("XXX")
       return
     }
 
