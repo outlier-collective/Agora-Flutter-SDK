@@ -2,10 +2,7 @@ package io.agora.screenshare
 
 import android.R.attr.description
 import android.app.Activity
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
 import android.os.Bundle
 import android.os.IBinder
 import android.os.Process.myUid
@@ -84,7 +81,15 @@ class ScreenShareActivity : Activity() {
     option.autoSubscribeVideo = true
     screenShareEngine.muteAllRemoteAudioStreams(true);
     screenShareEngine.muteAllRemoteVideoStreams(true);
-//    screenShareEngine.joinChannel(token, channel, "", 0, option)
+
+    val prefs: SharedPreferences = this
+      .getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
+    val channel: String? = prefs.getString("flutter.channel", null)
+    val token: String? = prefs.getString("flutter.token", null)
+    println("asdf: $channel")
+    println("asdf: $token")
+
+    screenShareEngine.joinChannel(token, channel, "", 0, option)
 
 
 //    val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager

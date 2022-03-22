@@ -146,12 +146,17 @@ open class AgoraRtcEnginePlugin :
 //      Constants.rtcEngine = engine()
 //      bindVideoService()
 
-      val prefs: SharedPreferences = pluginContext
-        .getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
-      val channel: String? = prefs.getString("flutter.channel", null)
-      val token: String? = prefs.getString("flutter.token", null)
-      println("asdf: $channel")
-      println("asdf: $token")
+//      val prefs: SharedPreferences = pluginContext
+//        .getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
+//      val channel: String? = prefs.getString("flutter.channel", null)
+//      val token: String? = prefs.getString("flutter.token", null)
+//      println("asdf: $channel")
+//      println("asdf: $token")
+  
+      val screenShareIntent = Intent(pluginContext, ScreenShareActivity::class.java).also { intent = it }
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+      pluginContext.startActivity(screenShareIntent)
+
       return
     }
 
