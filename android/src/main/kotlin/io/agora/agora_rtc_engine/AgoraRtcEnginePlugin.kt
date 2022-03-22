@@ -150,10 +150,8 @@ open class AgoraRtcEnginePlugin :
         .getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
       val channel: String? = prefs.getString("flutter.channel", null)
       val token: String? = prefs.getString("flutter.token", null)
-      println("XXX")
       println("asdf: $channel")
       println("asdf: $token")
-      println("XXX")
       return
     }
 

@@ -24,7 +24,7 @@ import io.agora.rtc.mediaio.AgoraDefaultSource
 import io.agora.rtc.models.ChannelMediaOptions
 import io.agora.rtc.video.VideoCanvas
 import io.agora.rtc.video.VideoEncoderConfiguration
-import io.agora.videohelpers.Constants
+//import io.agora.videohelpers.Constants
 import io.agora.videohelpers.ExternalVideoInputManager
 import io.agora.videohelpers.ExternalVideoInputService
 import io.agora.videohelpers.IExternalVideoInputService
@@ -40,14 +40,14 @@ class ScreenShareActivity : Activity() {
   private var screenShareContext: Context? = null
 
   private fun initScreenSharing() {
-    Constants.rtcEngine.enableLocalVideo(true)
-    Constants.rtcEngine.muteLocalVideoStream(false)
-
-    setContentView(R.layout.dialog)
-    this.setFinishOnTouchOutside(false)
-
-    val stopSharingButton = findViewById<Button>(R.id.stopScreenSharingButton)
-    stopSharingButton.setOnClickListener { finish() }
+//    Constants.rtcEngine.enableLocalVideo(true)
+//    Constants.rtcEngine.muteLocalVideoStream(false)
+//
+//    setContentView(R.layout.dialog)
+//    this.setFinishOnTouchOutside(false)
+//
+//    val stopSharingButton = findViewById<Button>(R.id.stopScreenSharingButton)
+//    stopSharingButton.setOnClickListener { finish() }
   }
 
   private fun stopScreenSharing() {
@@ -55,9 +55,9 @@ class ScreenShareActivity : Activity() {
       screenShareContext?.unbindService(mServiceConnection!!)
       mServiceConnection = null
 
-      Constants.rtcEngine.enableLocalVideo(false)
-      Constants.rtcEngine.muteLocalVideoStream(true)
-      Constants.rtcEngine.setVideoSource(AgoraDefaultSource())
+//      Constants.rtcEngine.enableLocalVideo(false)
+//      Constants.rtcEngine.muteLocalVideoStream(true)
+//      Constants.rtcEngine.setVideoSource(AgoraDefaultSource())
     }
   }
 
@@ -103,14 +103,14 @@ class ScreenShareActivity : Activity() {
 
   private fun setVideoConfig(width: Int, height: Int) {
     // Setup video stream encoding configs
-    Constants.rtcEngine.setVideoEncoderConfiguration(
-      VideoEncoderConfiguration(
-        VideoEncoderConfiguration.VideoDimensions(width, height),
-        VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30,
-        VideoEncoderConfiguration.STANDARD_BITRATE,
-        VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE
-      )
-    )
+//    Constants.rtcEngine.setVideoEncoderConfiguration(
+//      VideoEncoderConfiguration(
+//        VideoEncoderConfiguration.VideoDimensions(width, height),
+//        VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30,
+//        VideoEncoderConfiguration.STANDARD_BITRATE,
+//        VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE
+//      )
+//    )
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
