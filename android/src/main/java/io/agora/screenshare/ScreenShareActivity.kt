@@ -37,6 +37,8 @@ class ScreenShareActivity : Activity() {
   private var dataIntent: Intent? = null
   private var screenShareContext: Context? = null
 
+  private var screenShareEngine: RtcEngine? = null
+
   private fun initScreenSharing() {
 //    Constants.rtcEngine.enableLocalVideo(true)
 //    Constants.rtcEngine.muteLocalVideoStream(false)
@@ -49,14 +51,15 @@ class ScreenShareActivity : Activity() {
   }
 
   private fun stopScreenSharing() {
-    if (mServiceConnection != null) {
-      screenShareContext?.unbindService(mServiceConnection!!)
-      mServiceConnection = null
-
-//      Constants.rtcEngine.enableLocalVideo(false)
-//      Constants.rtcEngine.muteLocalVideoStream(true)
-//      Constants.rtcEngine.setVideoSource(AgoraDefaultSource())
-    }
+    screenShareEngine!!.leaveChannel()
+//    if (mServiceConnection != null) {
+//      screenShareContext?.unbindService(mServiceConnection!!)
+//      mServiceConnection = null
+//
+////      Constants.rtcEngine.enableLocalVideo(false)
+////      Constants.rtcEngine.muteLocalVideoStream(true)
+////      Constants.rtcEngine.setVideoSource(AgoraDefaultSource())
+//    }
   }
 
   override fun onCreate(bundle: Bundle?) {
@@ -64,11 +67,11 @@ class ScreenShareActivity : Activity() {
     println("asdf: activity created");
     screenShareContext = this
 
-    val screenShareEngine = RtcEngine
+    screenShareEngine = RtcEngine
       .create(screenShareContext, "54da13a8cc454880ac1cfbed3c0f441a", iRtcEngineEventHandler)
-    screenShareEngine.setChannelProfile(io.agora.rtc.Constants.CHANNEL_PROFILE_LIVE_BROADCASTING)
-    screenShareEngine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER)
-    screenShareEngine.enableVideo()
+    screenShareEngine!!.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING)
+    screenShareEngine!!.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER)
+    screenShareEngine!!.enableVideo()
 
     val screenCaptureParameters = ScreenCaptureParameters()
     screenCaptureParameters.captureAudio = true
