@@ -138,19 +138,10 @@ open class AgoraRtcEnginePlugin :
       return
     }
     if (call.method == "startScreenShare") {
-      println("XXX")
-      val parameters = mutableListOf<Any?>()
-      call.arguments<Map<*, *>>()?.let { args ->
-        args.values.forEach {
-          parameters.add(it)
-        }
-      }
-      println(parameters.toString())
-//      val channelId : String = call.argument<String>("channel")!!
-//      val token : String = call.argument<String>("token")!!
-//      println(channelId)
-//      println(token)
-      println("XXX")
+      val channelId : String = call.argument<String>("channel")!!
+      val token : String = call.argument<String>("token")!!
+      println("asdf: $channelId")
+      println("asdf: $token")
 //      Constants.rtcEngine = engine()
 //      bindVideoService()
 //      val screenShareEngine = RtcEngine.create(pluginContext, "54da13a8cc454880ac1cfbed3c0f441a", iRtcEngineEventHandler)
