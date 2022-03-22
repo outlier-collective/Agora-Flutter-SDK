@@ -379,7 +379,7 @@ public class Annotations {
     Constants.CONNECTION_CHANGED_RENEW_TOKEN,
     Constants.CONNECTION_CHANGED_CLIENT_IP_ADDRESS_CHANGED,
     Constants.CONNECTION_CHANGED_KEEP_ALIVE_TIMEOUT,
-    Constants.CONNECTION_CHANGED_PROXY_SERVER_INTERRUPTED,
+//    Constants.CONNECTION_CHANGED_PROXY_SERVER_INTERRUPTED,
   })
   @Retention(RetentionPolicy.SOURCE)
   public @interface AgoraConnectionChangedReason {
