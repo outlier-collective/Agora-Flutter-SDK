@@ -6,10 +6,13 @@ import android.os.*
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
+import io.agora.rtc.Constants
+import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.ScreenCaptureParameters
 import io.agora.rtc.ScreenCaptureParameters.VideoCaptureParameters
 import io.agora.rtc.base.RtcEngineManager
+import io.agora.rtc.models.ChannelMediaOptions
 import io.agora.screenshare.ScreenShareActivity
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.*
@@ -18,7 +21,6 @@ import io.flutter.plugin.common.*
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewRegistry
-import io.agora.videohelpers.Constants
 
 
 /** AgoraRtcEnginePlugin */
@@ -138,12 +140,34 @@ open class AgoraRtcEnginePlugin :
     if (call.method == "startScreenShare") {
 //      Constants.rtcEngine = engine()
 //      bindVideoService()
-      val screenCaptureParameters = ScreenCaptureParameters()
-      screenCaptureParameters.captureAudio = true
-      screenCaptureParameters.captureVideo = true
-      val videoCaptureParameters = VideoCaptureParameters()
-      screenCaptureParameters.videoCaptureParameters = videoCaptureParameters
-      engine()!!.startScreenCapture(screenCaptureParameters)
+//      val screenShareEngine = RtcEngine.create(pluginContext, "54da13a8cc454880ac1cfbed3c0f441a", iRtcEngineEventHandler)
+//
+//      screenShareEngine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
+//      screenShareEngine.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER);
+//      screenShareEngine.enableVideo();
+//
+//      val screenCaptureParameters = ScreenCaptureParameters()
+//      screenCaptureParameters.captureAudio = true
+//      screenCaptureParameters.captureVideo = true
+//      val videoCaptureParameters = VideoCaptureParameters()
+//      screenCaptureParameters.videoCaptureParameters = videoCaptureParameters
+//      screenShareEngine!!.startScreenCapture(screenCaptureParameters)
+
+      val prefs: SharedPreferences = pluginContext
+        .getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
+      val channelId: String? = prefs.getString("flutter." + "channelId", null)
+      val token: String? = prefs.getString("flutter." + "token", null)
+      print("XXX")
+      print(channelId)
+      print(token)
+      print("XXX")
+
+//      val option = ChannelMediaOptions()
+//      option.autoSubscribeAudio = true
+//      option.autoSubscribeVideo = true
+//      screenShareEngine.muteAllRemoteAudioStreams(true);
+//      screenShareEngine.muteAllRemoteVideoStreams(true);
+//      screenShareEngine.joinChannel(token, channelId, "", 0, option)
       return
     }
 
