@@ -13,6 +13,7 @@ import android.view.SurfaceView
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
+import io.agora.agora_rtc_engine.R
 import io.agora.rtc.Constants
 import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
@@ -42,7 +43,7 @@ class ScreenShareActivity : Activity() {
 //
 //    setContentView(R.layout.dialog)
 //    this.setFinishOnTouchOutside(false)
-//
+////
 //    val stopSharingButton = findViewById<Button>(R.id.stopScreenSharingButton)
 //    stopSharingButton.setOnClickListener { finish() }
   }
@@ -91,6 +92,11 @@ class ScreenShareActivity : Activity() {
 
     screenShareEngine.joinChannel(token, channel, "", 0, option)
 
+    setContentView(R.layout.dialog)
+    this.setFinishOnTouchOutside(false)
+
+    val stopSharingButton = findViewById<Button>(R.id.stopScreenSharingButton)
+    stopSharingButton.setOnClickListener { finish() }
 
 //    val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
 //    val captureIntent = mpm.createScreenCaptureIntent()
