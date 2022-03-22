@@ -138,7 +138,7 @@ open class AgoraRtcEnginePlugin :
       return
     }
     if (call.method == "startScreenShare") {
-      print("XXX")
+      println("XXX")
 //      Constants.rtcEngine = engine()
 //      bindVideoService()
 //      val screenShareEngine = RtcEngine.create(pluginContext, "54da13a8cc454880ac1cfbed3c0f441a", iRtcEngineEventHandler)
@@ -158,10 +158,10 @@ open class AgoraRtcEnginePlugin :
         .getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
       val channelId: String? = prefs.getString("flutter." + "channelId", null)
       val token: String? = prefs.getString("flutter." + "token", null)
-      print("XXX")
-      print(channelId)
-      print(token)
-      print("XXX")
+      println("XXX")
+      println(channelId)
+      println(token)
+      println("XXX")
 
 //      val option = ChannelMediaOptions()
 //      option.autoSubscribeAudio = true
