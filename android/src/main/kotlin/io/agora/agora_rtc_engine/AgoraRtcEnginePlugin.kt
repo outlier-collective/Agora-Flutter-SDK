@@ -7,14 +7,14 @@ import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
 import io.agora.rtc.RtcEngine
+import io.agora.rtc.ScreenCaptureParameters
+import io.agora.rtc.ScreenCaptureParameters.VideoCaptureParameters
 import io.agora.rtc.base.RtcEngineManager
 import io.agora.screenshare.ScreenShareActivity
-import io.agora.videohelpers.Constants
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.*
 import io.flutter.plugin.common.*
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewRegistry
 
@@ -134,8 +134,14 @@ open class AgoraRtcEnginePlugin :
       return
     }
     if (call.method == "startScreenShare") {
-      Constants.rtcEngine = engine()
-      bindVideoService()
+//      Constants.rtcEngine = engine()
+//      bindVideoService()
+      val screenCaptureParameters = ScreenCaptureParameters()
+      screenCaptureParameters.captureAudio = true
+      screenCaptureParameters.captureVideo = true
+      val videoCaptureParameters = VideoCaptureParameters()
+      screenCaptureParameters.videoCaptureParameters = videoCaptureParameters
+      engine()!!.startScreenCapture(screenCaptureParameters)
       return
     }
 
