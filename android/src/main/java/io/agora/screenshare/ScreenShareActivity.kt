@@ -60,7 +60,7 @@ class ScreenShareActivity : Activity() {
 
   override fun onCreate(bundle: Bundle?) {
     super.onCreate(bundle)
-    print("asdf activity created");
+    println("asdf: activity created");
     screenShareContext = this
 
     val screenShareEngine = RtcEngine
