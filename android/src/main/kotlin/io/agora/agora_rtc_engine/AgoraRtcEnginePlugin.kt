@@ -139,8 +139,8 @@ open class AgoraRtcEnginePlugin :
     }
     if (call.method == "startScreenShare") {
       println("XXX")
-      val channelId : String = call.argument<String>("channel")
-      val token : String = call.argument<String>("token")
+      val channelId : String = call.argument<String>("channel")!!
+      val token : String = call.argument<String>("token")!!
       println(channelId)
       println(token)
       println("XXX")
