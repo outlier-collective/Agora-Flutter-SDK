@@ -86,8 +86,10 @@ class ScreenShareActivity : Activity() {
 //    option.autoSubscribeAudio = true
 //    option.autoSubscribeVideo = true
 
-    screenShareEngine!!.muteAllRemoteAudioStreams(true);
-    screenShareEngine!!.muteAllRemoteVideoStreams(true);
+    screenShareEngine!!.muteAllRemoteAudioStreams(true)
+    screenShareEngine!!.muteAllRemoteVideoStreams(true)
+
+//    screenShareEngine!!.setExternalVideoSource(true, false, true);
 
     val prefs: SharedPreferences = this
       .getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
@@ -96,8 +98,8 @@ class ScreenShareActivity : Activity() {
     println("asdf: $channel")
     println("asdf: $token")
 
-//    val res = screenShareEngine!!.joinChannel(token, channel, "", 1)
-    val res = screenShareEngine!!.joinChannelWithUserAccount(token, channel, "0")
+    val res = screenShareEngine!!.joinChannel(token, channel, "", 0)
+//    val res = screenShareEngine!!.joinChannelWithUserAccount(token, channel, "0")
     println("asdf: $res")
 
     setContentView(R.layout.dialog)
