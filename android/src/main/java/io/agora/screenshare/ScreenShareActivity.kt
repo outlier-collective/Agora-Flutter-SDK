@@ -82,9 +82,9 @@ class ScreenShareActivity : Activity() {
     screenCaptureParameters.videoCaptureParameters = videoCaptureParameters
     screenShareEngine!!.startScreenCapture(screenCaptureParameters)
 
-    val option = ChannelMediaOptions()
-    option.autoSubscribeAudio = true
-    option.autoSubscribeVideo = true
+//    val option = ChannelMediaOptions()
+//    option.autoSubscribeAudio = true
+//    option.autoSubscribeVideo = true
 
     screenShareEngine!!.muteAllRemoteAudioStreams(true);
     screenShareEngine!!.muteAllRemoteVideoStreams(true);
@@ -96,7 +96,7 @@ class ScreenShareActivity : Activity() {
     println("asdf: $channel")
     println("asdf: $token")
 
-    val res = screenShareEngine!!.joinChannel(token, channel, "", 1, option)
+    val res = screenShareEngine!!.joinChannel(token, channel, "", 1)
     println("asdf: $res")
 
     setContentView(R.layout.dialog)
