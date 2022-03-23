@@ -68,7 +68,7 @@ class ScreenShareActivity : Activity() {
     screenShareContext = this
 
     screenShareEngine = RtcEngine
-      .create(screenShareContext, "54da13a8cc454880ac1cfbed3c0f441a", iRtcEngineEventHandler)
+      .create(screenShareContext, "54da13a8cc454880ac1cfbed3c0f441a", null)
     screenShareEngine!!.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING)
     screenShareEngine!!.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER)
     screenShareEngine!!.enableVideo()
