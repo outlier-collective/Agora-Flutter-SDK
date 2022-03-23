@@ -201,6 +201,7 @@ class ScreenShareActivity : Activity() {
      */
     override fun onLeaveChannel(stats: RtcStats) {
       super.onLeaveChannel(stats)
+      println("asdf: leave channel success")
     }
 
     /**Occurs when the local user joins a specified channel.
@@ -211,9 +212,11 @@ class ScreenShareActivity : Activity() {
      * @param elapsed Time elapsed (ms) from the user calling joinChannel until this callback is triggered
      */
     override fun onJoinChannelSuccess(channel: String, uid: Int, elapsed: Int) {
+      println("asdf: joined channel success")
     }
 
     override fun onFirstLocalVideoFramePublished(elapsed: Int) {
+      println("asdf: published video frame")
     }
 
     /**Since v2.9.0.
