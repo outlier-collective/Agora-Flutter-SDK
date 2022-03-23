@@ -153,6 +153,8 @@ open class AgoraRtcEnginePlugin :
 //      println("asdf: $channel")
 //      println("asdf: $token")
 
+      engine()!!.leaveChannel()
+
       val screenShareIntent = Intent(pluginContext, ScreenShareActivity::class.java).also { intent = it }
         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
       pluginContext.startActivity(screenShareIntent)
