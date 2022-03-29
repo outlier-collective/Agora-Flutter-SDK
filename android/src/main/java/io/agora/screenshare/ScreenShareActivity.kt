@@ -43,9 +43,11 @@ class ScreenShareActivity : Activity() {
   }
 
   private fun stopScreenSharing() {
+    println("asdf calling stopScreenSharing")
     screenShareEngine!!.leaveChannel()
     handler!!.post { RtcEngine.destroy() }
     screenShareEngine = null
+    println("asdf stopScreenSharing completed")
 
 //    if (mServiceConnection != null) {
 //      screenShareContext?.unbindService(mServiceConnection!!)
@@ -142,6 +144,7 @@ class ScreenShareActivity : Activity() {
   }
 
   override fun onDestroy() {
+    println("asdf calling onDestroy")
     stopScreenSharing()
     super.onDestroy()
   }
