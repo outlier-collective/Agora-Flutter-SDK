@@ -28,5 +28,22 @@
 <!--      android:exported="false"-->
 <!--      android:foregroundServiceType="mediaProjection"-->
 <!--      android:process=":screenshare" />-->
+
+    <activity
+      android:name="io.agora.rtc.ss.impl.ScreenSharing$LocalScreenCaptureAssistantActivity"
+      android:configChanges="screenSize|orientation"
+      android:screenOrientation="fullUser"
+      android:theme="@android:style/Theme.Translucent"
+      android:process=":screenshare" />
+
+    <service
+      android:name="io.agora.rtc.ss.impl.LocalScreenSharingService"
+      android:foregroundServiceType="mediaProjection"
+      android:exported="false"
+      android:process=":screenshare" >
+      <intent-filter>
+        <action android:name="android.intent.action.screenshare" />
+      </intent-filter>
+    </service>
   </application>
 </manifest>
