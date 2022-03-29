@@ -12,6 +12,7 @@ import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.ScreenCaptureParameters
 import io.agora.rtc.ScreenCaptureParameters.VideoCaptureParameters
+import io.agora.rtc.video.VideoEncoderConfiguration
 import io.agora.videohelpers.ExternalVideoInputManager
 import io.agora.videohelpers.ExternalVideoInputService
 import io.agora.videohelpers.IExternalVideoInputService
@@ -89,25 +90,38 @@ class ScreenShareActivity : Activity() {
     screenCaptureParameters.videoCaptureParameters = videoCaptureParameters
     val request = screenShareEngine!!.startScreenCapture(screenCaptureParameters)
 
-    println("asdf: req: $request")
-    println("asdf: engine: $screenShareEngine")
+    screenShareEngine!!.setVideoEncoderConfiguration(
+      VideoEncoderConfiguration(
+        VideoEncoderConfiguration.VideoDimensions(1920, 1080),
+        VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30,
+        VideoEncoderConfiguration.STANDARD_BITRATE,
+        VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_LANDSCAPE
+      )
+    )
+
+    if (request != 0) {
+      finish()
+    } else {
+      println("asdf: req: $request")
+      println("asdf: engine: $screenShareEngine")
 
 //    val option = ChannelMediaOptions()
 //    option.autoSubscribeAudio = true
 //    option.autoSubscribeVideo = true
 
-    screenShareEngine!!.muteAllRemoteAudioStreams(true)
-    screenShareEngine!!.muteAllRemoteVideoStreams(true)
+      screenShareEngine!!.muteAllRemoteAudioStreams(true)
+      screenShareEngine!!.muteAllRemoteVideoStreams(true)
 
-    val res = screenShareEngine!!.joinChannel(token, channel, "", 1)
+      val res = screenShareEngine!!.joinChannel(token, channel, "", 1)
 //    val res = screenShareEngine!!.joinChannelWithUserAccount(token, channel, "0")
-    println("asdf: join channel res: $res")
+      println("asdf: join channel res: $res")
 
-    setContentView(R.layout.dialog)
-    this.setFinishOnTouchOutside(false)
+      setContentView(R.layout.dialog)
+      this.setFinishOnTouchOutside(false)
 
-    val stopSharingButton = findViewById<Button>(R.id.stopScreenSharingButton)
-    stopSharingButton.setOnClickListener { finish() }
+      val stopSharingButton = findViewById<Button>(R.id.stopScreenSharingButton)
+      stopSharingButton.setOnClickListener { finish() }
+    }
 
 //    val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
 //    val captureIntent = mpm.createScreenCaptureIntent()
