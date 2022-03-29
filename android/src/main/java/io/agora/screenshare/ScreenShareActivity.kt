@@ -44,7 +44,7 @@ class ScreenShareActivity : Activity() {
     screenShareEngine!!.leaveChannel()
     handler!!.post { RtcEngine.destroy() }
     screenShareEngine = null
-    
+
 //    if (mServiceConnection != null) {
 //      screenShareContext?.unbindService(mServiceConnection!!)
 //      mServiceConnection = null
@@ -75,8 +75,9 @@ class ScreenShareActivity : Activity() {
     screenCaptureParameters.captureVideo = true
     val videoCaptureParameters = VideoCaptureParameters()
     screenCaptureParameters.videoCaptureParameters = videoCaptureParameters
-    screenShareEngine!!.startScreenCapture(screenCaptureParameters)
+    val request = screenShareEngine!!.startScreenCapture(screenCaptureParameters)
 
+    println("asdf: req: $request")
     println("asdf: engine: $screenShareEngine")
 
 //    val option = ChannelMediaOptions()
