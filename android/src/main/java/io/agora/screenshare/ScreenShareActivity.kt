@@ -12,6 +12,7 @@ import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.ScreenCaptureParameters
 import io.agora.rtc.ScreenCaptureParameters.VideoCaptureParameters
+import io.agora.rtc.models.ChannelMediaOptions
 import io.agora.rtc.video.VideoEncoderConfiguration
 import io.agora.videohelpers.ExternalVideoInputManager
 import io.agora.videohelpers.ExternalVideoInputService
@@ -81,9 +82,15 @@ class ScreenShareActivity : Activity() {
     screenShareEngine!!.enableVideo()
 
     val screenCaptureParameters = ScreenCaptureParameters()
+    val videoCaptureParameters = VideoCaptureParameters()
+    val audioCaptureParameters = ScreenCaptureParameters.AudioCaptureParameters()
+
     screenCaptureParameters.captureAudio = true
     screenCaptureParameters.captureVideo = true
-    val videoCaptureParameters = VideoCaptureParameters()
+
+    audioCaptureParameters.captureSignalVolume = 50
+    audioCaptureParameters.allowCaptureCurrentApp = false
+
     videoCaptureParameters.height = 1080
     videoCaptureParameters.width = 1920
     videoCaptureParameters.framerate = 30
@@ -105,14 +112,14 @@ class ScreenShareActivity : Activity() {
       println("asdf: req: $request")
       println("asdf: engine: $screenShareEngine")
 
-//    val option = ChannelMediaOptions()
-//    option.autoSubscribeAudio = true
-//    option.autoSubscribeVideo = true
+      val options = ChannelMediaOptions()
+      options.autoSubscribeAudio = false
+      options.autoSubscribeVideo = false
 
       screenShareEngine!!.muteAllRemoteAudioStreams(true)
       screenShareEngine!!.muteAllRemoteVideoStreams(true)
 
-      val res = screenShareEngine!!.joinChannel(token, channel, "", 1)
+      val res = screenShareEngine!!.joinChannel(token, channel, "", 1, options)
 //    val res = screenShareEngine!!.joinChannelWithUserAccount(token, channel, "0")
       println("asdf: join channel res: $res")
 
