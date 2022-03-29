@@ -83,6 +83,9 @@ class ScreenShareActivity : Activity() {
     screenCaptureParameters.captureAudio = true
     screenCaptureParameters.captureVideo = true
     val videoCaptureParameters = VideoCaptureParameters()
+    videoCaptureParameters.height = 1080
+    videoCaptureParameters.width = 1920
+    videoCaptureParameters.framerate = 30
     screenCaptureParameters.videoCaptureParameters = videoCaptureParameters
     val request = screenShareEngine!!.startScreenCapture(screenCaptureParameters)
 
