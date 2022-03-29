@@ -62,8 +62,17 @@ class ScreenShareActivity : Activity() {
 
     screenShareContext = this
 
+    val prefs: SharedPreferences = this
+      .getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
+    val appId: String? = prefs.getString("flutter.appId", null)
+    val channel: String? = prefs.getString("flutter.channel", null)
+    val token: String? = prefs.getString("flutter.token", null)
+    println("asdf: $appId")
+    println("asdf: $channel")
+    println("asdf: $token")
+
     screenShareEngine = RtcEngine
-      .create(screenShareContext, "50eded94a9344793beb8710e6f118fca", iRtcEngineEventHandler)
+      .create(screenShareContext, appId, iRtcEngineEventHandler)
     screenShareEngine!!.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING)
     screenShareEngine!!
       .setAudioProfile(Constants.AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO, Constants.AUDIO_SCENARIO_CHATROOM_ENTERTAINMENT)
@@ -86,13 +95,6 @@ class ScreenShareActivity : Activity() {
 
     screenShareEngine!!.muteAllRemoteAudioStreams(true)
     screenShareEngine!!.muteAllRemoteVideoStreams(true)
-
-    val prefs: SharedPreferences = this
-      .getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
-    val channel: String? = prefs.getString("flutter.channel", null)
-    val token: String? = prefs.getString("flutter.token", null)
-    println("asdf: $channel")
-    println("asdf: $token")
 
     val res = screenShareEngine!!.joinChannel(token, channel, "", 0)
 //    val res = screenShareEngine!!.joinChannelWithUserAccount(token, channel, "0")
