@@ -1,12 +1,9 @@
 package io.agora.screenshare
 
 //import io.agora.videohelpers.Constants
-import android.R.attr.description
 import android.app.Activity
 import android.content.*
-import android.os.Bundle
-import android.os.IBinder
-import android.os.RemoteException
+import android.os.*
 import android.util.DisplayMetrics
 import android.widget.Button
 import io.agora.agora_rtc_engine.R
@@ -15,7 +12,6 @@ import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.ScreenCaptureParameters
 import io.agora.rtc.ScreenCaptureParameters.VideoCaptureParameters
-import io.agora.rtc.models.ChannelMediaOptions
 import io.agora.videohelpers.ExternalVideoInputManager
 import io.agora.videohelpers.ExternalVideoInputService
 import io.agora.videohelpers.IExternalVideoInputService
@@ -31,6 +27,8 @@ class ScreenShareActivity : Activity() {
 
   private var screenShareEngine: RtcEngine? = null
 
+  private var handler: Handler? = null
+
   private fun initScreenSharing() {
 //    Constants.rtcEngine.enableLocalVideo(true)
 //    Constants.rtcEngine.muteLocalVideoStream(false)
@@ -44,6 +42,9 @@ class ScreenShareActivity : Activity() {
 
   private fun stopScreenSharing() {
     screenShareEngine!!.leaveChannel()
+    handler!!.post { RtcEngine.destroy() }
+    screenShareEngine = null
+    
 //    if (mServiceConnection != null) {
 //      screenShareContext?.unbindService(mServiceConnection!!)
 //      mServiceConnection = null
@@ -57,6 +58,8 @@ class ScreenShareActivity : Activity() {
   override fun onCreate(bundle: Bundle?) {
     super.onCreate(bundle)
     println("asdf: activity created");
+    handler = Handler(Looper.getMainLooper())
+
     screenShareContext = this
 
     screenShareEngine = RtcEngine
