@@ -1,32 +1,24 @@
 package io.agora.screenshare
 
+//import io.agora.videohelpers.Constants
 import android.R.attr.description
 import android.app.Activity
 import android.content.*
 import android.os.Bundle
 import android.os.IBinder
-import android.os.Process.myUid
 import android.os.RemoteException
 import android.util.DisplayMetrics
-import android.util.Log
-import android.view.SurfaceView
-import android.view.ViewGroup
 import android.widget.Button
-import android.widget.FrameLayout
 import io.agora.agora_rtc_engine.R
 import io.agora.rtc.Constants
 import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.ScreenCaptureParameters
-import io.agora.rtc.mediaio.AgoraDefaultSource
+import io.agora.rtc.ScreenCaptureParameters.VideoCaptureParameters
 import io.agora.rtc.models.ChannelMediaOptions
-import io.agora.rtc.video.VideoCanvas
-import io.agora.rtc.video.VideoEncoderConfiguration
-//import io.agora.videohelpers.Constants
 import io.agora.videohelpers.ExternalVideoInputManager
 import io.agora.videohelpers.ExternalVideoInputService
 import io.agora.videohelpers.IExternalVideoInputService
-import java.security.AccessController.getContext
 
 
 class ScreenShareActivity : Activity() {
@@ -78,7 +70,7 @@ class ScreenShareActivity : Activity() {
     val screenCaptureParameters = ScreenCaptureParameters()
     screenCaptureParameters.captureAudio = true
     screenCaptureParameters.captureVideo = true
-    val videoCaptureParameters = ScreenCaptureParameters.VideoCaptureParameters()
+    val videoCaptureParameters = VideoCaptureParameters()
     screenCaptureParameters.videoCaptureParameters = videoCaptureParameters
     screenShareEngine!!.startScreenCapture(screenCaptureParameters)
 
@@ -88,8 +80,6 @@ class ScreenShareActivity : Activity() {
 
     screenShareEngine!!.muteAllRemoteAudioStreams(true)
     screenShareEngine!!.muteAllRemoteVideoStreams(true)
-
-//    screenShareEngine!!.setExternalVideoSource(true, false, true);
 
     val prefs: SharedPreferences = this
       .getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
