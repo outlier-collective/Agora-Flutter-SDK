@@ -96,7 +96,7 @@ class ScreenShareActivity : Activity() {
     screenShareEngine!!.muteAllRemoteAudioStreams(true)
     screenShareEngine!!.muteAllRemoteVideoStreams(true)
 
-    val res = screenShareEngine!!.joinChannel(token, channel, "", 0)
+    val res = screenShareEngine!!.joinChannel(token, channel, "", 1)
 //    val res = screenShareEngine!!.joinChannelWithUserAccount(token, channel, "0")
     println("asdf: join channel res: $res")
 
