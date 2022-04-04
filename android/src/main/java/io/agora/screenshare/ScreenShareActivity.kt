@@ -12,6 +12,7 @@ import io.agora.rtc.IRtcEngineEventHandler
 import io.agora.rtc.RtcEngine
 import io.agora.rtc.ScreenCaptureParameters
 import io.agora.rtc.ScreenCaptureParameters.VideoCaptureParameters
+import io.agora.rtc.ScreenCaptureParameters.AudioCaptureParameters
 import io.agora.rtc.models.ChannelMediaOptions
 import io.agora.rtc.video.VideoEncoderConfiguration
 import io.agora.videohelpers.ExternalVideoInputManager
@@ -85,7 +86,7 @@ class ScreenShareActivity : Activity() {
 
     val screenCaptureParameters = ScreenCaptureParameters()
     val videoCaptureParameters = VideoCaptureParameters()
-    val audioCaptureParameters = ScreenCaptureParameters.AudioCaptureParameters()
+    val audioCaptureParameters = AudioCaptureParameters()
 
     screenCaptureParameters.captureAudio = true
     screenCaptureParameters.captureVideo = true
