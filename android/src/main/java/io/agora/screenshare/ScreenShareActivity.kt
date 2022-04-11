@@ -82,6 +82,15 @@ class ScreenShareActivity : Activity() {
     screenShareEngine!!
       .setAudioProfile(Constants.AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO, Constants.AUDIO_SCENARIO_CHATROOM_ENTERTAINMENT)
     screenShareEngine!!.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER)
+    screenShareEngine!!.setVideoEncoderConfiguration(
+      VideoEncoderConfiguration(
+        VideoEncoderConfiguration.VideoDimensions(1920, 1080),
+        VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30,
+        VideoEncoderConfiguration.STANDARD_BITRATE,
+        VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_LANDSCAPE
+      )
+    )
+    
     screenShareEngine!!.enableVideo()
 
     val screenCaptureParameters = ScreenCaptureParameters()
@@ -101,15 +110,6 @@ class ScreenShareActivity : Activity() {
     screenCaptureParameters.audioCaptureParameters = audioCaptureParameters
     screenCaptureParameters.videoCaptureParameters = videoCaptureParameters
     val request = screenShareEngine!!.startScreenCapture(screenCaptureParameters)
-
-    screenShareEngine!!.setVideoEncoderConfiguration(
-      VideoEncoderConfiguration(
-        VideoEncoderConfiguration.VideoDimensions(1920, 1080),
-        VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30,
-        VideoEncoderConfiguration.STANDARD_BITRATE,
-        VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_LANDSCAPE
-      )
-    )
 
     if (request != 0) {
       finish()
