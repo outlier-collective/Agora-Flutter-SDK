@@ -46,7 +46,7 @@ class ScreenShareActivity : Activity() {
   private fun stopScreenSharing() {
     println("asdf calling stopScreenSharing")
     screenShareEngine!!.leaveChannel()
-    handler!!.post { RtcEngine.destroy() }
+//    handler!!.post { RtcEngine.destroy() }
     screenShareEngine = null
     println("asdf stopScreenSharing completed")
 
@@ -90,7 +90,7 @@ class ScreenShareActivity : Activity() {
         VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_LANDSCAPE
       )
     )
-    
+
     screenShareEngine!!.enableVideo()
 
     val screenCaptureParameters = ScreenCaptureParameters()
