@@ -94,31 +94,25 @@ class ScreenShareActivity : Activity() {
     screenShareEngine!!.muteLocalAudioStream(true)
     screenShareEngine!!.enableLocalAudio(false)
 
-    if (request != 0) {
-      finish()
-    } else {
-      println("asdf: req: $request")
-      println("asdf: engine: $screenShareEngine")
+    val options = ChannelMediaOptions()
+    options.autoSubscribeAudio = false
+    options.autoSubscribeVideo = false
 
-      val options = ChannelMediaOptions()
-      options.autoSubscribeAudio = false
-      options.autoSubscribeVideo = false
+    screenShareEngine!!.muteAllRemoteAudioStreams(true)
+    screenShareEngine!!.muteAllRemoteVideoStreams(true)
 
-      screenShareEngine!!.muteAllRemoteAudioStreams(true)
-      screenShareEngine!!.muteAllRemoteVideoStreams(true)
-
-      val res = screenShareEngine!!.joinChannel(token, channel, "", 1, options)
+    val res = screenShareEngine!!.joinChannel(token, channel, "", 1, options)
 //    val res = screenShareEngine!!.joinChannelWithUserAccount(token, channel, "0")
-      println("asdf: join channel res: $res")
+    println("asdf: join channel res: $res")
 
-      val request = screenShareEngine!!.startScreenCapture(screenCaptureParameters)
+    var request = screenShareEngine!!.startScreenCapture(screenCaptureParameters)
+    println("asdf: share screen request: $request")
 
-      setContentView(R.layout.dialog)
-      this.setFinishOnTouchOutside(false)
+    setContentView(R.layout.dialog)
+    this.setFinishOnTouchOutside(false)
 
-      val stopSharingButton = findViewById<Button>(R.id.stopScreenSharingButton)
-      stopSharingButton.setOnClickListener { finish() }
-    }
+    val stopSharingButton = findViewById<Button>(R.id.stopScreenSharingButton)
+    stopSharingButton.setOnClickListener { finish() }
   }
 
   override fun onBackPressed() {

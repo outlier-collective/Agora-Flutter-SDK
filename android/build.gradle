@@ -51,7 +51,7 @@ android {
 dependencies {
   api fileTree(dir: 'libs', include: ['*.jar','*.aar'])
 
-  api 'io.agora.rtc:full-sdk:3.7.2'
+  api 'io.agora.rtc:full-sdk:3.7.0'
 //  api 'io.agora.rtc:full-screen-sharing:3.6.2'
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${safeExtGet('kotlin_version', '1.6.10')}"
