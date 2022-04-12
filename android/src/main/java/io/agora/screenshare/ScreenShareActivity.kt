@@ -32,32 +32,12 @@ class ScreenShareActivity : Activity() {
 
   private var handler: Handler? = null
 
-  private fun initScreenSharing() {
-//    Constants.rtcEngine.enableLocalVideo(true)
-//    Constants.rtcEngine.muteLocalVideoStream(false)
-//
-//    setContentView(R.layout.dialog)
-//    this.setFinishOnTouchOutside(false)
-////
-//    val stopSharingButton = findViewById<Button>(R.id.stopScreenSharingButton)
-//    stopSharingButton.setOnClickListener { finish() }
-  }
-
   private fun stopScreenSharing() {
     println("asdf calling stopScreenSharing")
     screenShareEngine!!.leaveChannel()
 //    handler!!.post { RtcEngine.destroy() }
     screenShareEngine = null
     println("asdf stopScreenSharing completed")
-
-//    if (mServiceConnection != null) {
-//      screenShareContext?.unbindService(mServiceConnection!!)
-//      mServiceConnection = null
-//
-////      Constants.rtcEngine.enableLocalVideo(false)
-////      Constants.rtcEngine.muteLocalVideoStream(true)
-////      Constants.rtcEngine.setVideoSource(AgoraDefaultSource())
-//    }
   }
 
   override fun onCreate(bundle: Bundle?) {
@@ -110,7 +90,6 @@ class ScreenShareActivity : Activity() {
 
     screenCaptureParameters.audioCaptureParameters = audioCaptureParameters
     screenCaptureParameters.videoCaptureParameters = videoCaptureParameters
-    val request = screenShareEngine!!.startScreenCapture(screenCaptureParameters)
 
     screenShareEngine!!.muteLocalAudioStream(true)
     screenShareEngine!!.enableLocalAudio(false)
@@ -132,16 +111,14 @@ class ScreenShareActivity : Activity() {
 //    val res = screenShareEngine!!.joinChannelWithUserAccount(token, channel, "0")
       println("asdf: join channel res: $res")
 
+      val request = screenShareEngine!!.startScreenCapture(screenCaptureParameters)
+
       setContentView(R.layout.dialog)
       this.setFinishOnTouchOutside(false)
 
       val stopSharingButton = findViewById<Button>(R.id.stopScreenSharingButton)
       stopSharingButton.setOnClickListener { finish() }
     }
-
-//    val mpm = this.getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-//    val captureIntent = mpm.createScreenCaptureIntent()
-//    this.startActivityForResult(captureIntent, requestCode)
   }
 
   override fun onBackPressed() {
@@ -152,23 +129,6 @@ class ScreenShareActivity : Activity() {
     println("asdf calling onDestroy")
     stopScreenSharing()
     super.onDestroy()
-  }
-
-  inner class VideoInputServiceConnection : ServiceConnection {
-    override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
-      mService = iBinder as IExternalVideoInputService
-      if (mService != null) {
-        try {
-          mService?.setExternalVideoInput(ExternalVideoInputManager.TYPE_SCREEN_SHARE, dataIntent!!)
-        } catch (e: RemoteException) {
-          e.printStackTrace()
-        }
-      }
-    }
-
-    override fun onServiceDisconnected(componentName: ComponentName) {
-      mService = null
-    }
   }
 
   /**
