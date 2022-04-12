@@ -152,38 +152,6 @@ class ScreenShareActivity : Activity() {
     super.onDestroy()
   }
 
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    super.onActivityResult(requestCode, resultCode, data)
-    if (requestCode == requestCode && resultCode == RESULT_OK) {
-      initScreenSharing()
-
-      dataIntent = data
-      val metrics = DisplayMetrics()
-      this.windowManager.getDefaultDisplay().getMetrics(metrics)
-      var percent = 0f
-      val hp = metrics.heightPixels.toFloat() - 1920f
-      val wp = metrics.widthPixels.toFloat() - 1080f
-      percent = if (hp < wp) {
-        (metrics.widthPixels.toFloat() - 1080f) / metrics.widthPixels.toFloat()
-      } else {
-        (metrics.heightPixels.toFloat() - 1920f) / metrics.heightPixels.toFloat()
-      }
-      metrics.heightPixels = (metrics.heightPixels.toFloat() - metrics.heightPixels * percent).toInt()
-      metrics.widthPixels = (metrics.widthPixels.toFloat() - metrics.widthPixels * percent).toInt()
-      dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_WIDTH, metrics.widthPixels)
-      dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_HEIGHT, metrics.heightPixels)
-      dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_SCREEN_DPI, metrics.density.toInt())
-      dataIntent!!.putExtra(ExternalVideoInputManager.FLAG_FRAME_RATE, 30)
-      setVideoConfig(metrics.widthPixels, metrics.heightPixels)
-
-      val videoInputIntent = Intent(screenShareContext, ExternalVideoInputService::class.java)
-      mServiceConnection = VideoInputServiceConnection()
-      screenShareContext?.bindService(videoInputIntent, mServiceConnection!!, BIND_AUTO_CREATE)
-    } else {
-      finish()
-    }
-  }
-
   inner class VideoInputServiceConnection : ServiceConnection {
     override fun onServiceConnected(componentName: ComponentName, iBinder: IBinder) {
       mService = iBinder as IExternalVideoInputService
