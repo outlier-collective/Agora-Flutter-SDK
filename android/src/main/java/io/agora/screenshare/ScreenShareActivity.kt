@@ -92,6 +92,7 @@ class ScreenShareActivity : Activity() {
     )
 
     screenShareEngine!!.enableVideo()
+    screenShareEngine!!.enableDeepLearningDenoise(true)
 
     val screenCaptureParameters = ScreenCaptureParameters()
     val videoCaptureParameters = VideoCaptureParameters()
