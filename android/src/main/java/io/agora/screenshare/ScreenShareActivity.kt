@@ -21,15 +21,8 @@ import io.agora.videohelpers.IExternalVideoInputService
 
 
 class ScreenShareActivity : Activity() {
-  private val requestCode: Int = 1
-
-  private var mService: IExternalVideoInputService? = null
-  private var mServiceConnection: VideoInputServiceConnection? = null
-  private var dataIntent: Intent? = null
   private var screenShareContext: Context? = null
-
   private var screenShareEngine: RtcEngine? = null
-
   private var handler: Handler? = null
 
   private fun stopScreenSharing() {
