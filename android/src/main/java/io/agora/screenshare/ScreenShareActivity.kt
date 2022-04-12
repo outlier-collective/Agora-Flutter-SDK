@@ -114,7 +114,6 @@ class ScreenShareActivity : Activity() {
 
     screenShareEngine!!.muteLocalAudioStream(true)
     screenShareEngine!!.enableLocalAudio(false)
-    screenShareEngine!!.setAudioProfile()
 
     if (request != 0) {
       finish()
