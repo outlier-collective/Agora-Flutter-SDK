@@ -111,6 +111,8 @@ class ScreenShareActivity : Activity() {
     screenCaptureParameters.videoCaptureParameters = videoCaptureParameters
     val request = screenShareEngine!!.startScreenCapture(screenCaptureParameters)
 
+    screenShareEngine!!.muteLocalAudioStream(true)
+
     if (request != 0) {
       finish()
     } else {
@@ -148,18 +150,6 @@ class ScreenShareActivity : Activity() {
     println("asdf calling onDestroy")
     stopScreenSharing()
     super.onDestroy()
-  }
-
-  private fun setVideoConfig(width: Int, height: Int) {
-    // Setup video stream encoding configs
-//    Constants.rtcEngine.setVideoEncoderConfiguration(
-//      VideoEncoderConfiguration(
-//        VideoEncoderConfiguration.VideoDimensions(width, height),
-//        VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30,
-//        VideoEncoderConfiguration.STANDARD_BITRATE,
-//        VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE
-//      )
-//    )
   }
 
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
