@@ -112,6 +112,7 @@ class ScreenShareActivity : Activity() {
     val request = screenShareEngine!!.startScreenCapture(screenCaptureParameters)
 
     screenShareEngine!!.muteLocalAudioStream(true)
+    screenShareEngine!!.enableLocalAudio(false)
 
     if (request != 0) {
       finish()
