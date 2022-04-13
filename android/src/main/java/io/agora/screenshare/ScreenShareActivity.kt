@@ -55,15 +55,6 @@ class ScreenShareActivity : Activity() {
     screenShareEngine!!
       .setAudioProfile(Constants.AUDIO_PROFILE_MUSIC_HIGH_QUALITY_STEREO, Constants.AUDIO_SCENARIO_CHATROOM_ENTERTAINMENT)
     screenShareEngine!!.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER)
-    screenShareEngine!!.setVideoEncoderConfiguration(
-      VideoEncoderConfiguration(
-        VideoEncoderConfiguration.VideoDimensions(1920, 1080),
-        VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30,
-        VideoEncoderConfiguration.STANDARD_BITRATE,
-//        VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_LANDSCAPE
-        VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_ADAPTIVE
-      )
-    )
 
     screenShareEngine!!.enableVideo()
     screenShareEngine!!.enableDeepLearningDenoise(true)
@@ -99,8 +90,17 @@ class ScreenShareActivity : Activity() {
 //    val res = screenShareEngine!!.joinChannelWithUserAccount(token, channel, "0")
     println("asdf: join channel res: $res")
 
-    var request = screenShareEngine!!.startScreenCapture(screenCaptureParameters)
+    val request = screenShareEngine!!.startScreenCapture(screenCaptureParameters)
     println("asdf: share screen request: $request")
+
+    screenShareEngine!!.setVideoEncoderConfiguration(
+      VideoEncoderConfiguration(
+        VideoEncoderConfiguration.VideoDimensions(1920, 1080),
+        VideoEncoderConfiguration.FRAME_RATE.FRAME_RATE_FPS_30,
+        VideoEncoderConfiguration.STANDARD_BITRATE,
+        VideoEncoderConfiguration.ORIENTATION_MODE.ORIENTATION_MODE_FIXED_LANDSCAPE
+      )
+    )
 
     setContentView(R.layout.dialog)
     this.setFinishOnTouchOutside(false)
