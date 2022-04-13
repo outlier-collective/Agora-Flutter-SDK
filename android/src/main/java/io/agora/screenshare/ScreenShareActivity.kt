@@ -57,6 +57,7 @@ class ScreenShareActivity : Activity() {
     screenShareEngine!!.setClientRole(IRtcEngineEventHandler.ClientRole.CLIENT_ROLE_BROADCASTER)
 
     screenShareEngine!!.enableVideo()
+    screenShareEngine!!.disableAudio()
     screenShareEngine!!.enableDeepLearningDenoise(true)
 
     val screenCaptureParameters = ScreenCaptureParameters()
